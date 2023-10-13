@@ -1,10 +1,14 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Providers } from "./_providers";
 
 const inter = Inter({ subsets: ["latin"] });
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  variable: "--font-inter-tight",
+});
 const title = "Flockstr";
 const description = "Own your flock";
 const image =
@@ -55,7 +59,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="">
       <body
-        className={cn(inter.className, "w-full bg-background scrollbar-none")}
+        className={cn(
+          inter.className,
+          interTight.variable,
+          "w-full bg-background scrollbar-none",
+        )}
       >
         <Providers>{children}</Providers>
       </body>

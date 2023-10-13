@@ -52,6 +52,13 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      fontFamily: {
+        condensed: ["var(--font-inter-tight)"],
+      },
+      width: {
+        "sidebar-open": "var(--sidebar-open-width)",
+        "sidebar-closed": "var(--sidebar-closed-width)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
