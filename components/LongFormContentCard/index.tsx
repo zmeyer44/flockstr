@@ -29,7 +29,7 @@ type CreatorCardProps = {
 
 export default function LongFormContentCard() {
   return (
-    <Card className="relative max-w-[400px] overflow-hidden">
+    <Card className="relative overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-4">
         <div className="center gap-x-3">
           <Avatar className="center h-8 w-8 overflow-hidden rounded-sm bg-muted">

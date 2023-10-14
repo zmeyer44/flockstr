@@ -73,6 +73,27 @@
   .app-layout {
     @apply sm:layout-grid-small-sidebar xl:layout-grid-large-sidebar flex flex-col sm:grid;
   }
+  .lg-feed-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    justify-items: stretch;
+    justify-content: stretch;
+    width: 100%;
+  }
+  .md-feed-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    justify-items: stretch;
+    justify-content: stretch;
+    width: 100%;
+  }
+  .sm-feed-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    justify-items: stretch;
+    justify-content: stretch;
+    width: 100%;
+  }
 }
 @layer components {
   .center {

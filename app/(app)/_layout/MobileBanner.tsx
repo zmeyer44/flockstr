@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RiCloseFill, RiLeafFill } from "react-icons/ri";
+import { RiCloseFill } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import Logo from "@/assets/Logo";
 
 export default function MobileBanner() {
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
@@ -25,7 +26,7 @@ export default function MobileBanner() {
   return (
     <div className="fixed bottom-[var(--bottom-nav-height)] flex w-screen items-center gap-3 border-t bg-card px-3 py-2.5 sm:hidden">
       <div className="center h-[32px] w-[32px] shrink-0 rounded-[6px] border bg-white shadow">
-        <RiLeafFill className="text-black" />
+        <Logo className="text-black" />
       </div>
       <div className="flex-1 text-sm font-medium text-foreground">
         Get our PWA

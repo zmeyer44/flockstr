@@ -2,8 +2,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { RiMenu3Line, RiLeafFill, RiCloseFill } from "react-icons/ri";
-
+import { RiMenu3Line, RiCloseFill } from "react-icons/ri";
+import Logo from "@/assets/Logo";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigation = [
@@ -29,7 +29,7 @@ export default function Header() {
             </li>
           ))}
           <Link href="/">
-            <RiLeafFill className="h-8 w-8 text-primary" />
+            <Logo className="h-8 w-8 text-primary" />
           </Link>
           {navigation.slice(2, 4).map((item) => (
             <li className="">
@@ -42,7 +42,7 @@ export default function Header() {
       </div>
       <div className="flex min-h-[var(--header-height)] flex-1 items-stretch justify-between gap-x-4 lg:hidden">
         <div className="center justify-between gap-x-3 text-primary">
-          <RiLeafFill className="h-7 w-7" />
+          <Logo className="h-7 w-7" />
         </div>
         <div className="flex grow items-center justify-end">
           <button

@@ -2,6 +2,16 @@ import { Button } from "@/components/ui/button";
 import HorizontalCarousel from "./_sections/HorizontalCarousel";
 import { RiArrowRightLine } from "react-icons/ri";
 import LongFormContentCard from "@/components/LongFormContentCard";
+import BecomeACreator from "./_sections/BecomeACreator";
+import {
+  Section,
+  SectionHeader,
+  SectionTitle,
+  SectionContent,
+} from "@/containers/PageSection";
+import LiveStreamingSection from "./_sections/LiveStreaming";
+import FeaturedListsSection from "./_sections/FeaturedLists";
+
 export default function Page() {
   return (
     <div className="relative space-y-6 pt-5 sm:pt-7">
@@ -16,22 +26,23 @@ export default function Page() {
         </div>
         <HorizontalCarousel />
       </section>
-      <section className="relative space-y-3 overflow-x-hidden sm:space-y-3">
-        <div className="flex items-center justify-between  max-sm:pr-3">
-          <h2 className="font-condensed text-xl font-semibold sm:text-xl">
-            Long form content
-          </h2>
+      <Section>
+        <SectionHeader>
+          <SectionTitle>Long form content</SectionTitle>
           <Button variant={"ghost"}>
             View all <RiArrowRightLine className="ml-1 h-4 w-4" />
           </Button>
-        </div>
-        <div className="relative grid gap-4">
+        </SectionHeader>
+        <SectionContent className="sm:lg-feed-cols relative mx-auto flex flex-col gap-4">
           <LongFormContentCard />
           <LongFormContentCard />
           <LongFormContentCard />
           <LongFormContentCard />
-        </div>
-      </section>
+        </SectionContent>
+      </Section>
+      <BecomeACreator />
+      <LiveStreamingSection />
+      <FeaturedListsSection />
     </div>
   );
 }
