@@ -6,7 +6,7 @@ import { MobileMenu } from "./components/MobileMenu";
 export default function Header() {
   return (
     <header className="flex h-[var(--header-height)] shrink-0 grow-0 ">
-      <div className="fixed flex h-[var(--header-height)] w-full grow border-b p-5 sm:w-[calc(100vw_-_var(--sidebar-closed-width))] sm:border-b-0 sm:py-0 xl:w-[calc(100vw_-_var(--sidebar-open-width))]">
+      <div className="fixed z-header flex h-[var(--header-height)] w-full grow border-b bg-background p-5 sm:w-[calc(100vw_-_var(--sidebar-closed-width))] sm:border-b-0 sm:py-0 xl:w-[calc(100vw_-_var(--sidebar-open-width))]">
         <div className="flex flex-1 items-stretch justify-between gap-x-4 sm:border-b">
           <div className="center justify-between gap-x-3 text-foreground">
             <RiLeafFill className="h-6 w-6 sm:hidden" />
