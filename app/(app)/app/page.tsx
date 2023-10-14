@@ -25,7 +25,10 @@ export default function Page() {
             View all <RiArrowRightLine className="ml-1 h-4 w-4" />
           </Button>
         </div>
-        <div className="relative">
+        <div className="relative grid gap-4">
+          <LongFormContentCard />
+          <LongFormContentCard />
+          <LongFormContentCard />
           <LongFormContentCard />
         </div>
       </section>
