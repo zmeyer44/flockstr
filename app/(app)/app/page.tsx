@@ -1,16 +1,10 @@
 import { Button } from "@/components/ui/button";
 import HorizontalCarousel from "./_sections/HorizontalCarousel";
 import { RiArrowRightLine } from "react-icons/ri";
-import LongFormContentCard from "@/components/LongFormContentCard";
 import BecomeACreator from "./_sections/BecomeACreator";
-import {
-  Section,
-  SectionHeader,
-  SectionTitle,
-  SectionContent,
-} from "@/containers/PageSection";
 import LiveStreamingSection from "./_sections/LiveStreaming";
 import FeaturedListsSection from "./_sections/FeaturedLists";
+import LongFormContentSection from "./_sections/LongFormContent";
 
 export default function Page() {
   return (
@@ -26,20 +20,7 @@ export default function Page() {
         </div>
         <HorizontalCarousel />
       </section>
-      <Section>
-        <SectionHeader>
-          <SectionTitle>Long form content</SectionTitle>
-          <Button variant={"ghost"}>
-            View all <RiArrowRightLine className="ml-1 h-4 w-4" />
-          </Button>
-        </SectionHeader>
-        <SectionContent className="sm:lg-feed-cols relative mx-auto flex flex-col gap-4">
-          <LongFormContentCard />
-          <LongFormContentCard />
-          <LongFormContentCard />
-          <LongFormContentCard />
-        </SectionContent>
-      </Section>
+      <LongFormContentSection />
       <BecomeACreator />
       <LiveStreamingSection />
       <FeaturedListsSection />

@@ -2,6 +2,8 @@ import { UserMenu } from "./components/UserMenu";
 import { Search } from "./components/Search";
 import { Notifications } from "./components/Notifications";
 import { MobileMenu } from "./components/MobileMenu";
+import { Relays } from "./components/Relays";
+
 import Logo from "@/assets/Logo";
 export default function Header() {
   return (
@@ -9,7 +11,7 @@ export default function Header() {
       <div className="fixed z-header flex h-[var(--header-height)] w-full grow border-b bg-background p-5 sm:w-[calc(100vw_-_var(--sidebar-closed-width))] sm:border-b-0 sm:py-0 xl:w-[calc(100vw_-_var(--sidebar-open-width))]">
         <div className="flex flex-1 items-stretch justify-between gap-x-4 sm:border-b">
           <div className="center justify-between gap-x-3 text-foreground">
-            <Logo className="h-[30px] w-[30px] sm:hidden" />
+            <Logo className="h-[30px] w-[30px] text-primary sm:hidden" />
             <div className="text-xl font-semibold">Flockstr</div>
           </div>
           <div className="flex grow items-center justify-end">
@@ -19,6 +21,7 @@ export default function Header() {
             <div className="hidden items-center gap-x-4 sm:flex">
               <Search />
               <Notifications />
+              <Relays />
               <UserMenu />
             </div>
           </div>

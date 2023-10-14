@@ -77,7 +77,7 @@ export default function FeaturedLists() {
                 )}
               />
             </div>
-            <CardContent className="flex gap-x-3 p-0  sm:p-4">
+            <CardContent className="flex gap-x-3 p-0 sm:p-3">
               <div className="shrink-0">
                 <Avatar className="center h-[60px] w-[60px] overflow-hidden rounded-sm bg-muted sm:h-12 sm:w-12">
                   <AvatarImage

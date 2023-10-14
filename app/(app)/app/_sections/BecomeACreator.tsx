@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function BecomeACreator() {
   return (
-    <div className="padded-container overflow-x-clip pb-8 md:py-[120px]">
+    <div className="padded-container overflow-x-clip pb-8 max-sm:-mx-5 md:py-[120px]">
       <div className="flex w-full flex-col items-center justify-between gap-8 lg:flex-row">
         <Image
           alt="creator icons"
@@ -14,7 +14,7 @@ export default function BecomeACreator() {
           }
           className="h-44 object-cover object-bottom lg:h-auto"
         />
-        <div className="md:self-start lg:max-w-lg lg:self-center">
+        <div className="max-sm:px-5 md:self-start lg:max-w-lg lg:self-center">
           <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
             Start earning on Nostr
           </h2>
