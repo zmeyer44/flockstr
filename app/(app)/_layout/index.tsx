@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="app-layout absolute inset-0 w-screen">
+    <main className="app-layout w-screen sm:absolute sm:inset-0">
       {/* Keystone */}
       <Keystone />
 
