@@ -1,5 +1,7 @@
 "use client";
 import CreatorCard from "@/components/CreatorCard";
+import { cn } from "@/lib/utils";
+
 export default function HorizontalCarousel() {
   const cards = [
     {
@@ -45,8 +47,8 @@ export default function HorizontalCarousel() {
   ];
   return (
     <div className="scrollbar-thumb-rounded-full mr-auto flex min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto pl-5 pr-[50vw] scrollbar-thin sm:pr-[200px]">
-      {cards.map((creator) => (
-        <div className="snap-start pl-2 sm:pl-5">
+      {cards.map((creator, index) => (
+        <div className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}>
           <CreatorCard key={creator.displayName} {...creator} />
         </div>
       ))}
