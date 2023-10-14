@@ -43,7 +43,7 @@ export default function ArticlePage() {
 
   return (
     <div className="relative @container">
-      <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b pb-4 pt-4">
+      <div className="sticky inset-x-0 top-0 z-10 flex items-center justify-between border-b bg-background pb-4 pt-4">
         <div className="center gap-x-3">
           <Avatar className="center h-8 w-8 overflow-hidden rounded-sm bg-muted">
             <AvatarImage
@@ -73,8 +73,8 @@ export default function ArticlePage() {
           <RiCloseFill className="h-5 w-5" />
         </Button>
       </div>
-      <div className="h-[70px] w-full"></div>
-      <div className="max-h-[calc(100vh_-_100px)] overflow-y-auto">
+      <div className="h-[20px] w-full"></div>
+      <div className="vmax-h-[calc(100vh_-_100px)] overflow-y-auto">
         <article className="prose dark:prose-invert prose-zinc relative mx-auto max-w-3xl pt-7">
           <div className="">
             <div className="flex items-center justify-between gap-1 lg:mb-2">
