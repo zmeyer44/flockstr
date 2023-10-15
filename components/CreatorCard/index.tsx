@@ -8,43 +8,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { NDKUserProfile } from "@nostr-dev-kit/ndk";
+import { BANNER } from "@/constants/app";
+import { getNameToShow } from "@/lib/utils";
 
 type CreatorCardProps = {
-  displayName: string;
-  about: string;
-  picture: string;
-  banner: string;
+  profile: NDKUserProfile;
+  npub: string;
+  recentWork: {
+    id: string;
+    title: string;
+    summary: string;
+  }[];
 };
 
 export default function CreatorCard({
-  banner,
-  displayName,
-  picture,
-  about,
+  profile,
+  npub,
+  recentWork,
 }: CreatorCardProps) {
-  const recentEvents = [
-    {
-      id: "test",
-      title: "How to start building a following on nostr.",
-      summary:
-        "Starting on a new protocol could be intinidating, But there is no reason to fret. I've got it all under control.",
-    },
-    {
-      id: "asg",
-      title: "Jumping through relays",
-      summary: "Getting used to different relays and how to find them",
-    },
-    {
-      id: "ant",
-      title: "Nostrasia is coming",
-      summary: "Time to start preping for Nostraisa.",
-    },
-  ];
   return (
     <Card className="relative h-[350px] w-[250px] min-w-[250] overflow-hidden">
       <Image
         alt="background"
-        src={banner}
+        src={profile?.banner ?? BANNER}
         className="absolute inset-0 object-cover"
         fill
         unoptimized
@@ -52,14 +39,18 @@ export default function CreatorCard({
       <div className="absolute inset-0 bg-background/60 backdrop-blur-md transition-all">
         <div className="group relative flex h-full w-full flex-col items-center justify-end transition-all">
           <CardHeader className="absolute inset-x-0 top-[59%] transform pt-4 text-center transition-all duration-300 group-hover:top-[8px] group-hover:ml-[75px] group-hover:text-left">
-            <CardTitle>{displayName}</CardTitle>
+            <CardTitle>{getNameToShow({ profile, npub })}</CardTitle>
             <CardDescription className="line-clamp-3 group-hover:text-xs">
-              {about}
+              {profile?.about}
             </CardDescription>
           </CardHeader>
           <Image
             alt="user"
-            src={picture}
+            src={
+              profile?.image ??
+              profile?.picture ??
+              `https://bitcoinfaces.xyz/api/get-image?name=${npub}&onchain=false`
+            }
             className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:w-[70px]"
             height={100}
             width={100}
@@ -70,22 +61,22 @@ export default function CreatorCard({
               <CardTitle>Recent work:</CardTitle>
             </CardHeader>
             <CardContent className="overflow-hidden px-0">
-              <ul>
-                {recentEvents.map((item) => (
-                  <li key={item.id} className="overflow-hidden">
+              <ul className="w-full">
+                {recentWork.map((item) => (
+                  <li key={item.id} className="w-full overflow-hidden">
                     <Link
-                      href={""}
-                      className="flex max-w-fit items-center justify-between overflow-hidden py-1.5 pl-4 pr-2 transition-colors hover:bg-muted hover:text-primary"
+                      href={`/${item.id}`}
+                      className="flex max-w-full items-center justify-between overflow-hidden py-1.5 pl-4 pr-2 transition-colors hover:bg-muted hover:text-primary"
                     >
-                      <div className="shrink">
+                      <div className="shrink overflow-x-hidden">
                         <h4 className="line-clamp-1 text-sm font-semibold text-card-foreground">
                           {item.title}
                         </h4>
                         <p className="line-clamp-2 text-[10px] leading-4 text-muted-foreground">
-                          {item.summary}
+                          {item.summary ?? ""}
                         </p>
                       </div>
-                      <div className="center shrink-0 pl-2">
+                      <div className="center ml-auto shrink-0 pl-2">
                         <RiArrowRightLine className="h-5 w-5" />
                       </div>
                     </Link>

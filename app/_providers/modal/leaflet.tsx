@@ -64,7 +64,7 @@ export default function Leaflet({
           <div className="-mr-1 h-1 w-6 rounded-full bg-muted transition-all group-active:rotate-12" />
           <div className="h-1 w-6 rounded-full bg-muted transition-all group-active:-rotate-12" />
         </div>
-        <div className="scrollbar-muted-foreground max-h-[calc(95vh_-_28px)] w-full overflow-y-auto scrollbar-track-background">
+        <div className="bottom-tabs scrollbar-muted-foreground max-h-[calc(95vh_-_28px)] w-full overflow-y-auto scrollbar-track-background">
           {children}
         </div>
       </motion.div>
