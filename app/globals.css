@@ -65,6 +65,9 @@
     .bottom-tabs {
       padding-bottom: 20px;
     }
+    .standalone-hide {
+      display: none;
+    }
   }
 }
 

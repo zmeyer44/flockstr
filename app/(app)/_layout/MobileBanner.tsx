@@ -24,7 +24,7 @@ export default function MobileBanner() {
   }
   if (!showPWAPrompt) return null;
   return (
-    <div className="standalone:hidden fixed bottom-[var(--bottom-nav-height)] flex w-screen items-center gap-3 border-t bg-card px-3 py-2.5 sm:hidden">
+    <div className="standalone-hide fixed bottom-[var(--bottom-nav-height)] flex w-screen items-center gap-3 border-t bg-card px-3 py-2.5 sm:hidden">
       <div className="center h-[32px] w-[32px] shrink-0 rounded-[6px] border bg-white shadow">
         <Logo className="h-[20px] w-[20px] text-primary" />
       </div>
