@@ -43,6 +43,7 @@ export default function BottomNav() {
             />
           </Link>
         ))}
+        <div className="standalone:block hidden h-[20px] w-full"></div>
       </div>
     </footer>
   );

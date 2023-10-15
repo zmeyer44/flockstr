@@ -55,6 +55,14 @@
     --header-height: 72px;
     --bottom-nav-height: 56px;
   }
+  @media all and (display-mode: standalone) {
+    :root {
+      --bottom-nav-height: 76px;
+    }
+    .dark {
+      --bottom-nav-height: 76px;
+    }
+  }
 }
 
 @layer base {

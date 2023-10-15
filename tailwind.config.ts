@@ -104,6 +104,9 @@ module.exports = {
         3: 3,
         4: 4,
       },
+      screens: {
+        standalone: { raw: "(display-mode: standalone)" },
+      },
     },
   },
   plugins: [
