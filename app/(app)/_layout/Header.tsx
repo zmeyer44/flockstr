@@ -12,14 +12,15 @@ export default function Header() {
         <div className="flex flex-1 items-stretch justify-between gap-x-4 sm:border-b">
           <div className="center justify-between gap-x-3 text-foreground">
             <Logo className="h-[30px] w-[30px] text-primary sm:hidden" />
-            <div className="text-xl font-semibold">Flockstr</div>
-          </div>
-          <div className="flex grow items-center justify-end">
-            <div className="sm:hidden">
-              <MobileMenu />
+            <div className="font-condensed text-xl font-semibold text-foreground xl:hidden">
+              Flockstr
             </div>
-            <div className="hidden items-center gap-x-4 sm:flex">
+          </div>
+          <div className="flex grow items-center justify-end gap-x-4 xl:justify-between">
+            <div className="hidden sm:flex">
               <Search />
+            </div>
+            <div className="flex items-center gap-x-4">
               <Notifications />
               <Relays />
               <UserMenu />

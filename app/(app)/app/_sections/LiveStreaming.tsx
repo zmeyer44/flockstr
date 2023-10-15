@@ -41,9 +41,9 @@ export default function LiveStreamingSection() {
     },
   ];
   return (
-    <Section>
+    <Section className="max-sm:-mx-5">
       <SectionHeader>
-        <div className="center gap-x-2">
+        <div className="center gap-x-2 max-sm:px-5">
           <SectionTitle>Streaming Now</SectionTitle>
           <LiveBadge text={"LIVE"} />
         </div>
@@ -53,7 +53,7 @@ export default function LiveStreamingSection() {
       </SectionHeader>
       <SectionContent className="relative">
         <ScrollArea>
-          <div className="flex space-x-2 pb-4">
+          <div className="flex space-x-2 pb-4 max-sm:px-5">
             {demo.map((item) => (
               <VideoCard
                 key={item.id}
