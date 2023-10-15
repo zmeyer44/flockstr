@@ -8,8 +8,6 @@ import {
 import LiveBadge from "@/components/Badges/LiveBadge";
 import { Button } from "@/components/ui/button";
 import { RiArrowRightLine } from "react-icons/ri";
-import VideoCard from "@/components/VideoCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Card,
   CardContent,
@@ -20,6 +18,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { Badge } from "@/components/ui/badge";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 export default function FeaturedLists() {
   const demo = [
     {
@@ -65,17 +64,19 @@ export default function FeaturedLists() {
         {demo.map((e) => (
           <Card key={e.id} className="max-sm:border-0 max-sm:shadow-none">
             <div className="hidden overflow-hidden rounded-t-md sm:flex">
-              <Image
-                width={250}
-                height={150}
-                src={e.picture}
-                alt={e.title}
-                unoptimized
-                className={cn(
-                  "h-auto w-auto object-cover transition-all group-hover:scale-105",
-                  "aspect-video",
-                )}
-              />
+              <AspectRatio ratio={16 / 9} className="bg-muted">
+                <Image
+                  width={250}
+                  height={150}
+                  src={e.picture}
+                  alt={e.title}
+                  unoptimized
+                  className={cn(
+                    "h-auto w-auto object-cover transition-all group-hover:scale-105",
+                    "aspect-video",
+                  )}
+                />
+              </AspectRatio>
             </div>
             <CardContent className="flex gap-x-3 p-0 sm:p-3">
               <div className="shrink-0">

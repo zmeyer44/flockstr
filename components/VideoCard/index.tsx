@@ -2,7 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { RxClock } from "react-icons/rx";
-
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 type VideoCardProps = {
   card: {
     picture: string;
@@ -21,17 +21,19 @@ export default function VideoCard({ className, card }: VideoCardProps) {
       )}
     >
       <div className="overflow-hidden rounded-md">
-        <Image
-          src={card.picture}
-          alt={card.title}
-          width={250}
-          height={150}
-          unoptimized
-          className={cn(
-            "h-auto w-auto object-cover transition-all group-hover:scale-105",
-            "aspect-video",
-          )}
-        />
+        <AspectRatio ratio={16 / 9} className="bg-muted">
+          <Image
+            src={card.picture}
+            alt={card.title}
+            width={250}
+            height={150}
+            unoptimized
+            className={cn(
+              "h-auto w-auto object-cover transition-all group-hover:scale-105",
+              "aspect-video",
+            )}
+          />
+        </AspectRatio>
       </div>
       <div className="flex-1 space-y-2 text-base">
         <h3 className="line-clamp-2 font-medium leading-none">{card.title}</h3>
