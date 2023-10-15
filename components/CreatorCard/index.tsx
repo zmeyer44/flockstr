@@ -51,7 +51,7 @@ export default function CreatorCard({
       />
       <div className="absolute inset-0 bg-background/60 backdrop-blur-md transition-all">
         <div className="group relative flex h-full w-full flex-col items-center justify-end transition-all">
-          <CardHeader className="absolute inset-x-0 top-[59%] transform pt-4 text-center transition-all duration-300 group-hover:top-0 group-hover:ml-[70px] group-hover:text-left">
+          <CardHeader className="absolute inset-x-0 top-[59%] transform pt-4 text-center transition-all duration-300 group-hover:top-[8px] group-hover:ml-[75px] group-hover:text-left">
             <CardTitle>{displayName}</CardTitle>
             <CardDescription className="line-clamp-3 group-hover:text-xs">
               {about}
@@ -60,7 +60,7 @@ export default function CreatorCard({
           <Image
             alt="user"
             src={picture}
-            className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg object-cover transition-all duration-300 group-hover:left-[45px] group-hover:top-[60px] group-hover:w-[70px]"
+            className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:w-[70px]"
             height={100}
             width={100}
             unoptimized
