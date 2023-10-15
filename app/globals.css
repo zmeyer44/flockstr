@@ -66,7 +66,7 @@
       padding-bottom: 20px;
     }
     .standalone-hide {
-      display: none;
+      display: none !important;
     }
   }
 }
