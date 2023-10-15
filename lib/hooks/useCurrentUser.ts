@@ -4,6 +4,7 @@ import currentUserStore from "@/lib/stores/currentUser";
 // import useEvents from "@/lib/hooks/useEvents";
 import { UserSchema } from "@/types";
 import { useNDK } from "@/app/_providers/ndk";
+import { nip19 } from "nostr-tools";
 
 export default function useCurrentUser() {
   const {
@@ -37,6 +38,21 @@ export default function useCurrentUser() {
   //     setFollows(follows);
   //   }
   // });
+
+  async function attemptLogin() {
+    const shouldReconnect = localStorage.getItem("shouldReconnect");
+    if (!shouldReconnect || typeof window.nostr === "undefined") return;
+    const user = await loginWithNip07();
+    if (!user) {
+      throw new Error("NO auth");
+    }
+    console.log("LOGIN", user);
+    await loginWithPubkey(nip19.decode(user.npub).data.toString());
+    if (typeof window.webln !== "undefined") {
+      await window.webln.enable();
+    }
+    console.log("connected ");
+  }
 
   function logout() {
     localStorage.removeItem("shouldReconnect");
@@ -73,5 +89,6 @@ export default function useCurrentUser() {
     logout,
     updateUser: handleUpdateUser,
     loginWithPubkey,
+    attemptLogin,
   };
 }

@@ -2,9 +2,9 @@ import Container from "./components/Container";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { type Event } from "nostr-tools";
 
-export default function KindDefault({}: Event) {
+export default function KindDefault({ pubkey }: Event) {
   return (
-    <Container>
+    <Container pubkey={pubkey}>
       <CardTitle className="mb-1.5 line-clamp-2 text-lg font-semibold">
         The start of the Nostr revolution
       </CardTitle>

@@ -10,7 +10,7 @@ import useCurrentUser from "@/lib/hooks/useCurrentUser";
 
 export default function LoginModal() {
   const { loginWithNip07 } = useNDK();
-  const { loginWithPubkey } = useCurrentUser();
+  const { loginWithPubkey, currentUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
   const modal = useModal();
 
@@ -29,9 +29,7 @@ export default function LoginModal() {
         if (!user) {
           throw new Error("NO auth");
         }
-        console.log("LOGIN", user);
         await loginWithPubkey(nip19.decode(user.npub).data.toString());
-
         // keys?.setKeys({
         //   privkey: "",
         //   pubkey: ,
@@ -56,6 +54,11 @@ export default function LoginModal() {
       getConnected(shouldReconnect);
     }
   }, []);
+  useEffect(() => {
+    if (currentUser) {
+      modal?.hide();
+    }
+  }, [currentUser]);
 
   async function handleLogin() {
     setIsLoading(true);

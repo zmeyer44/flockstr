@@ -17,7 +17,10 @@ export default function Template({ title, children, className }: ModalProps) {
 
   return (
     <div
-      className={cn("relative w-full grow p-4 md:rounded-lg md:p-6", className)}
+      className={cn(
+        "relative w-full grow border bg-background p-4 shadow md:rounded-lg md:p-6",
+        className,
+      )}
     >
       <div className="mb-4 flex items-center justify-between">
         <h1

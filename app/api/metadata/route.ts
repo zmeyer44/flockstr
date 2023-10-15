@@ -3,7 +3,6 @@ import { parse } from "node-html-parser";
 import { z } from "zod";
 import { validateUrl } from "@/lib/utils";
 
-
 type MetaData = {
   title: string;
   description: string;
@@ -81,6 +80,10 @@ async function handler(req: NextRequest) {
     });
   } catch (err) {
     console.log("Error", err);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
 

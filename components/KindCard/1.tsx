@@ -4,10 +4,34 @@ import { type Event } from "nostr-tools";
 import { RenderText } from "../TextRendering";
 import { getTagsValues } from "@/lib/nostr/utils";
 import LinkCard from "@/components/LinkCard";
-export default function Kind1({ content, tags }: Event) {
+import { copyText } from "@/lib/utils";
+import { nip19 } from "nostr-tools";
+import { toast } from "sonner";
+
+export default function Kind1(props: Event) {
+  const { content, pubkey, tags } = props;
   const r = getTagsValues("r", tags);
+  const npub = nip19.npubEncode(pubkey);
+
   return (
-    <Container>
+    <Container
+      pubkey={pubkey}
+      actionOptions={[
+        {
+          label: "View profile",
+          href: `/${npub}`,
+          type: "link",
+        },
+        {
+          label: "Copy raw data",
+          type: "button",
+          onClick: () => {
+            void copyText(JSON.stringify(props));
+            toast.success("Copied Text!");
+          },
+        },
+      ]}
+    >
       <CardDescription className="text-base text-foreground">
         <RenderText text={content} />
       </CardDescription>

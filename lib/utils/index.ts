@@ -26,6 +26,17 @@ export function truncateText(text: string, size?: number) {
   let length = size ?? 5;
   return text.slice(0, length) + "..." + text.slice(-length);
 }
+export function getNameToShow(user: {
+  npub: string;
+  profile?: {
+    displayName?: string;
+    name?: string;
+  };
+}) {
+  return (
+    user.profile?.displayName ?? user.profile?.name ?? truncateText(user.npub)
+  );
+}
 export function getTwoLetters(user: {
   npub: string;
   profile?: {

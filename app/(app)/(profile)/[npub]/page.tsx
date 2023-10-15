@@ -111,7 +111,7 @@ export default function ProfilePage({
       <div className="mx-auto max-w-[800px] space-y-6">
         <div className="flex max-w-2xl flex-col gap-5">
           {demo.map((e) => (
-            <SubscriptionCard {...e} />
+            <SubscriptionCard key={e.id} {...e} />
           ))}
         </div>
         <div className="">
