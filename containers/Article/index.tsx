@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/dates";
 import Actions from "./Actions";
+import Logo from "@/assets/Logo";
 
 export default function ArticlePage() {
   const Viewer = useMemo(
@@ -103,6 +104,9 @@ export default function ArticlePage() {
           </div>
           <Viewer content={markdown} />
         </article>
+      </div>
+      <div className="center fixed inset-0 bg-red-400">
+        <Logo className="fill-gradie h-[200px] w-[200px] bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent" />
       </div>
     </div>
   );
