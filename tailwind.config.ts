@@ -14,7 +14,6 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
-        standalone: { raw: "(display-mode: standalone)" },
       },
     },
     extend: {
@@ -105,6 +104,9 @@ module.exports = {
         3: 3,
         4: 4,
       },
+      // screens: {
+      //   standalone: { raw: "(display-mode: standalone)" },
+      // },
     },
   },
   plugins: [
