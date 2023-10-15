@@ -65,6 +65,9 @@
     .bottom-tabs {
       padding-bottom: 20px;
     }
+    .standalone-pb-8 {
+      padding-bottom: 24px;
+    }
     .standalone-hide {
       display: none !important;
     }

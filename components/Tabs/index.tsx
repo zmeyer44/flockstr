@@ -20,6 +20,7 @@ export default function Tabs<T extends { name: string; label: string }>({
       >
         {tabs.map((tab, idx) => (
           <button
+            key={tab.name}
             onClick={() => setActiveTab(tab)}
             type="button"
             role="tab"

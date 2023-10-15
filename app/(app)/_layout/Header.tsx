@@ -1,10 +1,7 @@
-import { UserMenu } from "./components/UserMenu";
 import { Search } from "./components/Search";
-import { Notifications } from "./components/Notifications";
-import { MobileMenu } from "./components/MobileMenu";
-import { Relays } from "./components/Relays";
-
+import AuthActions from "./components/AuthActions";
 import Logo from "@/assets/Logo";
+
 export default function Header() {
   return (
     <header className="flex h-[var(--header-height)] shrink-0 grow-0 ">
@@ -21,9 +18,7 @@ export default function Header() {
               <Search />
             </div>
             <div className="flex items-center gap-x-4">
-              <Notifications />
-              <Relays />
-              <UserMenu />
+              <AuthActions />
             </div>
           </div>
         </div>

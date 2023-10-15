@@ -2,17 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { fetchMetadata } from "@/lib/fetchers/metadata";
-import { HiOutlineCheckBadge } from "react-icons/hi2";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type LinkCardProps = {
   url: string;
@@ -46,25 +44,29 @@ export default function LinkCard({
   if (metadata) {
     return (
       <a href={url} target="_blank" rel="nonreferrer">
-        <Card className="group">
+        <Card className={cn("group", className)}>
           {metadata.image && (
-            <div className="h-[150px] overflow-hidden rounded-t-md">
-              <Image
-                width={250}
-                height={150}
-                src={metadata.image}
-                alt={metadata.title}
-                unoptimized
-                className={cn(
-                  "w-auto object-cover object-center transition-all group-hover:scale-105",
-                )}
-              />
+            <div className="max-h-[100px] overflow-hidden rounded-t-md">
+              <AspectRatio ratio={16 / 9} className="bg-muted">
+                <Image
+                  width={250}
+                  height={100}
+                  src={metadata.image}
+                  alt={metadata.title}
+                  unoptimized
+                  className={cn(
+                    "aspect-video w-auto object-cover object-center align-middle transition-all group-hover:scale-105",
+                  )}
+                />
+              </AspectRatio>
             </div>
           )}
           <div className="">
-            <CardHeader className="">
-              <CardTitle className="line-clamp-2">{metadata.title}</CardTitle>
-              <CardDescription className="line-clamp-3">
+            <CardHeader className="space-y-0 p-2">
+              <CardTitle className="line-clamp-1 text-sm font-medium group-hover:underline">
+                {metadata.title}
+              </CardTitle>
+              <CardDescription className="line-clamp-2 text-[10px]">
                 {metadata.description}
               </CardDescription>
             </CardHeader>

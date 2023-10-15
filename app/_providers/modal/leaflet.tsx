@@ -27,7 +27,7 @@ export default function Leaflet({
       offset: { x: number; y: number };
       point: { x: number; y: number };
       velocity: { x: number; y: number };
-    }
+    },
   ) {
     const offset = info.offset.y;
     const velocity = info.velocity.y;
@@ -45,7 +45,7 @@ export default function Leaflet({
       <motion.div
         ref={leafletRef}
         key="leaflet"
-        className="group fixed inset-x-0 bottom-0 z-modal max-h-[95vh] w-screen cursor-grab rounded-t-lg bg-background pb-5 active:cursor-grabbing sm:hidden standalone:pb-8"
+        className="standalone-pb-8 group fixed inset-x-0 bottom-0 z-modal max-h-[95vh] w-screen cursor-grab rounded-t-lg bg-background pb-5 active:cursor-grabbing sm:hidden"
         initial={{ y: "100%" }}
         animate={controls}
         exit={{ y: "100%" }}
@@ -58,19 +58,19 @@ export default function Leaflet({
       >
         <div
           className={cn(
-            "rounded-t-4xl -mb-1 flex h-7 w-full items-center justify-center"
+            "rounded-t-4xl z-modal -mb-1 flex h-7 w-full items-center justify-center",
           )}
         >
-          <div className="-mr-1 h-1 w-6 rounded-full bg-[#636363] transition-all group-active:rotate-12" />
-          <div className="h-1 w-6 rounded-full bg-[#636363] transition-all group-active:-rotate-12" />
+          <div className="-mr-1 h-1 w-6 rounded-full bg-muted transition-all group-active:rotate-12" />
+          <div className="h-1 w-6 rounded-full bg-muted transition-all group-active:-rotate-12" />
         </div>
-        <div className="max-h-[calc(95vh_-_28px)] w-full overflow-y-auto scrollbar-track-background scrollbar-thumb-gray-900">
+        <div className="scrollbar-muted-foreground max-h-[calc(95vh_-_28px)] w-full overflow-y-auto scrollbar-track-background">
           {children}
         </div>
       </motion.div>
       <motion.div
         key="leaflet-backdrop"
-        className="fixed inset-0 z-modal- bg-background bg-opacity-40 backdrop-blur"
+        className="z-overlay fixed inset-0 bg-background/40 backdrop-blur"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

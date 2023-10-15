@@ -1,9 +1,8 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
- 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function formatCount(count: number) {
@@ -26,6 +25,31 @@ export function cleanUrl(url?: string) {
 export function truncateText(text: string, size?: number) {
   let length = size ?? 5;
   return text.slice(0, length) + "..." + text.slice(-length);
+}
+export function getTwoLetters(user: {
+  npub: string;
+  profile?: {
+    displayName?: string;
+    name?: string;
+  };
+}) {
+  if (user.profile) {
+    if (user.profile.displayName) {
+      const firstLetter = user.profile.displayName.at(0);
+      const secondLetter =
+        user.profile.displayName.split(" ")[1].at(0) ??
+        user.profile.displayName.at(1) ??
+        "";
+      return firstLetter + secondLetter;
+    }
+    if (user.profile.name) {
+      const firstLetter = user.profile.name.at(0);
+      const secondLetter =
+        user.profile.name.split(" ")[1].at(0) ?? user.profile.name.at(1) ?? "";
+      return firstLetter + secondLetter;
+    }
+  }
+  return (user.npub.at(5) ?? "") + (user.npub.at(6) ?? "");
 }
 
 export function removeDuplicates<T>(data: T[], key?: keyof T) {
