@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   themeColor: {
-    color: "#000000",
+    color: "#FFFFFF",
   },
 };
 
