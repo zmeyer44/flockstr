@@ -28,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
 const LoginModal = dynamic(() => import("@/components/Modals/Login"), {
   ssr: false,
 });
@@ -36,7 +37,9 @@ export default function AuthActions() {
   const modal = useModal();
   const { currentUser, logout, attemptLogin } = useCurrentUser();
   useEffect(() => {
-    attemptLogin();
+    if (!currentUser) {
+      void attemptLogin();
+    }
   }, []);
   if (currentUser) {
     return (

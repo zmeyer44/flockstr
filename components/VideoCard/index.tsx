@@ -46,7 +46,7 @@ export default function VideoCard({ className, card }: VideoCardProps) {
       </div>
       <div className="-mt-1 flex gap-2 overflow-x-scroll">
         {card.tags.map((tag) => (
-          <Badge>{tag}</Badge>
+          <Badge key={tag}>{tag}</Badge>
         ))}
       </div>
     </div>

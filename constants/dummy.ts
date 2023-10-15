@@ -5,7 +5,7 @@ export const DUMMY_1: Event = {
   id: "test",
   content: "Time for nostr to take over twitter",
   kind: 1,
-  pubkey: "235235",
+  pubkey: "f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca",
   sig: "wetwet",
   tags: [["t", "nostr"]],
   created_at: unixTimeNowInSeconds() - 3600,
@@ -32,7 +32,7 @@ export const DUMMY_30023: Event = {
       "wss://relay.nostr.org",
     ],
   ],
-  pubkey: "...",
+  pubkey: "f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca",
   id: "...",
   sig: "wetwet",
 };

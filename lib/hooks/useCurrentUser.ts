@@ -40,18 +40,22 @@ export default function useCurrentUser() {
   // });
 
   async function attemptLogin() {
-    const shouldReconnect = localStorage.getItem("shouldReconnect");
-    if (!shouldReconnect || typeof window.nostr === "undefined") return;
-    const user = await loginWithNip07();
-    if (!user) {
-      throw new Error("NO auth");
+    try {
+      const shouldReconnect = localStorage.getItem("shouldReconnect");
+      if (!shouldReconnect || typeof window.nostr === "undefined") return;
+      const user = await loginWithNip07();
+      if (!user) {
+        throw new Error("NO auth");
+      }
+      console.log("LOGIN", user);
+      await loginWithPubkey(nip19.decode(user.npub).data.toString());
+      if (typeof window.webln !== "undefined") {
+        await window.webln.enable();
+      }
+      console.log("connected ");
+    } catch (err) {
+      console.log("Error at attemptLogin", err);
     }
-    console.log("LOGIN", user);
-    await loginWithPubkey(nip19.decode(user.npub).data.toString());
-    if (typeof window.webln !== "undefined") {
-      await window.webln.enable();
-    }
-    console.log("connected ");
   }
 
   function logout() {
@@ -75,7 +79,8 @@ export default function useCurrentUser() {
   }
 
   async function loginWithPubkey(pubkey: string) {
-    const user = ndk!.getUser({ hexpubkey: pubkey });
+    if (!ndk) return;
+    const user = ndk.getUser({ hexpubkey: pubkey });
     console.log("user", user);
     await user.fetchProfile();
     setCurrentUser(user);

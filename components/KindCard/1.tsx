@@ -37,8 +37,8 @@ export default function Kind1(props: Event) {
       </CardDescription>
       {!!r.length && (
         <div className="mt-1.5 flex flex-wrap">
-          {r.map((url) => (
-            <LinkCard key={url} url={url} className="max-w-[250px]" />
+          {r.map((url, idx) => (
+            <LinkCard key={idx} url={url} className="max-w-[250px]" />
           ))}
         </div>
       )}

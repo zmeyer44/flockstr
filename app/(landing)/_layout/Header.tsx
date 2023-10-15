@@ -22,8 +22,8 @@ export default function Header() {
       <div className="center hidden min-h-[var(--header-height)] lg:flex">
         <ul className="font-condensed flex w-full max-w-xl items-center justify-between text-base font-semibold uppercase text-zinc-500 hover:text-zinc-600">
           {navigation.slice(0, 2).map((item) => (
-            <li className="">
-              <Link key={item.name} href={item.href} className="flex p-1">
+            <li key={item.name} className="">
+              <Link href={item.href} className="flex p-1">
                 <div className="center w-full ">{item.label}</div>
               </Link>
             </li>
@@ -32,8 +32,8 @@ export default function Header() {
             <Logo className="h-8 w-8 text-primary" />
           </Link>
           {navigation.slice(2, 4).map((item) => (
-            <li className="">
-              <Link key={item.name} href={item.href} className="flex p-1">
+            <li key={item.name} className="">
+              <Link href={item.href} className="flex p-1">
                 <div className="center w-full">{item.label}</div>
               </Link>
             </li>
@@ -60,8 +60,8 @@ export default function Header() {
       <nav className="lg:hidden">
         <ul className="mb-5 flex w-full flex-col items-stretch border-t">
           {navigation.map((item) => (
-            <li className="">
-              <Link key={item.name} href={item.href} className="flex p-1">
+            <li key={item.name} className="">
+              <Link href={item.href} className="flex p-1">
                 <div className="center w-full  rounded-sm bg-zinc-50 py-3 hover:bg-zinc-100">
                   {item.label}
                 </div>

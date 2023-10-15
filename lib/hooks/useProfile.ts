@@ -14,7 +14,9 @@ export default function useProfile(key: string) {
       key = nip19.decode(key).data.toString();
     }
     return () => {
-      void ndk.getUser({ hexpubkey: key }).fetchProfile();
+      if (ndk) {
+        void ndk.getUser({ hexpubkey: key }).fetchProfile();
+      }
     };
   }, [key, ndk]);
 
