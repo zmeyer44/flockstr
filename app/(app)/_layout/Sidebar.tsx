@@ -11,6 +11,12 @@ import {
 import { HiOutlineLightningBolt } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Sidebar() {
   const navigation = [
@@ -20,6 +26,7 @@ export default function Sidebar() {
       label: "Home",
       icon: RiHome6Fill,
       current: true,
+      active: true,
     },
     {
       href: "",
@@ -27,6 +34,7 @@ export default function Sidebar() {
       label: "Explore",
       icon: RiCompassLine,
       current: false,
+      active: false,
     },
     {
       href: "",
@@ -34,6 +42,7 @@ export default function Sidebar() {
       label: "Messages",
       icon: RiQuestionAnswerLine,
       current: false,
+      active: false,
     },
     {
       href: "",
@@ -41,6 +50,7 @@ export default function Sidebar() {
       label: "Zap Flockstr",
       icon: HiOutlineLightningBolt,
       current: false,
+      active: true,
     },
   ];
   return (
@@ -48,24 +58,58 @@ export default function Sidebar() {
       <div className="fixed bottom-0 flex h-[calc(100svh_-_var(--header-height))] w-[var(--sidebar-closed-width)] flex-col border-r xl:w-[var(--sidebar-open-width)]">
         <div className="flex flex-1 flex-col">
           <div className="flex flex-col items-stretch gap-y-2 p-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                  item.current
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <item.icon
-                  className={cn("h-6 w-6 shrink-0")}
-                  aria-hidden="true"
-                />
-                <span className="hidden text-base xl:flex">{item.label}</span>
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              if (item.active) {
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
+                      item.current
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <item.icon
+                      className={cn("h-6 w-6 shrink-0")}
+                      aria-hidden="true"
+                    />
+                    <span className="hidden text-base xl:flex">
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              } else {
+                return (
+                  <TooltipProvider key={item.name}>
+                    <Tooltip delayDuration={100}>
+                      <TooltipTrigger>
+                        <div
+                          className={cn(
+                            "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
+                            item.current
+                              ? "text-foreground"
+                              : "text-muted-foreground hover:text-foreground",
+                          )}
+                        >
+                          <item.icon
+                            className={cn("h-6 w-6 shrink-0")}
+                            aria-hidden="true"
+                          />
+                          <span className="hidden text-base xl:flex">
+                            {item.label}
+                          </span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent align="start">
+                        <p>Coming Soon</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                );
+              }
+            })}
             <div className="center py-2 xl:justify-start">
               <Button size={"icon"} className="xl:hidden">
                 <RiAddFill className="h-6 w-6" />
