@@ -29,7 +29,7 @@ export default function BottomNav() {
   ];
   return (
     <footer className="z-header- flex h-[var(--bottom-nav-height)] w-full sm:hidden">
-      <div className="bottom-tabs fixed inset-x-0 bottom-0 flex h-[var(--bottom-nav-height)] flex-1 items-center justify-between border-t bg-background px-4">
+      <div className="bottom-tabs fixed inset-x-0 bottom-0 flex h-[var(--bottom-nav-height)] flex-1 items-stretch justify-between border-t bg-background px-4">
         {navigationItems.map((item) => (
           <Link href={item.href} className="center group group flex-1">
             <item.icon
