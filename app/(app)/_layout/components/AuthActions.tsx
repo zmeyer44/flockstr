@@ -55,7 +55,6 @@ export default function AuthActions() {
     <>
       <Button
         onClick={() => modal?.show(<LoginModal />)}
-        size={"sm"}
         className="rounded-sm px-5"
       >
         Login

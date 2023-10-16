@@ -25,7 +25,7 @@ export default function Page() {
       <BecomeACreator />
       <LiveStreamingSection />
       <FeaturedListsSection />
-      <div className="z-overlay- fixed bottom-[calc(var(--bottom-nav-height)_+_20px)] right-[15px] sm:hidden">
+      <div className="z-overlay- fixed bottom-[calc(var(--bottom-nav-height)_+_20px)] right-[20px] sm:hidden">
         <Link href="/article/new">
           <Button size={"icon"} className="h-[50px] w-[50px]">
             <RiAddFill className="h-[32px] w-[32px]" />
