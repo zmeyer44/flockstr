@@ -61,7 +61,7 @@ export default function Container({
         {children}
         <div className="mt-auto">
           {!!contentTags?.length && (
-            <div className="mb-2 mt-1 max-h-[52px] overflow-hidden">
+            <div className="mb-2.5 mt-1 max-h-[52px] overflow-hidden">
               <Tags tags={contentTags} />
             </div>
           )}

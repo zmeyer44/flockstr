@@ -17,9 +17,10 @@ export default function EventPage({
   const { data, type } = nip19.decode(key);
   const { events } = useEvents({
     filter:
-      type === "nevent"
+      type === "naddr"
         ? {
-            ids: [data.id],
+            kinds: [data.kind],
+            ["#d"]: [data.identifier],
             limit: 1,
           }
         : {},

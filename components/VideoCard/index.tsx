@@ -13,6 +13,7 @@ type VideoCardProps = {
     title: string;
     tags: string[];
     starts?: number;
+    ends?: number;
     status: "live" | "planned" | "ended";
     ["total_participants"]?: number;
   };
@@ -21,6 +22,7 @@ type VideoCardProps = {
 
 export default function VideoCard({ className, card }: VideoCardProps) {
   const startTime = card?.starts ? new Date(card.starts * 1000) : null;
+  const endTime = card?.ends ? new Date(card.ends * 1000) : null;
   return (
     <div
       className={cn(
@@ -52,10 +54,17 @@ export default function VideoCard({ className, card }: VideoCardProps) {
         <h3 className="line-clamp-2 font-medium leading-none">{card.title}</h3>
         <div className="flex items-center gap-x-3">
           <div className="flex flex-col items-start gap-y-1">
-            {startTime && (
+            {!!startTime && (
               <div className="center gap-x-1 text-xs text-muted-foreground">
                 <RxClock className="h-4 w-4 text-primary" />
                 <span>{formatDate(new Date(startTime), "h:m a")}</span>
+                {!!endTime && (
+                  <>
+                    {" "}
+                    <span>-</span>{" "}
+                    <span>{formatDate(new Date(endTime), "h:m a")}</span>
+                  </>
+                )}
               </div>
             )}
             {!!card["total_participants"] && (

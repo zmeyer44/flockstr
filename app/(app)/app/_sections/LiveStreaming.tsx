@@ -29,8 +29,25 @@ export default function LiveStreamingSection() {
     },
   });
 
-  const processedEvents = uniqBy((e) => getTagValues("title", e.tags), events);
-  console.log(events);
+  const processedEvents = uniqBy(
+    (e) => getTagValues("title", e.tags),
+    events,
+  ).sort((a, b) => {
+    const aParticipants =
+      getTagValues("total_participants", a.tags) ??
+      getTagValues("current_participants", a.tags);
+    const bParticipants =
+      getTagValues("total_participants", b.tags) ??
+      getTagValues("current_participants", b.tags);
+    if (aParticipants && bParticipants) {
+      if (parseInt(aParticipants) < parseInt(bParticipants)) {
+        return 1;
+      } else return -1;
+    }
+    if (bParticipants) return 1;
+    return -1;
+  });
+  console.log(processedEvents);
   return (
     <Section className="max-sm:-mx-5">
       <SectionHeader>
@@ -55,6 +72,7 @@ export default function LiveStreamingSection() {
                   const image = getTagValues("image", event.tags) as string;
                   const title = getTagValues("title", event.tags) as string;
                   const starts = getTagValues("starts", event.tags) as string;
+                  const ends = getTagValues("ends", event.tags) as string;
                   const tags = getTagsValues("t", event.tags) as string[];
                   const total_participants =
                     getTagValues("total_participants", event.tags) ??
@@ -75,6 +93,7 @@ export default function LiveStreamingSection() {
                           tags,
                           title,
                           starts: parseInt(starts),
+                          ends: parseInt(ends),
                           total_participants: total_participants
                             ? parseInt(total_participants)
                             : undefined,
