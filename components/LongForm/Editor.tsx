@@ -7,16 +7,24 @@ import "@blocknote/core/style.css";
 
 interface EditorProps {
   editable?: boolean;
+  onContentChange: (text: string) => void;
 }
 
-const Editor = ({ editable }: EditorProps) => {
+const Editor = ({ editable, onContentChange }: EditorProps) => {
   const { resolvedTheme } = useTheme();
-  const [content, setContent] = useState("");
 
   const editor: BlockNoteEditor = useBlockNote({
     editable,
     onEditorContentChange: (editor) => {
-      setContent(JSON.stringify(editor.topLevelBlocks, null, 2));
+      // Converts the editor's contents from Block objects to Markdown and
+      // saves them.
+      const saveBlocksAsMarkdown = async () => {
+        const markdown: string = await editor.blocksToMarkdown(
+          editor.topLevelBlocks,
+        );
+        onContentChange(markdown);
+      };
+      saveBlocksAsMarkdown();
     },
   });
 

@@ -27,7 +27,6 @@ import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import { NOTABLE_ACCOUNTS } from "@/constants";
 import { type NDKKind } from "@nostr-dev-kit/ndk";
 import { uniqBy } from "ramda";
-import useProfile from "@/lib/hooks/useProfile";
 import ListCard from "@/components/ListCard";
 
 export default function FeaturedLists() {
@@ -66,7 +65,6 @@ export default function FeaturedLists() {
       <SectionHeader>
         <div className="center gap-x-2">
           <SectionTitle>Featured Lists</SectionTitle>
-          {processedEvents.length}
         </div>
         <Button variant={"ghost"}>
           View all <RiArrowRightLine className="ml-1 h-4 w-4" />

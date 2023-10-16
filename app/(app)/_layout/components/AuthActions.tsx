@@ -36,11 +36,12 @@ const LoginModal = dynamic(() => import("@/components/Modals/Login"), {
 export default function AuthActions() {
   const modal = useModal();
   const { currentUser, logout, attemptLogin } = useCurrentUser();
+  const { ndk } = useNDK();
   useEffect(() => {
-    if (!currentUser) {
+    if (ndk && !currentUser) {
       void attemptLogin();
     }
-  }, []);
+  }, [ndk]);
   if (currentUser) {
     return (
       <>

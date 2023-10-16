@@ -4,18 +4,22 @@ import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { BlockNoteEditor, Block } from "@blocknote/core";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import Spinner from "../spinner";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Toolbar } from "./ToolBar";
 
 type MarkdoneProps = {
   content?: string;
   editable?: boolean;
 };
-export default function Markdown({ content }: MarkdoneProps) {
+export default function Markdown({ content, editable = false }: MarkdoneProps) {
   const { resolvedTheme } = useTheme();
   const [loading, setLoading] = useState(true);
 
   const editor: BlockNoteEditor = useBlockNote({
-    editable: false,
+    editable,
+    onEditorContentChange: (e) => {
+      console.log("EDITOR CHANGE", e);
+    },
   });
 
   useEffect(() => {
@@ -38,8 +42,11 @@ export default function Markdown({ content }: MarkdoneProps) {
 
   if (loading) {
     return (
-      <div className="center py-20 text-primary">
-        <Spinner />
+      <div className="space-y-4 pl-8 pt-5">
+        <Skeleton className="h-14 w-[50%]" />
+        <Skeleton className="h-4 w-[80%]" />
+        <Skeleton className="h-4 w-[40%]" />
+        <Skeleton className="h-4 w-[60%]" />
       </div>
     );
   }
