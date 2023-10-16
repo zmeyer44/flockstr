@@ -42,9 +42,7 @@ export default function ProfilePage({
               {!!profile?.banner && (
                 <Image
                   className="absolute inset-0 h-full w-full object-cover align-middle"
-                  src={
-                    "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,quality=75,width=1250,height=357.14285714285717/calendar-cover-images/4m/c50dff9c-12e1-4b8a-ae95-68a36364b760"
-                  }
+                  src={profile.banner}
                   width={400}
                   height={100}
                   alt="banner"
@@ -58,9 +56,7 @@ export default function ProfilePage({
           <div className="z-1 ml-[calc(-1_*_3px)] overflow-hidden rounded-[0.5rem] bg-background p-[3px] sm:ml-[calc(-1_*_4px)] sm:p-[4px] lg:ml-[calc(-1_*_6px)] lg:rounded-[1rem] lg:p-[6px]">
             {profile?.image ? (
               <Image
-                src={
-                  "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=96,height=96/calendars/hw/70772773-6d97-4fbb-a076-fc4dee603080"
-                }
+                src={profile.image}
                 className="aspect-square w-[4rem] overflow-hidden rounded-[calc(0.5rem_-_3px)] object-cover object-center sm:w-[4.5rem] sm:rounded-[calc(0.5rem_-_4px)] md:w-[5rem] lg:w-[6rem] lg:rounded-[calc(1rem_-_6px)]"
                 unoptimized
                 alt="profile picture"

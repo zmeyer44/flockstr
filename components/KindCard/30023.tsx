@@ -14,7 +14,7 @@ export default function Kind30023({ content, pubkey, tags }: Event) {
 
   return (
     <Container pubkey={pubkey} contentTags={contentTags}>
-      <CardTitle className="mb-1.5 line-clamp-2 text-lg font-semibold">
+      <CardTitle className="mb-1.5 line-clamp-2 text-lg font-semibold leading-6">
         {title}
       </CardTitle>
       <CardDescription className="line-clamp-4 text-sm">

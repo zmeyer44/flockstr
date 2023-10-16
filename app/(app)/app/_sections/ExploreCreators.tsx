@@ -102,6 +102,7 @@ function Creator({ npub }: { npub: string }) {
       "",
     summary:
       getTagValues("summary", e.tags) ?? getTagValues("r", e.tags) ?? e.content,
+    href: `/article/${e.encode()}`,
   }));
 
   return (

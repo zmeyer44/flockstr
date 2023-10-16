@@ -37,7 +37,7 @@ export default function Container({
   actionOptions = [],
 }: CreatorCardProps) {
   return (
-    <Card className="relative overflow-hidden">
+    <Card className="relative flex h-full flex-col overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-4">
         <ProfileHeader pubkey={pubkey} />
         <div className="-mr-1 flex items-center gap-x-1.5 text-xs text-muted-foreground">
@@ -53,14 +53,16 @@ export default function Container({
           </DropDownMenu>
         </div>
       </CardHeader>
-      <CardContent className="px-4 pb-3">
+      <CardContent className="flex grow flex-col px-4 pb-3">
         {children}
-        {!!contentTags?.length && (
-          <div className="-mb-2 mt-1 max-h-[52px] overflow-hidden">
-            <Tags tags={contentTags} />
-          </div>
-        )}
-        <Actions />
+        <div className="mt-auto">
+          {!!contentTags?.length && (
+            <div className="-mb-1 mt-1 max-h-[52px] overflow-hidden">
+              <Tags tags={contentTags} />
+            </div>
+          )}
+          <Actions />
+        </div>
       </CardContent>
     </Card>
   );

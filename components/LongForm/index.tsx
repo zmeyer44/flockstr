@@ -12,7 +12,6 @@ type MarkdoneProps = {
 };
 export default function Markdown({ content }: MarkdoneProps) {
   const { resolvedTheme } = useTheme();
-  //   const [blocks, setBlocks] = useState<Block[]>();
   const [loading, setLoading] = useState(true);
 
   const editor: BlockNoteEditor = useBlockNote({
@@ -22,12 +21,10 @@ export default function Markdown({ content }: MarkdoneProps) {
   useEffect(() => {
     if (editor) {
       if (content) {
-        console.log("initial md", content);
         // Whenever the current Markdown content changes, converts it to an array
         // of Block objects and replaces the editor's content with them.
         const getBlocks = async () => {
           const blocks: Block[] = await editor.markdownToBlocks(content);
-          console.log("Blocks", blocks);
           editor.replaceBlocks(editor.topLevelBlocks, blocks);
           setLoading(false);
         };
@@ -41,7 +38,7 @@ export default function Markdown({ content }: MarkdoneProps) {
 
   if (loading) {
     return (
-      <div className="">
+      <div className="center py-20 text-primary">
         <Spinner />
       </div>
     );
