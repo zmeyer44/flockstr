@@ -39,7 +39,7 @@ export default function ProfilePage({
         <div className="mx-auto max-w-5xl p-0">
           <div className="m-0 @5xl:px-5 @5xl:pt-8">
             <div className="relative w-full overflow-hidden bg-gradient-to-b from-primary pb-[29%] @5xl:rounded-[20px]">
-              {!!profile.banner && (
+              {!!profile?.banner && (
                 <Image
                   className="absolute inset-0 h-full w-full object-cover align-middle"
                   src={
@@ -56,7 +56,7 @@ export default function ProfilePage({
         </div>
         <div className="relative mx-auto mb-4 mt-[calc(-0.4375_*_4rem)] flex max-w-[800px] items-end justify-between gap-2 px-3 sm:mt-[calc(-0.4375_*_4.5rem)] sm:px-5 md:mt-[calc(-0.5625_*_5rem)] lg:mt-[calc(-0.5625_*_6rem)]">
           <div className="z-1 ml-[calc(-1_*_3px)] overflow-hidden rounded-[0.5rem] bg-background p-[3px] sm:ml-[calc(-1_*_4px)] sm:p-[4px] lg:ml-[calc(-1_*_6px)] lg:rounded-[1rem] lg:p-[6px]">
-            {profile.image ? (
+            {profile?.image ? (
               <Image
                 src={
                   "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=96,height=96/calendars/hw/70772773-6d97-4fbb-a076-fc4dee603080"
@@ -84,15 +84,15 @@ export default function ProfilePage({
         <div className="mx-auto max-w-[800px] space-y-1 px-4">
           <div className="flex items-center gap-x-1.5 lg:gap-x-2.5">
             <h2 className="text-xl font-semibold sm:text-2xl lg:text-3xl">
-              {profile.displayName ?? profile.name ?? truncateText(npub)}
+              {profile?.displayName ?? profile?.name ?? truncateText(npub)}
             </h2>
-            {!!profile.nip05 && (
+            {!!profile?.nip05 && (
               <HiCheckBadge className="h-5 w-5 text-primary lg:h-7 lg:w-7" />
             )}
           </div>
           <div className="flex items-center text-xs text-muted-foreground/80 md:text-sm">
-            {!!profile.name && <p>{profile.name}</p>}
-            {!!profile.name && !!profile.nip05 && (
+            {!!profile?.name && <p>{profile.name}</p>}
+            {!!profile?.name && !!profile.nip05 && (
               <>
                 <div className="inline-flex px-1">·</div>
                 <p>{profile.nip05}</p>
@@ -100,7 +100,7 @@ export default function ProfilePage({
             )}
           </div>
           <div className="pt-1 md:pt-2">
-            {!!profile.about && (
+            {!!profile?.about && (
               <p className="line-clamp-3 text-xs text-muted-foreground md:text-sm">
                 {profile.about}
               </p>

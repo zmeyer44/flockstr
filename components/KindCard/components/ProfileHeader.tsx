@@ -14,7 +14,7 @@ export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
   return (
     <Link href={`/${npub}`} className="center group gap-x-3">
       <Avatar className="center h-8 w-8 overflow-hidden rounded-sm bg-muted">
-        <AvatarImage src={profile.image} alt={profile.displayName} />
+        <AvatarImage src={profile?.image} alt={profile?.displayName} />
         <AvatarFallback className="text-xs">
           {getTwoLetters({ npub, profile })}
         </AvatarFallback>
@@ -23,7 +23,7 @@ export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
         <span className="text-xs uppercase text-muted-foreground group-hover:underline">
           {getNameToShow({ npub, profile })}
         </span>
-        {!!profile.nip05 && <HiCheckBadge className="h-4 w-4 text-primary" />}
+        {!!profile?.nip05 && <HiCheckBadge className="h-4 w-4 text-primary" />}
       </div>
     </Link>
   );

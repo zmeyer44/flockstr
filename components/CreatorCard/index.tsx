@@ -13,7 +13,7 @@ import { BANNER } from "@/constants/app";
 import { getNameToShow } from "@/lib/utils";
 
 type CreatorCardProps = {
-  profile: NDKUserProfile;
+  profile?: NDKUserProfile;
   npub: string;
   recentWork: {
     id: string;

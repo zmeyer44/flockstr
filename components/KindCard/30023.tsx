@@ -8,7 +8,9 @@ import { removeDuplicates } from "@/lib/utils";
 export default function Kind30023({ content, pubkey, tags }: Event) {
   const title = getTagValues("title", tags);
   const summary = getTagValues("summary", tags);
-  const contentTags = removeDuplicates(getTagsValues("t", tags));
+  const contentTags = removeDuplicates(getTagsValues("t", tags)).filter(
+    Boolean,
+  );
 
   return (
     <Container pubkey={pubkey} contentTags={contentTags}>

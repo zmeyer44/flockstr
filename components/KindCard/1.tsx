@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 export default function Kind1(props: Event) {
   const { content, pubkey, tags } = props;
-  const r = getTagsValues("r", tags);
+  const r = getTagsValues("r", tags).filter(Boolean);
   const npub = nip19.npubEncode(pubkey);
 
   return (

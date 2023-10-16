@@ -50,12 +50,16 @@ const RenderText = ({ text }: { text?: string }) => {
         // specialElement = <span className="">{specialValuesArray[index]}</span>;
       } else if (specialValuesArray[index]?.match(nostrPrefixRegex)) {
         const mention = specialValuesArray[index]?.split(":")[1];
-        if (mention.startsWith("nprofile") || mention.startsWith("npub")) {
+        if (
+          mention &&
+          (mention.startsWith("nprofile") || mention.startsWith("npub"))
+        ) {
           specialElement = <ProfileMention mention={mention} />;
         } else if (
-          mention.startsWith("nevent") ||
-          mention.startsWith("note") ||
-          mention.startsWith("naddr")
+          mention &&
+          (mention.startsWith("nevent") ||
+            mention.startsWith("note") ||
+            mention.startsWith("naddr"))
         ) {
           specialElement = <EventMention mention={mention} />;
         }

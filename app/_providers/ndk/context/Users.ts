@@ -54,8 +54,9 @@ export const Users = (ndk: NDK | undefined) => {
   }
 
   function getProfile(id: string) {
-    if (users[id]) {
-      return users[id].profile!;
+    const user = users[id];
+    if (user) {
+      return user.profile;
     } else {
       fetchUser(id);
     }

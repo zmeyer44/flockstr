@@ -64,9 +64,11 @@ export default function useCurrentUser() {
     window.location.reload();
   }
   function handleUpdateUser(userInfo: string) {
+    const userObject = UserSchema.safeParse(JSON.parse(userInfo));
+    if (!userObject.success) return;
     const parsedData = UserSchema.safeParse({
       ...currentUser,
-      ...JSON.parse(userInfo),
+      ...userObject,
     });
     if (parsedData.success) {
       updateCurrentUser({

@@ -46,7 +46,7 @@ export const parseContent = ({
     // Convert legacy mentions to bech32 entities
     const mentionMatch = text.match(/^#\[(\d+)\]/i);
 
-    if (mentionMatch) {
+    if (mentionMatch && mentionMatch[1]) {
       const i = parseInt(mentionMatch[1]);
 
       if (tags[i]) {

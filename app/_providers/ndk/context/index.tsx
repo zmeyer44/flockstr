@@ -56,8 +56,8 @@ interface NDKContext {
         }
       | undefined,
   ) => Promise<undefined | NDKEvent>;
-  getUser: (_: string) => NDKUser;
-  getProfile: (_: string) => NDKUserProfile;
+  getUser: (_: string) => NDKUser | undefined;
+  getProfile: (_: string) => NDKUserProfile | undefined;
 }
 
 const NDKContext = createContext<NDKContext>({
