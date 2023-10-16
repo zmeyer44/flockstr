@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   RiHome6Fill,
@@ -17,14 +19,36 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ZapPicker from "@/components/Modals/ZapPicker";
+import { useModal } from "@/app/_providers/modal/provider";
+import { IconType } from "react-icons";
+
+type NavigationLink = {
+  type: "link";
+  href: string;
+};
+type NavigationButton = {
+  type: "button";
+  onClick: () => void;
+};
+type NavigationElement = {
+  name: string;
+  label: string;
+  icon: IconType;
+  current: boolean;
+  active: boolean;
+} & (NavigationLink | NavigationButton);
 
 export default function Sidebar() {
-  const navigation = [
+  const modal = useModal();
+
+  const navigation: NavigationElement[] = [
     {
       href: "",
       name: "home",
       label: "Home",
       icon: RiHome6Fill,
+      type: "link",
       current: true,
       active: true,
     },
@@ -33,6 +57,7 @@ export default function Sidebar() {
       name: "explore",
       label: "Explore",
       icon: RiCompassLine,
+      type: "link",
       current: false,
       active: false,
     },
@@ -41,14 +66,16 @@ export default function Sidebar() {
       name: "messages",
       label: "Messages",
       icon: RiQuestionAnswerLine,
+      type: "link",
       current: false,
       active: false,
     },
     {
-      href: "",
+      onClick: () => modal?.show(<ZapPicker />),
       name: "zap",
       label: "Zap Flockstr",
       icon: HiOutlineLightningBolt,
+      type: "button",
       current: false,
       active: true,
     },
@@ -59,62 +86,123 @@ export default function Sidebar() {
         <div className="flex flex-1 flex-col">
           <div className="flex flex-col items-stretch gap-y-2 p-4">
             {navigation.map((item) => {
-              if (item.active) {
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                      item.current
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    <item.icon
-                      className={cn("h-6 w-6 shrink-0")}
-                      aria-hidden="true"
-                    />
-                    <span className="hidden text-base xl:flex">
-                      {item.label}
-                    </span>
-                  </Link>
-                );
+              if (item.type === "link") {
+                if (item.active) {
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
+                        item.current
+                          ? "text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      <item.icon
+                        className={cn("h-6 w-6 shrink-0")}
+                        aria-hidden="true"
+                      />
+                      <span className="hidden text-base xl:flex">
+                        {item.label}
+                      </span>
+                    </Link>
+                  );
+                } else {
+                  return (
+                    <TooltipProvider key={item.name}>
+                      <Tooltip delayDuration={100}>
+                        <TooltipTrigger>
+                          <div
+                            className={cn(
+                              "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
+                              item.current
+                                ? "text-foreground"
+                                : "text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            <item.icon
+                              className={cn("h-6 w-6 shrink-0")}
+                              aria-hidden="true"
+                            />
+                            <span className="hidden text-base xl:flex">
+                              {item.label}
+                            </span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent align="start">
+                          <p>Coming Soon</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  );
+                }
               } else {
-                return (
-                  <TooltipProvider key={item.name}>
-                    <Tooltip delayDuration={100}>
-                      <TooltipTrigger>
-                        <div
-                          className={cn(
-                            "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                            item.current
-                              ? "text-foreground"
-                              : "text-muted-foreground hover:text-foreground",
-                          )}
-                        >
-                          <item.icon
-                            className={cn("h-6 w-6 shrink-0")}
-                            aria-hidden="true"
-                          />
-                          <span className="hidden text-base xl:flex">
-                            {item.label}
-                          </span>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent align="start">
-                        <p>Coming Soon</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                );
+                if (item.active) {
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={item.onClick}
+                      className={cn(
+                        "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
+                        item.current
+                          ? "text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      <item.icon
+                        className={cn("h-6 w-6 shrink-0")}
+                        aria-hidden="true"
+                      />
+                      <span className="hidden text-base xl:flex">
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                } else {
+                  return (
+                    <TooltipProvider key={item.name}>
+                      <Tooltip delayDuration={100}>
+                        <TooltipTrigger>
+                          <div
+                            className={cn(
+                              "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
+                              item.current
+                                ? "text-foreground"
+                                : "text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            <item.icon
+                              className={cn("h-6 w-6 shrink-0")}
+                              aria-hidden="true"
+                            />
+                            <span className="hidden text-base xl:flex">
+                              {item.label}
+                            </span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent align="start">
+                          <p>Coming Soon</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  );
+                }
               }
             })}
             <div className="center py-2 xl:justify-start">
-              <Button size={"icon"} className="xl:hidden">
+              <Button
+                onClick={() => modal?.show(<ZapPicker />)}
+                size={"icon"}
+                className="xl:hidden"
+              >
                 <RiAddFill className="h-6 w-6" />
               </Button>
-              <Button size={"lg"} className="hidden xl:flex">
+              <Button
+                onClick={() => modal?.show(<ZapPicker />)}
+                size={"lg"}
+                className="hidden xl:flex"
+              >
                 <div className="center gap-x-1.5">
                   <RiAddFill className="h-6 w-6" />
                   <span>Add Note</span>

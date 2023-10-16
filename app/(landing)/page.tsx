@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className="h-[calc(100svh_-_var(--header-height))] p-2 lg:p-5">
+    <div className="min-h-[calc(100svh_-_var(--header-height))] p-2 lg:p-5">
       <section className="flex h-full w-full flex-col items-center gap-3">
         <div className="flex h-full w-full flex-col items-center gap-y-12 rounded-[35px] bg-black p-6 pt-20 @container md:p-20 md:py-20">
           <div className="flex flex-col gap-y-6 text-center md:self-start md:pb-4 lg:max-w-md lg:text-left">

@@ -52,8 +52,8 @@ export default function VideoCard({ className, card }: VideoCardProps) {
       </div>
       <div className="flex-1 space-y-2 text-base">
         <h3 className="line-clamp-2 font-medium leading-none">{card.title}</h3>
-        <div className="flex items-center gap-x-3">
-          <div className="flex flex-col items-start gap-y-1">
+        <div className="flex flex-col items-start gap-y-1">
+          <div className="flex items-center gap-x-3">
             {!!startTime && (
               <div className="center gap-x-1 text-xs text-muted-foreground">
                 <RxClock className="h-4 w-4 text-primary" />
@@ -76,8 +76,8 @@ export default function VideoCard({ className, card }: VideoCardProps) {
           </div>
         </div>
       </div>
-      <div className="-mt-1 flex flex-wrap-reverse gap-2 overflow-x-hidden">
-        {card.tags.slice(0, 4).map((tag) => (
+      <div className="-mt-1 flex flex-wrap-reverse gap-2 overflow-x-scroll scrollbar-none">
+        {card.tags.slice(0, 3).map((tag) => (
           <Badge key={tag}>{tag}</Badge>
         ))}
       </div>

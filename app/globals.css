@@ -55,6 +55,12 @@
     --header-height: 72px;
     --bottom-nav-height: 56px;
   }
+  /* @media (min-width: 640px) {
+    :root {
+      --header-height: 64px;
+    }
+  } */
+
   @media all and (display-mode: standalone) {
     :root {
       --bottom-nav-height: 76px;

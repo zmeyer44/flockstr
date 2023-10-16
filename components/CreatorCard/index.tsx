@@ -37,15 +37,15 @@ export default function CreatorCard({
         fill
         unoptimized
       />
-      <div className="absolute inset-0 bg-background/60 backdrop-blur-md transition-all">
+      <div className="absolute inset-0 bg-zinc-800/20 backdrop-blur-lg transition-all">
         <div className="group relative flex h-full w-full flex-col items-center justify-end transition-all">
           <CardHeader className="absolute inset-x-0 top-[59%] transform pt-4 text-center transition-all duration-300 group-hover:top-[8px] group-hover:ml-[75px] group-hover:text-left">
             <Link href={`/${npub}`}>
-              <CardTitle className="hover:underline">
+              <CardTitle className="text-zinc-100 hover:underline">
                 {getNameToShow({ profile, npub })}
               </CardTitle>
             </Link>
-            <CardDescription className="line-clamp-3 group-hover:text-xs">
+            <CardDescription className="line-clamp-3 text-zinc-200 group-hover:text-xs">
               {profile?.about}
             </CardDescription>
           </CardHeader>

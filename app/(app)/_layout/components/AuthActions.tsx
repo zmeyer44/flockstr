@@ -55,7 +55,7 @@ export default function AuthActions() {
     <>
       <Button
         onClick={() => modal?.show(<LoginModal />)}
-        className="rounded-sm px-5"
+        className="rounded-sm px-5 font-medium"
       >
         Login
       </Button>
@@ -154,7 +154,7 @@ export function Relays() {
         {ndk?.explicitRelayUrls?.map((r) => (
           <DropdownMenuGroup key={r}>
             <DropdownMenuItem className="flex items-center gap-x-2 overflow-hidden">
-              <StatusIndicator status="offline" />
+              <StatusIndicator status="online" />
               <span className="w-full truncate">{r}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
