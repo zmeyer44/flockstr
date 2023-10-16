@@ -17,7 +17,9 @@ export default function LandingPage() {
               again.
             </p>
             <div className="center lg:justify-start">
-              <Button size={"lg"}>Get Started</Button>
+              <Link href="/app">
+                <Button size={"lg"}>Get Started</Button>
+              </Link>
             </div>
           </div>
           <div className="h-[1px] w-full shrink-0 bg-zinc-500"></div>
