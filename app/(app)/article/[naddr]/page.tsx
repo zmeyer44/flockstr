@@ -33,7 +33,6 @@ export default function ArticlePage({
   return (
     <div className="center pt-20 text-primary">
       <Spinner />
-      {events.length}
     </div>
   );
 }

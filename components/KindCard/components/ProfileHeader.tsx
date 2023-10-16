@@ -4,6 +4,7 @@ import Link from "next/link";
 import useProfile from "@/lib/hooks/useProfile";
 import { nip19 } from "nostr-tools";
 import { getTwoLetters, getNameToShow } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ProfileHeaderProps = {
   pubkey: string;
@@ -48,5 +49,17 @@ export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
         </div>
       )}
     </Link>
+  );
+}
+
+export function LoadingProfileHeader() {
+  return (
+    <div className="center group gap-x-3">
+      <Avatar className="center h-8 w-8 overflow-hidden rounded-sm bg-muted"></Avatar>
+      <div className="space-y-1">
+        <Skeleton className="h-2.5 w-[70px] bg-muted" />
+        <Skeleton className="h-2.5 w-[100px] bg-muted" />
+      </div>
+    </div>
   );
 }

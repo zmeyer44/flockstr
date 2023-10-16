@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils/dates";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
-import ProfileHeader from "./ProfileHeader";
+import ProfileHeader, { LoadingProfileHeader } from "./ProfileHeader";
 import Actions from "./Actions";
 import Tags from "./Tags";
 import DropDownMenu from "@/components/DropDownMenu";
@@ -24,14 +24,16 @@ type Option = {
 } & (OptionLink | OptionButton);
 
 type CreatorCardProps = {
-  pubkey: string;
+  pubkey?: string;
   contentTags?: string[];
+  createdAt?: number;
   children: ReactNode;
   actionOptions?: Option[];
 };
 
 export default function Container({
   children,
+  createdAt,
   contentTags,
   pubkey,
   actionOptions = [],
@@ -39,9 +41,10 @@ export default function Container({
   return (
     <Card className="relative flex h-full flex-col overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-4">
-        <ProfileHeader pubkey={pubkey} />
+        {pubkey ? <ProfileHeader pubkey={pubkey} /> : <LoadingProfileHeader />}
+
         <div className="-mr-1 flex items-center gap-x-1.5 text-xs text-muted-foreground">
-          {formatDate(new Date("10-5-23"), "MMM Do")}
+          {!!createdAt && formatDate(new Date(createdAt * 1000), "MMM Do")}
           <DropDownMenu options={actionOptions}>
             <Button
               size={"sm"}
