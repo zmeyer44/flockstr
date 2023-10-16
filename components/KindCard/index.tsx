@@ -13,14 +13,18 @@ const KindCard3745 = dynamic(() => import("./3745"), {
 const KindCard30023 = dynamic(() => import("./30023"), {
   ssr: false,
 });
+const KindCard30311 = dynamic(() => import("./30311"), {
+  ssr: false,
+});
 const KindCardDefault = dynamic(() => import("./default"), {
   ssr: false,
 });
 
 const componentMap: Record<number, ComponentType<KindCardProps>> = {
   1: KindCard1,
-  30023: KindCard30023,
   3745: KindCard3745,
+  30023: KindCard30023,
+  30311: KindCard30311,
 };
 
 type KindCardProps = Event<number>;
