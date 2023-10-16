@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useNDK } from "@/app/_providers/ndk";
 import {

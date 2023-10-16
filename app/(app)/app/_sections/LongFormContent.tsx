@@ -1,3 +1,4 @@
+"use client";
 import {
   Section,
   SectionHeader,
@@ -9,7 +10,15 @@ import { RiArrowRightLine } from "react-icons/ri";
 import KindCard from "@/components/KindCard";
 import { DUMMY_30023 } from "@/constants";
 import Link from "next/link";
+import useEvents from "@/lib/hooks/useEvents";
+import { Event } from "nostr-tools";
 export default function LongFormContentSection() {
+  const { events } = useEvents({
+    filter: {
+      kinds: [30023],
+      limit: 10,
+    },
+  });
   return (
     <Section>
       <SectionHeader>
@@ -19,27 +28,14 @@ export default function LongFormContentSection() {
         </Button>
       </SectionHeader>
       <SectionContent className="sm:lg-feed-cols relative mx-auto flex flex-col gap-4">
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
-        <Link href="/article/ere">
-          <KindCard {...DUMMY_30023} />
-        </Link>
+        {events.map((e) => {
+          const event = e.rawEvent() as Event;
+          return (
+            <Link key={e.id} href={`/article/${e.tagId}`}>
+              <KindCard {...event} />
+            </Link>
+          );
+        })}
       </SectionContent>
     </Section>
   );

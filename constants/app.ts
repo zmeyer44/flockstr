@@ -5,7 +5,6 @@ export const EXPLORE_CREATORS = [
   "npub19mduaf5569jx9xz555jcx3v06mvktvtpu0zgk47n4lcpjsz43zzqhj6vzk",
   "npub1dc9p7jzjhj86g2uqgltq4qvnpkyfqn9r72kdlddcgyat3j05gnjsgjc8rz",
   "npub1qny3tkh0acurzla8x3zy4nhrjz5zd8l9sy9jys09umwng00manysew95gx",
-  "npub17u5dneh8qjp43ecfxr6u5e9sjamsmxyuekrg2nlxrrk6nj9rsyrqywt4tp",
   "npub1l2vyh47mk2p0qlsku7hg0vn29faehy9hy34ygaclpn66ukqp3afqutajft",
 ];
 

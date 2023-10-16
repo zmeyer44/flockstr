@@ -48,7 +48,7 @@ export function getTwoLetters(user: {
     if (user.profile.displayName) {
       const firstLetter = user.profile.displayName.at(0);
       const secondLetter =
-        user.profile.displayName.split(" ")[1].at(0) ??
+        user.profile.displayName.split(" ")[1]?.at(0) ??
         user.profile.displayName.at(1) ??
         "";
       return firstLetter + secondLetter;
@@ -56,7 +56,7 @@ export function getTwoLetters(user: {
     if (user.profile.name) {
       const firstLetter = user.profile.name.at(0);
       const secondLetter =
-        user.profile.name.split(" ")[1].at(0) ?? user.profile.name.at(1) ?? "";
+        user.profile.name.split(" ")[1]?.at(0) ?? user.profile.name.at(1) ?? "";
       return firstLetter + secondLetter;
     }
   }

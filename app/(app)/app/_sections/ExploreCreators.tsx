@@ -90,7 +90,7 @@ function Creator({ npub }: { npub: string }) {
     filter: {
       authors: [pubkey],
       kinds: [30023, 9802],
-      limit: 5,
+      limit: 10,
     },
   });
   const recentWork = events.map((e) => ({
