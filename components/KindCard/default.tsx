@@ -4,9 +4,14 @@ import { type Event } from "nostr-tools";
 import { nip19 } from "nostr-tools";
 import { toast } from "sonner";
 import { copyText } from "@/lib/utils";
+import { RenderText } from "../TextRendering";
+import { getTagsValues } from "@/lib/nostr/utils";
+import LinkCard from "@/components/LinkCard";
 
 export default function KindDefault(props: Event) {
-  const { pubkey, created_at: createdAt } = props;
+  const { pubkey, created_at: createdAt, tags } = props;
+  const r = getTagsValues("r", tags).filter(Boolean);
+
   const npub = nip19.npubEncode(pubkey);
 
   return (
@@ -29,14 +34,16 @@ export default function KindDefault(props: Event) {
         },
       ]}
     >
-      <CardTitle className="mb-1.5 line-clamp-2 text-lg font-semibold">
-        The start of the Nostr revolution
-      </CardTitle>
-      <CardDescription className="line-clamp-4 text-sm">
-        This is the summary of this artilce. Let's hope that it is a good
-        article and that it will end up being worth reading. I don't want to
-        waste my time on some random other stuff.
+      <CardDescription className="text-sm font-normal text-secondary-foreground">
+        <RenderText text={props.content} />
       </CardDescription>
+      {!!r.length && (
+        <div className="mt-1.5 flex flex-wrap">
+          {r.map((url, idx) => (
+            <LinkCard key={idx} url={url} className="max-w-[250px]" />
+          ))}
+        </div>
+      )}
     </Container>
   );
 }

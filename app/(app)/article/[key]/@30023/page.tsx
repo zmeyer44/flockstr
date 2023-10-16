@@ -6,14 +6,14 @@ import { nip19 } from "nostr-tools";
 import Spinner from "@/components/spinner";
 import useEvents from "@/lib/hooks/useEvents";
 export default function ArticlePage({
-  params: { naddr },
+  params: { key },
 }: {
   params: {
-    naddr: string;
+    key: string;
   };
 }) {
   const { ndk } = useNDK();
-  const { data, type } = nip19.decode(naddr);
+  const { data, type } = nip19.decode(key);
   const { events } = useEvents({
     filter:
       type === "naddr"

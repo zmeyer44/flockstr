@@ -14,7 +14,7 @@ export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
   const npub = nip19.npubEncode(pubkey);
   return (
     <Link href={`/${npub}`} className="center group gap-x-3">
-      <Avatar className="center h-8 w-8 overflow-hidden rounded-sm bg-muted">
+      <Avatar className="center h-9 w-9 overflow-hidden rounded-sm bg-muted @md:h-10 @md:w-10">
         <AvatarImage src={profile?.image} alt={profile?.displayName} />
         <AvatarFallback className="text-xs">
           {getTwoLetters({ npub, profile })}
@@ -55,7 +55,7 @@ export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
 export function LoadingProfileHeader() {
   return (
     <div className="center group gap-x-3">
-      <Avatar className="center h-8 w-8 overflow-hidden rounded-sm bg-muted"></Avatar>
+      <Avatar className="center h-9 w-9 overflow-hidden rounded-sm bg-muted @md:h-10 @md:w-10"></Avatar>
       <div className="space-y-1">
         <Skeleton className="h-2.5 w-[70px] bg-muted" />
         <Skeleton className="h-2.5 w-[100px] bg-muted" />

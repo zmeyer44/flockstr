@@ -39,12 +39,13 @@ export default function Container({
   actionOptions = [],
 }: CreatorCardProps) {
   return (
-    <Card className="relative flex h-full flex-col overflow-hidden">
+    <Card className="relative flex h-full w-full flex-col overflow-hidden @container">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-4">
         {pubkey ? <ProfileHeader pubkey={pubkey} /> : <LoadingProfileHeader />}
 
         <div className="-mr-1 flex items-center gap-x-1.5 text-xs text-muted-foreground">
-          {!!createdAt && formatDate(new Date(createdAt * 1000), "MMM Do")}
+          {!!createdAt &&
+            formatDate(new Date(createdAt * 1000), "MMM Do, h:m a")}
           <DropDownMenu options={actionOptions}>
             <Button
               size={"sm"}
@@ -60,11 +61,13 @@ export default function Container({
         {children}
         <div className="mt-auto">
           {!!contentTags?.length && (
-            <div className="-mb-1 mt-1 max-h-[52px] overflow-hidden">
+            <div className="mb-2 mt-1 max-h-[52px] overflow-hidden">
               <Tags tags={contentTags} />
             </div>
           )}
-          <Actions />
+          <div className="border-t">
+            <Actions />
+          </div>
         </div>
       </CardContent>
     </Card>

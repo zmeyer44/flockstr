@@ -33,7 +33,7 @@ export default function Kind1(props: Event) {
         },
       ]}
     >
-      <CardDescription className="text-base text-foreground">
+      <CardDescription className="text-sm font-normal text-secondary-foreground">
         <RenderText text={content} />
       </CardDescription>
       {!!r.length && (
