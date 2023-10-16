@@ -30,36 +30,7 @@ export default function LiveStreamingSection() {
   });
 
   const processedEvents = uniqBy((e) => getTagValues("title", e.tags), events);
-  const demo = [
-    {
-      id: 1,
-      title: "BTC Radio",
-      picture:
-        "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/51602.original.png?1693358530",
-      tags: ["music", "crypto", "art"],
-    },
-    {
-      id: 2,
-      title: "The Book of Alpha: NFTs and crypto taking over. Market Talk",
-      picture:
-        "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/31095.thumbnail.png?1692203850",
-      tags: ["NFTs", "crypto", "art", "trading"],
-    },
-    {
-      id: 3,
-      title: "Space Talk: What's Elon up to?",
-      picture:
-        "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/40088.original.png?1692206315",
-      tags: ["Space"],
-    },
-    {
-      id: 4,
-      title: "The Book of Alpha: NFTs and crypto taking over. Market Talk",
-      picture:
-        "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/40680.original.png?1692206434",
-      tags: ["Market"],
-    },
-  ];
+  console.log(events);
   return (
     <Section className="max-sm:-mx-5">
       <SectionHeader>
@@ -85,10 +56,12 @@ export default function LiveStreamingSection() {
                   const title = getTagValues("title", event.tags) as string;
                   const starts = getTagValues("starts", event.tags) as string;
                   const tags = getTagsValues("t", event.tags) as string[];
-                  const total_participants = getTagValues(
-                    "total_participants",
-                    event.tags,
-                  ) as string;
+                  const total_participants =
+                    getTagValues("total_participants", event.tags) ??
+                    (getTagValues(
+                      "current_participants",
+                      event.tags,
+                    ) as string);
                   const status = getTagValues("status", event.tags) as
                     | "live"
                     | "planned"

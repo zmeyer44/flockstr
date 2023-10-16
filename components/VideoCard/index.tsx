@@ -51,14 +51,14 @@ export default function VideoCard({ className, card }: VideoCardProps) {
       <div className="flex-1 space-y-2 text-base">
         <h3 className="line-clamp-2 font-medium leading-none">{card.title}</h3>
         <div className="flex items-center gap-x-3">
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start gap-y-1">
             {startTime && (
               <div className="center gap-x-1 text-xs text-muted-foreground">
                 <RxClock className="h-4 w-4 text-primary" />
                 <span>{formatDate(new Date(startTime), "h:m a")}</span>
               </div>
             )}
-            {card["total_participants"] && (
+            {!!card["total_participants"] && (
               <div className="center gap-x-1 text-xs text-muted-foreground">
                 <HiOutlineUsers className="h-4 w-4 text-primary" />
                 <span>{formatNumber(card["total_participants"])}</span>
@@ -90,7 +90,7 @@ export function VideoCardLoading({ className }: { className: string }) {
         <Skeleton className="mb-2 h-4 w-1/3 bg-muted" />
         <div className="flex flex-col items-start">
           <div className="center gap-x-1 text-xs text-muted-foreground">
-            <RxClock className="h-4 w-4 text-primary" />
+            <Skeleton className="h-3 w-3 bg-muted" />
             <Skeleton className="h-3 w-[50px] bg-muted" />
           </div>
         </div>

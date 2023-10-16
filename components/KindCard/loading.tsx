@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function KindLoading() {
   return (
     <Container>
-      <div className="space-y-2 text-muted-foreground">
+      <div className="mb-3 space-y-2 text-muted-foreground">
         <Skeleton className="mb-2 h-4 w-1/3 bg-muted" />
         <Skeleton className="h-4 w-1/2 bg-muted" />
         <Skeleton className="h-4 w-2/5 bg-muted" />
