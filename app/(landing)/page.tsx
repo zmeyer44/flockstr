@@ -4,14 +4,14 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen">
-      <section className="flex w-full flex-col items-center gap-3 px-2">
-        <div className="flex w-full justify-center rounded-[35px] bg-black p-6 pt-20 @container lg:justify-start lg:p-10 lg:py-16">
-          <div className="flex flex-col gap-y-6 text-center lg:max-w-md lg:text-left">
+    <div className="h-[calc(100svh_-_var(--header-height))] p-2 lg:p-5">
+      <section className="flex h-full w-full flex-col items-center gap-3">
+        <div className="flex h-full w-full flex-col items-center gap-y-12 rounded-[35px] bg-black p-6 pt-20 @container md:p-20 md:py-20">
+          <div className="flex flex-col gap-y-6 text-center md:self-start md:pb-4 lg:max-w-md lg:text-left">
             <h1 className="font-condensed text-[11cqw] font-semibold leading-[13cqw] text-zinc-100 sm:text-5xl">
               Your Community, Where ever you are.
             </h1>
-            <p className="text-sm text-zinc-400 lg:text-base">
+            <p className="text-base text-zinc-400 lg:text-base">
               Nostr allows you to truly own your community with a fully
               decentralized social graph. Never get locked into a platform
               again.
@@ -20,8 +20,33 @@ export default function LandingPage() {
               <Button size={"lg"}>Get Started</Button>
             </div>
           </div>
+          <div className="h-[1px] w-full shrink-0 bg-zinc-500"></div>
+          <div className="mx-auto flex max-w-xl flex-col gap-y-4 text-center md:pt-4">
+            <span className="text-sm uppercase tracking-wider text-zinc-400">
+              About nostr
+            </span>
+            <div className="font-condensed space-y-4 font-medium">
+              <p className="text-sm text-zinc-300">
+                Nostr is a simple, open protocol for decentralizing how
+                infomration is stored and retreived on the web.
+              </p>
+              <p className="text-sm text-zinc-200">
+                Rather that your user data being siloed by the big tech
+                companies whose platforms dominate our culture, nostr
+                distributes data across hundreds of relays that anyone can spin
+                up.
+              </p>
+              <p className="text-sm text-zinc-200">
+                This means that no single entity is ever in control of your
+                data. In other words:
+                <span className="mt-10 block text-3xl font-bold text-primary">
+                  No more lock-in, Way more choices.
+                </span>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex w-full flex-col gap-3 lg:flex-row">
+        {/* <div className="flex w-full flex-col gap-3 lg:flex-row">
           <div className="flex w-full flex-1 rounded-[35px] bg-zinc-200 p-6 @container">
             <div className="flex flex-col gap-y-6 text-center">
               <span className="uppercase tracking-wider text-zinc-400">
@@ -97,9 +122,9 @@ export default function LandingPage() {
               <Button size={"lg"}>Contact Us</Button>
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
-      <section className="mt-10 w-full">
+      {/* <section className="mt-10 w-full">
         <div className="overflow-hidden pt-32 sm:pt-14">
           <div className="bg-zinc-800">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -180,7 +205,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

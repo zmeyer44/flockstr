@@ -7,7 +7,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <div className="relative z-0 flex shrink-0 grow flex-col justify-center">
         <div className="flex-1">{children}</div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </main>
   );
