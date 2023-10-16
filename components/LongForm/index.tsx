@@ -44,7 +44,7 @@ export default function Markdown({ content }: MarkdoneProps) {
     );
   }
   return (
-    <div className="pt-10">
+    <div className="pt-5">
       <BlockNoteView
         editor={editor}
         theme={resolvedTheme === "dark" ? "dark" : "light"}

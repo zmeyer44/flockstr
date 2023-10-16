@@ -1,6 +1,7 @@
 "use client";
-import dynamic from "next/dynamic";
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { RiCloseFill } from "react-icons/ri";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
@@ -12,7 +13,6 @@ import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
 import useProfile from "@/lib/hooks/useProfile";
 import { nip19 } from "nostr-tools";
 import { getNameToShow, getTwoLetters } from "@/lib/utils";
-
 type ArticleProps = {
   event: NDKEvent;
 };
@@ -34,6 +34,7 @@ export default function ArticlePage({ event }: ArticleProps) {
   const title = getTagValues("title", event.tags);
   const summary = getTagValues("summary", event.tags);
   const tags = getTagAllValues("t", event.tags);
+  const image = getTagValues("image", event.tags);
 
   return (
     <div className="relative @container">
@@ -85,12 +86,24 @@ export default function ArticlePage({ event }: ArticleProps) {
               </div>
             </div>
             <h1 className="">{title}</h1>
-            <div className="mb-3 flex items-center justify-end">
+            <div className="mb-5 flex items-center justify-end">
               <Actions />
             </div>
             <div className="rounded-r-lg border-l-[4px] border-primary bg-muted p-4">
               <p className="m-0">{summary} </p>
             </div>
+            {image && (
+              <div className="max-h-[400px] w-full">
+                <Image
+                  src={image}
+                  alt="article banner image"
+                  height="288"
+                  width="288"
+                  unoptimized
+                  className="mb-0 mt-5 max-h-[400px] w-full rounded-lg object-cover sm:mt-8"
+                />
+              </div>
+            )}
           </div>
           <Viewer content={markdown} />
         </article>
