@@ -56,7 +56,7 @@ export default function CreatorCard({
               profile?.picture ??
               `https://bitcoinfaces.xyz/api/get-image?name=${npub}&onchain=false`
             }
-            className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:w-[70px]"
+            className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg bg-muted object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:w-[70px]"
             height={100}
             width={100}
             unoptimized

@@ -57,12 +57,12 @@ export default function VideoCard({ className, card }: VideoCardProps) {
             {!!startTime && (
               <div className="center gap-x-1 text-xs text-muted-foreground">
                 <RxClock className="h-4 w-4 text-primary" />
-                <span>{formatDate(new Date(startTime), "h:m a")}</span>
+                <span>{formatDate(new Date(startTime), "h:mm a")}</span>
                 {!!endTime && (
                   <>
                     {" "}
                     <span>-</span>{" "}
-                    <span>{formatDate(new Date(endTime), "h:m a")}</span>
+                    <span>{formatDate(new Date(endTime), "h:mm a")}</span>
                   </>
                 )}
               </div>

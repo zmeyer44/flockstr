@@ -45,7 +45,7 @@ export default function Container({
 
         <div className="-mr-1 flex items-center gap-x-1.5 text-xs text-muted-foreground">
           {!!createdAt &&
-            formatDate(new Date(createdAt * 1000), "MMM Do, h:m a")}
+            formatDate(new Date(createdAt * 1000), "MMM Do, h:mm a")}
           <DropDownMenu options={actionOptions}>
             <Button
               size={"sm"}

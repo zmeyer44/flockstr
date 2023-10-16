@@ -1,5 +1,5 @@
 import { nip19 } from "nostr-tools";
-
+import { btcToSats } from "../utils";
 export const NOSTR_BECH32_REGEXP =
   /^(npub|nprofile|note|nevent|naddr|nrelay)1[023456789acdefghjklmnpqrstuvwxyz]+/;
 
@@ -61,4 +61,25 @@ export const getTagsValues = (name: string, tags: string[][]) => {
 export const getTagsAllValues = (name: string, tags: string[][]) => {
   const itemTags = tags.filter((tag: string[]) => tag[0] === name);
   return itemTags.map(([key, ...vals]) => vals) ?? [];
+};
+
+export const getPrice = (tags: string[][]) => {
+  const price = tags.find(([i]) => i === "price");
+  if (!price) return;
+  const [_, amount, currency = "BTC", frequency] = price as [
+    string,
+    string,
+    string | undefined,
+    string | undefined,
+  ];
+
+  return {
+    amount,
+    currency,
+    frequency,
+    asSats:
+      currency?.toLowerCase() === "btc"
+        ? btcToSats(parseFloat(amount))
+        : parseInt(amount),
+  };
 };

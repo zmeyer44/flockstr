@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { copyText } from "@/lib/utils";
 import { RenderText } from "../TextRendering";
 import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
-import LinkCard from "@/components/LinkCard";
 import ReactPlayer from "react-player";
 
 export default function Kind30311(props: Event) {
@@ -40,7 +39,12 @@ export default function Kind30311(props: Event) {
         },
       ]}
     >
-      <ReactPlayer url={streamingUrl} muted={false} controls={true} />
+      <ReactPlayer
+        url={streamingUrl}
+        playing={true}
+        muted={false}
+        controls={true}
+      />
       <div className="border-t pt-4">
         {!!title && <CardTitle className="text-base">{title}</CardTitle>}
         {!!summary && <CardDescription>{summary}</CardDescription>}

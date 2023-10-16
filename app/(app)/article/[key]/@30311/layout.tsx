@@ -15,7 +15,7 @@ export default function Layout(props: {
 }) {
   const router = useRouter();
   const { data, type } = nip19.decode(props.params.key);
-  const pubkey = type === "nevent" ? data.author ?? "" : "";
+  const pubkey = type === "naddr" ? data.pubkey ?? "" : "";
   const { profile } = useProfile(pubkey);
   const npub = nip19.npubEncode(pubkey);
   return (

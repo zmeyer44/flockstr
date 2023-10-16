@@ -17,7 +17,7 @@ import KindLoading from "@/components/KindCard/loading";
 import { nip19 } from "nostr-tools";
 import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import { NOTABLE_ACCOUNTS } from "@/constants";
-import { NDKKind } from "@nostr-dev-kit/ndk";
+import { type NDKKind } from "@nostr-dev-kit/ndk";
 import { uniqBy } from "ramda";
 
 export default function LiveStreamingSection() {
@@ -67,7 +67,6 @@ export default function LiveStreamingSection() {
                 .filter((e) => !!getTagValues("summary", e.tags))
                 .slice(0, 6)
                 .map((e, idx) => {
-                  if (idx > 6) return null;
                   const event = e.rawEvent() as Event;
                   const image = getTagValues("image", event.tags) as string;
                   const title = getTagValues("title", event.tags) as string;
