@@ -16,6 +16,7 @@ import {
 import { RiSubtractFill, RiAddFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";
 import LoginModal from "./Login";
+import CreateList from "./CreateList";
 
 export default function NewEventModal() {
   const modal = useModal();
@@ -37,7 +38,12 @@ export default function NewEventModal() {
             <HiNewspaper className="h-4 w-4" />
           </Button>
         </Link>
-        <Button className="w-full gap-x-1">
+        <Button
+          onClick={() => {
+            modal?.swap(<CreateList />);
+          }}
+          className="w-full gap-x-1"
+        >
           <span>Content List</span>
           <HiBookmarkSquare className="h-4 w-4" />
         </Button>

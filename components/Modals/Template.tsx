@@ -18,7 +18,7 @@ export default function Template({ title, children, className }: ModalProps) {
   return (
     <div
       className={cn(
-        "relative w-full grow bg-background p-4 shadow sm:border md:rounded-lg md:p-6",
+        "relative w-full grow bg-background p-4 shadow md:rounded-lg md:border md:p-6",
         className,
       )}
     >

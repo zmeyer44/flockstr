@@ -9,6 +9,7 @@ import {
   FieldValues,
   DefaultValues,
   Path,
+  PathValue,
 } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import Template from "./Template";
@@ -37,6 +38,7 @@ type FieldOptions =
   | "toggle"
   | "horizontal-tabs"
   | "input"
+  | "number"
   | "text-area"
   | "custom";
 
@@ -44,11 +46,13 @@ type DefaultFieldType<TSchema> = {
   label: string;
   slug: keyof z.infer<z.Schema<TSchema>> & string;
   placeholder?: string;
+  subtitle?: string;
   description?: string;
   lines?: number;
   styles?: string;
   value?: string | number | boolean;
   custom?: ReactNode;
+  condition?: keyof z.infer<z.Schema<TSchema>> & string;
   options?: { label: string; value: string; icon?: ReactNode }[];
 };
 type FieldType<TSchema> = DefaultFieldType<TSchema> &
@@ -91,10 +95,11 @@ export default function FormModal<TSchema extends FieldValues>({
     defaultValues: defaultValues as DefaultValues<TSchema>,
     mode: "onChange",
   });
+  const { watch, setValue } = form;
   return (
     <Template title={title} className="md:max-w-[400px]">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {fields.map(
             ({
               label,
@@ -102,69 +107,171 @@ export default function FormModal<TSchema extends FieldValues>({
               type,
               placeholder,
               description,
+              subtitle,
+              condition,
               ...fieldProps
-            }) => (
-              <FormField
-                control={form.control}
-                name={slug as Path<TSchema>}
-                render={({ field }) => (
-                  <FormItem
-                    className={cn(
-                      type === "toggle" &&
-                        "flex items-center gap-x-3 space-y-0",
-                    )}
-                  >
-                    <FormLabel>{label}</FormLabel>
-                    {type === "input" ? (
-                      <FormControl>
-                        <Input placeholder={placeholder} {...field} />
-                      </FormControl>
-                    ) : type === "text-area" ? (
-                      <FormControl>
-                        <Textarea
-                          placeholder={placeholder}
-                          {...field}
-                          className="auto-sizing"
-                        />
-                      </FormControl>
-                    ) : type === "select" ? (
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
+            }) => {
+              if (!condition) {
+                return (
+                  <FormField
+                    control={form.control}
+                    name={slug as Path<TSchema>}
+                    render={({ field }) => (
+                      <FormItem
+                        className={cn(
+                          type === "toggle" &&
+                            "flex items-center gap-x-3 space-y-0",
+                        )}
                       >
+                        <FormLabel>{label}</FormLabel>
+                        {type === "input" ? (
+                          <FormControl>
+                            <Input placeholder={placeholder} {...field} />
+                          </FormControl>
+                        ) : type === "text-area" ? (
+                          <FormControl>
+                            <Textarea
+                              placeholder={placeholder}
+                              {...field}
+                              className="auto-sizing"
+                            />
+                          </FormControl>
+                        ) : type === "select" ? (
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={placeholder} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="z-modal+">
+                              {fieldProps.options?.map((o) => (
+                                <SelectItem key={o.value} value={o.value}>
+                                  {o.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : type === "toggle" ? (
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        ) : type === "number" ? (
+                          <FormControl>
+                            <Input
+                              placeholder={placeholder}
+                              type="number"
+                              {...field}
+                            />
+                          </FormControl>
+                        ) : (
+                          <FormControl>
+                            <Input placeholder={placeholder} {...field} />
+                          </FormControl>
+                        )}
+                        {!!description && (
+                          <FormDescription>{description}</FormDescription>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                );
+              }
+              const state = watch(condition as Path<TSchema>);
+              if (!state) return;
+              return (
+                <FormField
+                  control={form.control}
+                  name={slug as Path<TSchema>}
+                  render={({ field }) => (
+                    <FormItem
+                      className={cn(
+                        type === "toggle" &&
+                          "flex items-center gap-x-3 space-y-0",
+                      )}
+                    >
+                      <FormLabel>
+                        {label}
+                        {!!subtitle && (
+                          <span className="ml-1.5 text-[0.8rem] font-normal text-muted-foreground ">
+                            {subtitle}
+                          </span>
+                        )}
+                      </FormLabel>
+                      {type === "input" ? (
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={placeholder} />
-                          </SelectTrigger>
+                          <Input placeholder={placeholder} {...field} />
                         </FormControl>
-                        <SelectContent className="z-modal+">
-                          {fieldProps.options?.map((o) => (
-                            <SelectItem key={o.value} value={o.value}>
-                              {o.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    ) : type === "toggle" ? (
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    ) : (
-                      <FormControl>
-                        <Input placeholder={placeholder} {...field} />
-                      </FormControl>
-                    )}
-                    {!!description && (
-                      <FormDescription>{description}</FormDescription>
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ),
+                      ) : type === "text-area" ? (
+                        <FormControl>
+                          <Textarea
+                            placeholder={placeholder}
+                            {...field}
+                            className="auto-sizing"
+                          />
+                        </FormControl>
+                      ) : type === "select" ? (
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={placeholder} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="z-modal+">
+                            {fieldProps.options?.map((o) => (
+                              <SelectItem key={o.value} value={o.value}>
+                                {o.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : type === "toggle" ? (
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      ) : type === "number" ? (
+                        <FormControl>
+                          <Input
+                            placeholder={placeholder}
+                            type="number"
+                            {...field}
+                            onChange={(e) => {
+                              setValue(
+                                field.name,
+                                parseInt(e.target.value) as PathValue<
+                                  TSchema,
+                                  Path<TSchema>
+                                >,
+                              );
+                            }}
+                          />
+                        </FormControl>
+                      ) : (
+                        <FormControl>
+                          <Input placeholder={placeholder} {...field} />
+                        </FormControl>
+                      )}
+                      {!!description && (
+                        <FormDescription>{description}</FormDescription>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              );
+            },
           )}
           <Button type="submit" className="w-full" loading={isSubmitting}>
             {cta.text}
