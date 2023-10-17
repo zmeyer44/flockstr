@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { useModal } from "@/app/_providers/modal/provider";
@@ -28,15 +29,29 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { useKeyboardShortcut } from "@/lib/hooks/useKeyboardShortcut";
 const LoginModal = dynamic(() => import("@/components/Modals/Login"), {
   ssr: false,
 });
 
 export default function AuthActions() {
+  const router = useRouter();
   const modal = useModal();
   const { currentUser, logout, attemptLogin } = useCurrentUser();
   const { ndk } = useNDK();
+
+  useKeyboardShortcut(["shift", "ctrl", "u"], () => {
+    if (currentUser) {
+      router.push(`/${currentUser?.npub}`);
+    } else {
+      modal?.show(<LoginModal />);
+    }
+  });
+  useKeyboardShortcut(["shift", "ctrl", "q"], () => {
+    if (currentUser) {
+      logout();
+    }
+  });
   useEffect(() => {
     if (ndk && !currentUser) {
       void attemptLogin();
@@ -213,7 +228,7 @@ export function UserMenu({
               className="flex w-full justify-between"
             >
               Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              <DropdownMenuShortcut>⇧⌘U</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           {/* <DropdownMenuItem>
