@@ -59,7 +59,7 @@ export default function ListPage({
     );
   }
   const noteIds = getTagsValues("e", event.tags).filter(Boolean);
-
+  console.log("notes", event.tags);
   const title =
     getTagValues("title", event.tags) ??
     getTagValues("name", event.tags) ??

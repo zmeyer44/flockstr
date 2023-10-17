@@ -19,8 +19,11 @@ export default function ProfilePage({
 }) {
   const [activeTab, setActiveTab] = useState("feed");
   console.log("calling with ", npub);
+  if (npub === "service-worker.js") {
+    throw new Error("Invalid list");
+  }
   const { type, data } = nip19.decode(npub);
-  console.log("RES", data);
+
   if (type !== "npub") {
     throw new Error("Invalid list");
   }

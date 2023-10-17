@@ -1,213 +1,134 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
+
+const navigation = [
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-[calc(100svh_-_var(--header-height))] p-2 lg:p-5">
-      <section className="flex h-full w-full flex-col items-center gap-3">
-        <div className="flex h-full w-full flex-col items-center gap-y-12 rounded-[35px] bg-black p-6 pt-20 @container md:p-20 md:py-20">
-          <div className="flex flex-col gap-y-6 text-center md:self-start md:pb-4 lg:max-w-md lg:text-left">
-            <h1 className="font-condensed text-[11cqw] font-semibold leading-[13cqw] text-zinc-100 sm:text-5xl">
-              Your Community, Where ever you are.
-            </h1>
-            <p className="text-base text-zinc-400 lg:text-base">
-              Nostr allows you to truly own your community with a fully
-              decentralized social graph. Never get locked into a platform
-              again.
-            </p>
-            <div className="center lg:justify-start">
-              <Link href="/app">
-                <Button size={"lg"}>Get Started</Button>
-              </Link>
-            </div>
-          </div>
-          <div className="h-[1px] w-full shrink-0 bg-zinc-500"></div>
-          <div className="mx-auto flex max-w-xl flex-col gap-y-4 text-center md:pt-4">
-            <span className="text-sm uppercase tracking-wider text-zinc-400">
-              About nostr
-            </span>
-            <div className="font-condensed space-y-4 font-medium">
-              <p className="text-sm text-zinc-300">
-                Nostr is a simple, open protocol for decentralizing how
-                infomration is stored and retreived on the web.
-              </p>
-              <p className="text-sm text-zinc-200">
-                Rather that your user data being siloed by the big tech
-                companies whose platforms dominate our culture, nostr
-                distributes data across hundreds of relays that anyone can spin
-                up.
-              </p>
-              <p className="text-sm text-zinc-200">
-                This means that no single entity is ever in control of your
-                data. In other words:
-                <span className="mt-10 block text-3xl font-bold text-primary">
-                  No more lock-in, Way more choices.
-                </span>
-              </p>
-            </div>
-          </div>
+    <main>
+      <div className="relative isolate">
+        <svg
+          className="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-zinc-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
+          aria-hidden="true"
+        >
+          <defs>
+            <pattern
+              id="1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84"
+              width={200}
+              height={200}
+              x="50%"
+              y={-1}
+              patternUnits="userSpaceOnUse"
+            >
+              <path d="M.5 200V.5H200" fill="none" />
+            </pattern>
+          </defs>
+          <svg x="50%" y={-1} className="overflow-visible fill-zinc-50">
+            <path
+              d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
+              strokeWidth={0}
+            />
+          </svg>
+          <rect
+            width="100%"
+            height="100%"
+            strokeWidth={0}
+            fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)"
+          />
+        </svg>
+        <div
+          className="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
+          aria-hidden="true"
+        >
+          <div
+            className="aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-primary to-primary opacity-30"
+            style={{
+              clipPath:
+                "polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)",
+            }}
+          />
         </div>
-        {/* <div className="flex w-full flex-col gap-3 lg:flex-row">
-          <div className="flex w-full flex-1 rounded-[35px] bg-zinc-200 p-6 @container">
-            <div className="flex flex-col gap-y-6 text-center">
-              <span className="uppercase tracking-wider text-zinc-400">
-                About nostr
-              </span>
-              <div className="font-condensed space-y-4 font-medium">
-                <p className="text-base text-zinc-800">
-                  Nostr is a simple, open protocol for decentralizing how
-                  infomration is stored and retreived on the web.
+        <div className="overflow-hidden">
+          <div className="mx-auto max-w-7xl px-6 pb-32 pt-16 sm:pt-40 lg:px-8 lg:pt-16">
+            <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
+              <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
+                <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl">
+                  Monatized, Curated content on Nostr.
+                </h1>
+                <p className="relative mt-6 text-lg leading-8 text-zinc-600 sm:max-w-md lg:max-w-none">
+                  Cupidatat minim id magna ipsum sint dolor qui. Sunt sit in
+                  quis cupidatat mollit aute velit. Et labore commodo nulla
+                  aliqua proident mollit ullamco exercitation tempor. Sint
+                  aliqua anim nulla sunt mollit id pariatur in voluptate cillum.
                 </p>
-                <p className="text-base text-zinc-800">
-                  Rather that your user data being siloed by the big tech
-                  companies whose platforms dominate our culture, nostr
-                  distributes data across hundreds of relays that anyone can
-                  spin up.
-                </p>
-                <p className="text-base text-zinc-800">
-                  This means that no single entity is ever in control of your
-                  data. In other words:
-                  <span className="mt-3 block text-xl font-bold">
-                    No more lock-in, Way more choices.
-                  </span>
-                </p>
-              </div>
-              <div className="center">
-                <Button size={"lg"}>Get Started</Button>
-              </div>
-            </div>
-          </div>
-          <div className="flex w-full flex-1 rounded-[35px] bg-primary p-6 @container">
-            <div className="flex flex-col gap-y-6 text-center">
-              <span className="uppercase tracking-wider text-primary-foreground/80">
-                Why Bitcoin?
-              </span>
-              <div className="font-condensed space-y-4 font-medium">
-                <p className="text-base text-zinc-800">
-                  Nostr is a simple, open protocol for decentralizing how
-                  infomration is stored and retreived on the web.
-                </p>
-                <p className="text-base text-zinc-800">
-                  Rather that your user data being siloed by the big tech
-                  companies whose platforms dominate our culture, nostr
-                  distributes data across hundreds of relays that anyone can
-                  spin up.
-                </p>
-                <p className="text-base text-zinc-800">
-                  This means that no single entity is ever in control of your
-                  data. In other words:
-                  <span className="mt-3 block text-xl font-bold">
-                    No more lock-in, Way more choices.
-                  </span>
-                </p>
-              </div>
-              <div className="center">
-                <Button size={"lg"} variant={"secondary"}>
-                  Explore
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex w-full justify-center rounded-[35px] bg-zinc-500 p-6 pt-10 @container lg:justify-start lg:p-10 lg:py-16 lg:pt-20">
-          <div className="flex flex-col gap-y-6 text-center lg:max-w-md lg:text-left">
-            <h1 className="font-condensed text-[11cqw] font-semibold leading-[13cqw] text-zinc-100 sm:text-5xl">
-              Find out if you're the right fit.
-            </h1>
-            <p className="text-sm text-zinc-200 lg:text-base">
-              Nostr allows you to truly own your community with a fully
-              decentralized social graph. Never get locked into a platform
-              again.
-            </p>
-            <div className="center lg:justify-start">
-              <Button size={"lg"}>Contact Us</Button>
-            </div>
-          </div>
-        </div> */}
-      </section>
-      {/* <section className="mt-10 w-full">
-        <div className="overflow-hidden pt-32 sm:pt-14">
-          <div className="bg-zinc-800">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="relative pb-16 pt-48 sm:pb-24">
-                <div>
-                  <h2
-                    id="sale-heading"
-                    className="text-4xl font-bold tracking-tight text-white md:text-5xl"
+                <div className="mt-10 flex items-center gap-x-6">
+                  <Button className="rounded-sm">Start Exploring</Button>
+
+                  <a
+                    href="#"
+                    className="text-sm font-semibold leading-6 text-zinc-900"
                   >
-                    It's about time
-                    <br />
-                    Let's take a look.
-                  </h2>
-                  <div className="mt-6 text-base">
-                    <Link href="/app" className="font-semibold text-white">
-                      Explore Now
-                      <span aria-hidden="true"> &rarr;</span>
-                    </Link>
+                    Live demo <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+              <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
+                <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
+                  <div className="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
+                      alt=""
+                      className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                    />
+                    <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                   </div>
                 </div>
-
-                <div className="absolute -top-32 left-1/2 -translate-x-1/2 transform sm:top-6 sm:translate-x-0">
-                  <div className="ml-24 flex min-w-max space-x-6 sm:ml-3 lg:space-x-8">
-                    <div className="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
-                          alt=""
-                        />
-                      </div>
-
-                      <div className="mt-6 flex-shrink-0 sm:mt-0">
-                        <img
-                          className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-02.jpg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="flex space-x-6 sm:-mt-20 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
-                          alt=""
-                        />
-                      </div>
-
-                      <div className="mt-6 flex-shrink-0 sm:mt-0">
-                        <img
-                          className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-02.jpg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
-                          alt=""
-                        />
-                      </div>
-
-                      <div className="mt-6 flex-shrink-0 sm:mt-0">
-                        <img
-                          className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-02.jpg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
+                <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
+                  <div className="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
+                      alt=""
+                      className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                    />
+                    <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                  </div>
+                  <div className="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-x=.4&w=396&h=528&q=80"
+                      alt=""
+                      className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                    />
+                    <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                  </div>
+                </div>
+                <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
+                  <div className="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1670272504528-790c24957dda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=left&w=400&h=528&q=80"
+                      alt=""
+                      className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                    />
+                    <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                  </div>
+                  <div className="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1670272505284-8faba1c31f7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
+                      alt=""
+                      className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                    />
+                    <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section> */}
-    </div>
+      </div>
+    </main>
   );
 }
