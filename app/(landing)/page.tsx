@@ -1,4 +1,4 @@
-import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
@@ -67,14 +67,16 @@ export default function LandingPage() {
                   aliqua anim nulla sunt mollit id pariatur in voluptate cillum.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">
-                  <Button className="rounded-sm">Start Exploring</Button>
+                  <Link href="/app">
+                    <Button className="rounded-sm">Start Exploring</Button>
+                  </Link>
 
-                  <a
+                  {/* <a
                     href="#"
                     className="text-sm font-semibold leading-6 text-zinc-900"
                   >
                     Live demo <span aria-hidden="true">→</span>
-                  </a>
+                  </a> */}
                 </div>
               </div>
               <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
