@@ -4,8 +4,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import useProfile from "@/lib/hooks/useProfile";
-import { nip19 } from "nostr-tools";
-import useEvents from "@/lib/hooks/useEvents";
+import { HiOutlineLightningBolt } from "react-icons/hi";
 import Spinner from "@/components/spinner";
 import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import ProfileInfo from "./ProfileInfo";
@@ -19,11 +18,15 @@ import {
 } from "@/lib/actions/zap";
 import { useModal } from "@/app/_providers/modal/provider";
 import { type NDKEvent } from "@nostr-dev-kit/ndk";
-
+import { btcToSats, formatNumber } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/dates";
 const EditListModal = dynamic(() => import("@/components/Modals/EditList"), {
   ssr: false,
 });
 const CreateEventModal = dynamic(() => import("@/components/Modals/NewEvent"), {
+  ssr: false,
+});
+const ConfirmModal = dynamic(() => import("@/components/Modals/Confirm"), {
   ssr: false,
 });
 
@@ -31,7 +34,6 @@ export default function Header({ event }: { event: NDKEvent }) {
   const { currentUser } = useCurrentUser();
   const modal = useModal();
   const { ndk } = useNDK();
-  const [sendingZap, setSendingZap] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const [syncingUsers, setSyncingUsers] = useState(false);
@@ -39,7 +41,6 @@ export default function Header({ event }: { event: NDKEvent }) {
   const { profile } = useProfile(pubkey);
 
   const noteIds = getTagsValues("e", event.tags).filter(Boolean);
-  console.log("notes", event.tags);
   const title =
     getTagValues("title", event.tags) ??
     getTagValues("name", event.tags) ??
@@ -53,7 +54,7 @@ export default function Header({ event }: { event: NDKEvent }) {
   const description = getTagValues("description", event.tags);
   const rawEvent = event.rawEvent();
   const subscriptionsEnabled = !!getTagValues("subscriptions", rawEvent.tags);
-  const priceInBTC = getTagValues("price", rawEvent.tags);
+  const priceInBTC = parseFloat(getTagValues("price", rawEvent.tags) ?? "0");
   const isMember =
     currentUser &&
     getTagsValues("p", rawEvent.tags).includes(currentUser.pubkey);
@@ -97,6 +98,21 @@ export default function Header({ event }: { event: NDKEvent }) {
       console.log("error syncing users", err);
     } finally {
       setSyncingUsers(false);
+    }
+  }
+  async function handleSendZap() {
+    try {
+      const result = await sendZap(
+        ndk!,
+        btcToSats(priceInBTC),
+        rawEvent,
+        `Access payment: ${title}`,
+      );
+      toast.success("Payment Sent!");
+      void handleCheckPayment();
+    } catch (err) {
+      console.log("error sending zap", err);
+    } finally {
     }
   }
   if (!event) {
@@ -155,7 +171,39 @@ export default function Header({ event }: { event: NDKEvent }) {
                 </Button>
               </>
             )}
-            {subscriptionsEnabled && !isMember && <Button>Subscribe</Button>}
+            {subscriptionsEnabled && !isMember && (
+              <Button
+                onClick={() =>
+                  modal?.show(
+                    <ConfirmModal
+                      title={`Subscribe to ${title}`}
+                      onConfirm={handleSendZap}
+                      ctaBody={
+                        <>
+                          <span>Zap to Subscribe</span>
+                          <HiOutlineLightningBolt className="h-4 w-4" />
+                        </>
+                      }
+                    >
+                      <p className="text-muted-forground">
+                        {`Pay ${priceInBTC} BTC (${formatNumber(
+                          btcToSats(priceInBTC),
+                        )} sats) for year long access until ${formatDate(
+                          new Date(
+                            new Date().setFullYear(
+                              new Date().getFullYear() + 1,
+                            ),
+                          ),
+                          "MMM Do, YYYY",
+                        )}`}
+                      </p>
+                    </ConfirmModal>,
+                  )
+                }
+              >
+                Subscribe
+              </Button>
+            )}
           </div>
         </div>
 

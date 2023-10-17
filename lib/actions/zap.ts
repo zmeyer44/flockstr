@@ -103,10 +103,11 @@ export async function updateListUsersFromZaps(
   event: NostrEvent,
 ) {
   const SECONDS_IN_MONTH = 2_628_000;
+  const SECONDS_IN_YEAR = SECONDS_IN_MONTH * 365;
   const paymentEvents = await ndk.fetchEvents({
     kinds: [9735],
     ["#a"]: [tagId],
-    since: unixTimeNowInSeconds() - SECONDS_IN_MONTH,
+    since: unixTimeNowInSeconds() - SECONDS_IN_YEAR,
   });
   const paymentInvoices = Array.from(paymentEvents).map((paymentEvent) =>
     zapInvoiceFromEvent(paymentEvent),
@@ -137,7 +138,7 @@ export async function updateListUsersFromZaps(
         paymentInvoice.zappee,
         "",
         "",
-        (unixTimeNowInSeconds() + SECONDS_IN_MONTH).toString(),
+        (unixTimeNowInSeconds() + SECONDS_IN_YEAR).toString(),
       ]);
     }
   }
@@ -152,14 +153,14 @@ export async function updateListUsersFromZaps(
       event.pubkey,
       "",
       "self",
-      (unixTimeNowInSeconds() + SECONDS_IN_MONTH).toString(),
+      (unixTimeNowInSeconds() + SECONDS_IN_YEAR).toString(),
     ];
   } else {
     validUsers.push([
       event.pubkey,
       "",
       "self",
-      (unixTimeNowInSeconds() + SECONDS_IN_MONTH).toString(),
+      (unixTimeNowInSeconds() + SECONDS_IN_YEAR).toString(),
     ]);
   }
   console.log("Valid users", validUsers);

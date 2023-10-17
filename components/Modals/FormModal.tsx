@@ -114,6 +114,7 @@ export default function FormModal<TSchema extends FieldValues>({
               if (!condition) {
                 return (
                   <FormField
+                    key={slug}
                     control={form.control}
                     name={slug as Path<TSchema>}
                     render={({ field }) => (
@@ -187,6 +188,7 @@ export default function FormModal<TSchema extends FieldValues>({
               if (!state) return;
               return (
                 <FormField
+                  key={slug}
                   control={form.control}
                   name={slug as Path<TSchema>}
                   render={({ field }) => (
