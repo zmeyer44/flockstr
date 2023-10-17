@@ -12,7 +12,7 @@ import { createEvent } from "@/lib/actions/create";
 import { getTagValues } from "@/lib/nostr/utils";
 import { NDKList } from "@nostr-dev-kit/ndk";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
-
+import { useRouter } from "next/navigation";
 const CreateListSchema = z.object({
   title: z.string(),
   image: z.string().optional(),
@@ -26,6 +26,7 @@ type CreateListType = z.infer<typeof CreateListSchema>;
 export default function CreateList() {
   const [isLoading, setIsLoading] = useState(false);
   const modal = useModal();
+  const router = useRouter();
 
   const { currentUser, updateUser } = useCurrentUser();
   const { ndk } = useNDK();
@@ -80,8 +81,13 @@ export default function CreateList() {
     }
     // getLists(currentUser!.hexpubkey);
     setIsLoading(false);
-    toast.success("List Created!");
-    modal?.hide();
+    if (event) {
+      toast.success("List Created!");
+      modal?.hide();
+      router.push(`/list/${event.encode()}`);
+    } else {
+      toast.error("An error occured");
+    }
   }
   return (
     <FormModal
