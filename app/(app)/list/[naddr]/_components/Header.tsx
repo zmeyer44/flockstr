@@ -18,6 +18,7 @@ import {
   updateListUsersFromZaps,
 } from "@/lib/actions/zap";
 import { useModal } from "@/app/_providers/modal/provider";
+import { type NDKEvent } from "@nostr-dev-kit/ndk";
 
 const EditListModal = dynamic(() => import("@/components/Modals/EditList"), {
   ssr: false,
@@ -26,7 +27,7 @@ const CreateEventModal = dynamic(() => import("@/components/Modals/NewEvent"), {
   ssr: false,
 });
 
-export default function Header({ naddr }: { naddr: string }) {
+export default function Header({ event }: { event: NDKEvent }) {
   const { currentUser } = useCurrentUser();
   const modal = useModal();
   const { ndk } = useNDK();
@@ -34,30 +35,9 @@ export default function Header({ naddr }: { naddr: string }) {
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const [syncingUsers, setSyncingUsers] = useState(false);
-  const { type, data } = nip19.decode(naddr);
-  console.log("PASSED", naddr, data);
-  if (type !== "naddr") {
-    throw new Error("Invalid list");
-  }
-  const { identifier, kind, pubkey } = data;
+  const pubkey = event.pubkey;
   const { profile } = useProfile(pubkey);
-  const { events } = useEvents({
-    filter: {
-      authors: [pubkey],
-      kinds: [kind],
-      ["#d"]: [identifier],
-      limit: 1,
-    },
-  });
-  const event = events[0];
 
-  if (!event) {
-    return (
-      <div className="center pt-20 text-primary">
-        <Spinner />
-      </div>
-    );
-  }
   const noteIds = getTagsValues("e", event.tags).filter(Boolean);
   console.log("notes", event.tags);
   const title =
@@ -86,14 +66,14 @@ export default function Header({ naddr }: { naddr: string }) {
   }, [isMember, currentUser]);
 
   async function handleCheckPayment() {
-    if (!event) return;
+    if (!event || !currentUser) return;
     setCheckingPayment(true);
     console.log("Checking payment");
     try {
       const result = await checkPayment(
         ndk!,
         event.tagId(),
-        currentUser!.hexpubkey,
+        currentUser.pubkey,
         rawEvent,
       );
       console.log("Payment result", result);
@@ -118,6 +98,13 @@ export default function Header({ naddr }: { naddr: string }) {
     } finally {
       setSyncingUsers(false);
     }
+  }
+  if (!event) {
+    return (
+      <div className="center pt-20 text-primary">
+        <Spinner />
+      </div>
+    );
   }
   return (
     <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">

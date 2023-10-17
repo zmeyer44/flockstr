@@ -50,7 +50,7 @@ export default function ListPage({
 
   return (
     <div className="relative mx-auto max-w-5xl space-y-4 p-2 sm:p-4">
-      <Header naddr={naddr} />
+      <Header event={event} />
       <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
         <div className="space-y-3 overflow-hidden rounded-[0.5rem] p-0">
           <Feed

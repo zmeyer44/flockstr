@@ -1,10 +1,8 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import ExploreCreators from "./_sections/ExploreCreators";
 import LongFormContentSection from "./_sections/LongFormContent";
 import BecomeACreator from "./_sections/BecomeACreator";
-import { RiAddFill } from "react-icons/ri";
-import { Button } from "@/components/ui/button";
+
 const LiveStreamingSection = dynamic(
   () => import("./_sections/LiveStreaming"),
   {
@@ -17,6 +15,10 @@ const FeaturedListsSection = dynamic(
     ssr: false,
   },
 );
+const NewEventButton = dynamic(() => import("./_components/NewEventButton"), {
+  ssr: false,
+});
+
 export default function Page() {
   return (
     <div className="relative space-y-6 px-5 pt-5 sm:pt-7">
@@ -26,11 +28,7 @@ export default function Page() {
       <LiveStreamingSection />
       <FeaturedListsSection />
       <div className="z-overlay- fixed bottom-[calc(var(--bottom-nav-height)_+_20px)] right-[20px] sm:hidden">
-        <Link href="/article/new">
-          <Button size={"icon"} className="h-[50px] w-[50px]">
-            <RiAddFill className="h-[32px] w-[32px]" />
-          </Button>
-        </Link>
+        <NewEventButton />
       </div>
     </div>
   );
