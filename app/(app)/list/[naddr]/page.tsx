@@ -111,7 +111,7 @@ export default function ListPage({
         </div>
       </div>
       <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
-        <div className="overflow-hidden rounded-[0.5rem] p-0">
+        <div className="space-y-3 overflow-hidden rounded-[0.5rem] p-0">
           <Feed
             filter={{
               ids: noteIds,

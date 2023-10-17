@@ -63,7 +63,7 @@ export default function LandingPage() {
                 <p className="relative mt-6 text-lg leading-8 text-zinc-600 sm:max-w-md lg:max-w-none">
                   We're bringing the creator economy onto Nostr. The days of
                   walled gardens are coming to an end. It's time to truly own
-                  your following, no-long dependent on an external company.
+                  your following, no-longer dependent on an external company.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">
                   <Link href="/app">
