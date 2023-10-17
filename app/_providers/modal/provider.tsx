@@ -21,6 +21,7 @@ type ModalProps = ReactElement | Modals;
 
 type ModalContextProps = {
   show: (content: ModalProps) => void;
+  swap: (content: ModalProps) => void;
   hide: () => void;
 };
 
@@ -40,6 +41,13 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     setShowModal(true);
   };
 
+  const swap = (content: ModalProps) => {
+    hide();
+    setTimeout(() => {
+      show(content);
+    }, 300);
+  };
+
   const hide = () => {
     setShowModal(false);
     setTimeout(() => {
@@ -48,7 +56,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ModalContext.Provider value={{ show, hide }}>
+    <ModalContext.Provider value={{ show, hide, swap }}>
       {children}
       {showModal && (
         <Modal showModal={showModal} setShowModal={setShowModal}>

@@ -7,40 +7,68 @@ import { HiCheckBadge } from "react-icons/hi2";
 import Tabs from "@/components/Tabs";
 import useProfile from "@/lib/hooks/useProfile";
 import { getTwoLetters, truncateText } from "@/lib/utils";
-import ProfileFeed from "./_components/Feed";
 import { nip19 } from "nostr-tools";
+import useEvents from "@/lib/hooks/useEvents";
+import Spinner from "@/components/spinner";
+import { getTagValues } from "@/lib/nostr/utils";
 
-export default function ProfilePage({
-  params: { npub },
+const demo = [
+  {
+    id: "1",
+    title: "BTC Radio",
+    description:
+      "BTC Radio is the best fuking show ever. you should sub to it. now",
+    picture:
+      "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/51602.original.png?1693358530",
+    tags: ["music", "crypto", "art"],
+  },
+];
+
+export default function ListPage({
+  params: { naddr },
 }: {
   params: {
-    npub: string;
+    naddr: string;
   };
 }) {
   const [activeTab, setActiveTab] = useState("feed");
-  console.log("calling with ", npub);
-  const { type, data } = nip19.decode(npub);
-  console.log("RES", data);
-  if (type !== "npub") {
+  const { type, data } = nip19.decode(naddr);
+  console.log("PASSED", naddr, data);
+  if (type !== "naddr") {
     throw new Error("Invalid list");
   }
-  const pubkey = data.toString();
+  const { identifier, kind, pubkey } = data;
   const { profile } = useProfile(pubkey);
-
-  const demo = [
-    {
-      id: "1",
-      title: "BTC Radio",
-      description:
-        "BTC Radio is the best fuking show ever. you should sub to it. now",
-      picture:
-        "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/51602.original.png?1693358530",
-      tags: ["music", "crypto", "art"],
+  const { events } = useEvents({
+    filter: {
+      authors: [pubkey],
+      kinds: [kind],
+      ["#d"]: [identifier],
+      limit: 1,
     },
-  ];
+  });
+  const event = events[0];
+
+  if (!event) {
+    return (
+      <div className="center ">
+        <Spinner />
+      </div>
+    );
+  }
+  const title =
+    getTagValues("title", event.tags) ??
+    getTagValues("name", event.tags) ??
+    "Untitled";
+  const image =
+    getTagValues("image", event.tags) ??
+    getTagValues("picture", event.tags) ??
+    getTagValues("benner", event.tags);
+
+  const description = getTagValues("description", event.tags);
   return (
     <div className="relative mx-auto max-w-5xl space-y-6">
-      <div className="relative -mx-5 @container ">
+      <div className="relative bg-muted @container">
         <div className="absolute top-0 h-[8rem] w-full" />
         <div className="mx-auto max-w-5xl p-0">
           <div className="m-0 @5xl:px-5 @5xl:pt-8">
@@ -70,12 +98,7 @@ export default function ProfilePage({
                 height={16}
               />
             ) : (
-              <div className="center aspect-square w-[4rem] overflow-hidden rounded-[calc(0.5rem_-_3px)] bg-muted object-cover object-center text-primary @xl:text-2xl sm:w-[4.5rem] sm:rounded-[calc(0.5rem_-_4px)] md:w-[5rem] lg:w-[6rem] lg:rounded-[calc(1rem_-_6px)]">
-                {getTwoLetters({
-                  npub,
-                  profile,
-                })}
-              </div>
+              <div className="center aspect-square w-[4rem] overflow-hidden rounded-[calc(0.5rem_-_3px)] bg-muted object-cover object-center text-primary @xl:text-2xl sm:w-[4.5rem] sm:rounded-[calc(0.5rem_-_4px)] md:w-[5rem] lg:w-[6rem] lg:rounded-[calc(1rem_-_6px)]"></div>
             )}
           </div>
           <Button size={"sm"} className="rounded-sm px-5 sm:hidden">
@@ -86,7 +109,7 @@ export default function ProfilePage({
         <div className="mx-auto max-w-[800px] space-y-1 px-4">
           <div className="flex items-center gap-x-1.5 lg:gap-x-2.5">
             <h2 className="text-xl font-semibold sm:text-2xl lg:text-3xl">
-              {profile?.displayName ?? profile?.name ?? truncateText(npub)}
+              {title}
             </h2>
             {!!profile?.nip05 && (
               <HiCheckBadge className="h-5 w-5 text-primary lg:h-7 lg:w-7" />
@@ -102,9 +125,9 @@ export default function ProfilePage({
             )}
           </div>
           <div className="pt-1 md:pt-2">
-            {!!profile?.about && (
+            {!!description && (
               <p className="line-clamp-3 text-xs text-muted-foreground md:text-sm">
-                {profile.about}
+                {description}
               </p>
             )}
           </div>
@@ -136,7 +159,6 @@ export default function ProfilePage({
             setActiveTab={(t) => setActiveTab(t.name)}
           />
         </div>
-        {activeTab === "feed" ? <ProfileFeed pubkey={pubkey} /> : ""}
       </div>
     </div>
   );
