@@ -40,7 +40,7 @@ export default function ProfilePage({
   ];
   return (
     <div className="relative mx-auto max-w-5xl space-y-6">
-      <div className="relative -mx-5 @container ">
+      <div className="relative @container">
         <div className="absolute top-0 h-[8rem] w-full" />
         <div className="mx-auto max-w-5xl p-0">
           <div className="m-0 @5xl:px-5 @5xl:pt-8">

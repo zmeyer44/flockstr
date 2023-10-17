@@ -19,7 +19,7 @@ const FeaturedListsSection = dynamic(
 );
 export default function Page() {
   return (
-    <div className="relative space-y-6 pt-5 sm:pt-7">
+    <div className="relative space-y-6 px-5 pt-5 sm:pt-7">
       <ExploreCreators />
       <LongFormContentSection />
       <BecomeACreator />

@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { HiCheckBadge } from "react-icons/hi2";
 import Link from "next/link";
 import useProfile from "@/lib/hooks/useProfile";
