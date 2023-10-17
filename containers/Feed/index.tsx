@@ -9,9 +9,15 @@ type FeedProps = {
   filter?: NDKFilter;
   className?: string;
   loader?: () => JSX.Element;
+  empty?: () => JSX.Element;
 };
 
-export default function Feed({ filter, className, loader: Loader }: FeedProps) {
+export default function Feed({
+  filter,
+  className,
+  loader: Loader,
+  empty: Empty,
+}: FeedProps) {
   const { events, isLoading } = useEvents({
     filter: { ...filter },
   });
@@ -20,6 +26,9 @@ export default function Feed({ filter, className, loader: Loader }: FeedProps) {
       return <Loader />;
     }
     return <Spinner />;
+  }
+  if (Empty && events.length === 0) {
+    return <Empty />;
   }
   return (
     <>

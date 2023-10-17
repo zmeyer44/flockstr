@@ -57,6 +57,11 @@ export default function ListPage({
             filter={{
               ids: noteIds,
             }}
+            empty={() => (
+              <div className="text-center text-muted-foreground">
+                <p>No notes yet</p>
+              </div>
+            )}
           />
         </div>
       </div>
