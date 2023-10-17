@@ -1,3 +1,4 @@
+"use client";
 import { useModal } from "@/app/_providers/modal/provider";
 import NewEventModal from "@/components/Modals/NewEvent";
 import { RiAddFill } from "react-icons/ri";
