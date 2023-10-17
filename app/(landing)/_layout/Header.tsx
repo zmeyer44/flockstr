@@ -20,7 +20,7 @@ export default function Header() {
       )}
     >
       <div className="center hidden min-h-[var(--header-height)] lg:flex">
-        <ul className="font-condensed flex w-full max-w-xl items-center justify-between text-base font-semibold uppercase text-zinc-500 hover:text-zinc-600">
+        <ul className="font-condensed flex w-full max-w-2xl items-center justify-between text-base font-semibold text-zinc-800 hover:text-zinc-600">
           {navigation.slice(0, 2).map((item) => (
             <li key={item.name} className="">
               <Link href={item.href} className="flex p-1">
