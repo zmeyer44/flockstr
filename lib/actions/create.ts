@@ -212,8 +212,8 @@ async function generateEvent(
     const newEvent = new NDKEvent(ndk, {
       content: _value || "",
       kind: 1,
-      tags: [...event.tags, ["client", "ordstr"]],
-      pubkey: user.hexpubkey,
+      tags: [...event.tags, ["client", "flockstr"]],
+      pubkey: user.pubkey,
     } as NostrEvent);
     console.log("Event to create", newEvent);
 
