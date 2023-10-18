@@ -17,7 +17,7 @@ import { RiSubtractFill, RiAddFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";
 import LoginModal from "./Login";
 import CreateList from "./CreateList";
-
+import ShortTextNoteModal from "./ShortTextNote";
 export default function NewEventModal() {
   const modal = useModal();
   return (
@@ -25,7 +25,7 @@ export default function NewEventModal() {
       <div className="flex flex-col gap-y-5">
         <Button
           onClick={() => {
-            modal?.swap(<LoginModal />);
+            modal?.swap(<ShortTextNoteModal />);
           }}
           className="w-full gap-x-1"
         >

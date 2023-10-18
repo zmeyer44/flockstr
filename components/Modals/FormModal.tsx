@@ -3,6 +3,7 @@
 import { type ReactNode } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { HiOutlineChevronDown } from "react-icons/hi2";
 import {
   FieldErrors,
   useForm,
@@ -29,6 +30,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -53,13 +67,33 @@ type DefaultFieldType<TSchema> = {
   value?: string | number | boolean;
   custom?: ReactNode;
   condition?: keyof z.infer<z.Schema<TSchema>> & string;
-  options?: { label: string; value: string; icon?: ReactNode }[];
+  options?: {
+    label: string;
+    value: string;
+    icon?: ReactNode;
+    description?: string;
+  }[];
 };
 type FieldType<TSchema> = DefaultFieldType<TSchema> &
   (
     | {
+        type: "select-search";
+        options: {
+          label: string;
+          description?: string;
+          value: string;
+          icon?: ReactNode;
+        }[];
+      }
+    | {
         type: "select";
-        options: { label: string; value: string; icon?: ReactNode }[];
+        description?: string;
+        options: {
+          label: string;
+          value: string;
+          icon?: ReactNode;
+          description?: string;
+        }[];
       }
     | {
         type: FieldOptions;
@@ -111,81 +145,10 @@ export default function FormModal<TSchema extends FieldValues>({
               condition,
               ...fieldProps
             }) => {
-              if (!condition) {
-                return (
-                  <FormField
-                    key={slug}
-                    control={form.control}
-                    name={slug as Path<TSchema>}
-                    render={({ field }) => (
-                      <FormItem
-                        className={cn(
-                          type === "toggle" &&
-                            "flex items-center gap-x-3 space-y-0",
-                        )}
-                      >
-                        <FormLabel>{label}</FormLabel>
-                        {type === "input" ? (
-                          <FormControl>
-                            <Input placeholder={placeholder} {...field} />
-                          </FormControl>
-                        ) : type === "text-area" ? (
-                          <FormControl>
-                            <Textarea
-                              placeholder={placeholder}
-                              {...field}
-                              className="auto-sizing"
-                            />
-                          </FormControl>
-                        ) : type === "select" ? (
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder={placeholder} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="z-modal+">
-                              {fieldProps.options?.map((o) => (
-                                <SelectItem key={o.value} value={o.value}>
-                                  {o.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        ) : type === "toggle" ? (
-                          <FormControl>
-                            <Switch
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                        ) : type === "number" ? (
-                          <FormControl>
-                            <Input
-                              placeholder={placeholder}
-                              type="number"
-                              {...field}
-                            />
-                          </FormControl>
-                        ) : (
-                          <FormControl>
-                            <Input placeholder={placeholder} {...field} />
-                          </FormControl>
-                        )}
-                        {!!description && (
-                          <FormDescription>{description}</FormDescription>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                );
+              if (condition) {
+                const state = watch(condition as Path<TSchema>);
+                if (!state) return;
               }
-              const state = watch(condition as Path<TSchema>);
-              if (!state) return;
               return (
                 <FormField
                   key={slug}
@@ -236,7 +199,71 @@ export default function FormModal<TSchema extends FieldValues>({
                             ))}
                           </SelectContent>
                         </Select>
-                      ) : type === "toggle" ? (
+                      ) : type === "select-search" ? (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button variant="outline" className="flex">
+                              {(() => {
+                                const val = watch(slug as Path<TSchema>);
+                                const selectedOption = fieldProps.options?.find(
+                                  (o) => o.value === val,
+                                );
+                                if (selectedOption) {
+                                  return selectedOption.label;
+                                }
+                                return "no list selected";
+                              })()}{" "}
+                              <HiOutlineChevronDown className="ml-2 h-4 w-4 text-muted-foreground" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            className="z-modal+ p-0"
+                            align="start"
+                          >
+                            <Command>
+                              <CommandInput placeholder={placeholder} />
+                              <CommandList>
+                                <CommandEmpty>No options found.</CommandEmpty>
+                                <CommandGroup className="p-1.5">
+                                  {fieldProps.options?.map((o) => (
+                                    <CommandItem
+                                      key={o.value}
+                                      onClick={() =>
+                                        console.log("Captured", o.value)
+                                      }
+                                      className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
+                                    >
+                                      <p>{o.label}</p>
+                                      {!!o.description && (
+                                        <p className="text-sm text-muted-foreground">
+                                          {o.description}
+                                        </p>
+                                      )}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      ) : // <Select
+                      //   onValueChange={field.onChange}
+                      //   defaultValue={field.value}
+                      // >
+                      //   <FormControl>
+                      //     <SelectTrigger>
+                      //       <SelectValue placeholder={placeholder} />
+                      //     </SelectTrigger>
+                      //   </FormControl>
+                      //   <SelectContent className="z-modal+">
+                      //     {fieldProps.options?.map((o) => (
+                      //       <SelectItem key={o.value} value={o.value}>
+                      //         {o.label}
+                      //       </SelectItem>
+                      //     ))}
+                      //   </SelectContent>
+                      // </Select>
+                      type === "toggle" ? (
                         <FormControl>
                           <Switch
                             checked={field.value}
