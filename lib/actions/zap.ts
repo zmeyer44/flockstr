@@ -1,5 +1,6 @@
 import NDK, {
   NDKEvent,
+  NDKUser,
   zapInvoiceFromEvent,
   type NostrEvent,
 } from "@nostr-dev-kit/ndk";
@@ -10,7 +11,7 @@ import { createZodFetcher } from "zod-fetch";
 import { getTagValues, getTagsAllValues } from "../nostr/utils";
 import { unixTimeNowInSeconds } from "../nostr/dates";
 import { createEvent } from "./create";
-
+import { findEphemeralSigner } from "@/lib/actions/ephemeral";
 const fetchWithZod = createZodFetcher();
 const ZapEndpointResponseSchema = z.object({
   nostrPubkey: z.string(),
@@ -40,7 +41,6 @@ export async function checkPayment(
   pubkey: string,
   event: NostrEvent,
 ) {
-  console.log("CHeck payment called", tagId);
   const paymentEvents = await ndk.fetchEvents({
     kinds: [9735],
     ["#a"]: [tagId],
@@ -49,10 +49,8 @@ export async function checkPayment(
   const paymentEvent = Array.from(paymentEvents).find(
     (e) => zapInvoiceFromEvent(e)?.zappee === pubkey,
   );
-  console.log("paymentEvent", paymentEvent);
   if (!paymentEvent) return;
   const invoice = zapInvoiceFromEvent(paymentEvent);
-  console.log("invoice", invoice);
   if (!invoice) {
     console.log("No invoice");
     return;
@@ -137,6 +135,7 @@ export async function updateListUsersFromZaps(
       event,
     );
     console.log("Is valid?", isValid);
+    const newUsers: string[] = [];
     if (isValid) {
       validUsers.push([
         paymentInvoice.zappee,
@@ -144,7 +143,10 @@ export async function updateListUsersFromZaps(
         "",
         (unixTimeNowInSeconds() + SECONDS_IN_YEAR).toString(),
       ]);
+      newUsers.push(paymentInvoice.zappee);
+      // Send old codes to user
     }
+    await sendCodesToNewUsers(ndk, newUsers, tagId);
   }
 
   // Add self
@@ -162,4 +164,40 @@ export async function updateListUsersFromZaps(
       ...validUsers.map((user) => ["p", ...user]),
     ],
   });
+}
+
+async function sendCodesToNewUsers(ndk: NDK, users: string[], tagId: string) {
+  const signer = await findEphemeralSigner(ndk, ndk!.signer!, {
+    associatedEventNip19: tagId,
+  });
+  if (!signer) return;
+  const delegate = await signer.user();
+  const messages = await ndk.fetchEvents({
+    authors: [delegate.pubkey],
+    kinds: [4],
+    ["#p"]: [tagId.split(":")?.[1] ?? ""],
+  });
+  const codes: [string, string][] = [];
+  for (const message of Array.from(messages)) {
+    await message.decrypt(delegate, signer);
+    codes.push([getTagValues("e", message.tags) ?? "", message.content]);
+  }
+
+  for (const user of users) {
+    for (const [event, code] of codes) {
+      const messageEvent = new NDKEvent(ndk, {
+        content: code,
+        kind: 4,
+        tags: [
+          ["p", user],
+          ["e", event],
+          ["client", "flockstr"],
+        ],
+        pubkey: delegate.pubkey,
+      } as NostrEvent);
+      await messageEvent.encrypt(new NDKUser({ hexpubkey: user }), signer);
+      await messageEvent.sign(signer);
+      await messageEvent.publish();
+    }
+  }
 }
