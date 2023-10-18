@@ -3,7 +3,7 @@ import FormModal from "./FormModal";
 import { z } from "zod";
 import { useModal } from "@/app/_providers/modal/provider";
 import { toast } from "sonner";
-import { generateRandomStringLength } from "@/lib/nostr";
+import { randomId } from "@/lib/nostr";
 import { satsToBtc } from "@/lib/utils";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { useNDK } from "@/app/_providers/ndk";
@@ -34,7 +34,7 @@ export default function CreateList() {
   const { getSigner } = useSigner()!;
   async function handleSubmit(data: CreateListType) {
     setIsLoading(true);
-    const random = generateRandomStringLength(8);
+    const random = randomId();
     const tags = [
       ["title", data.title],
       ["name", data.title],

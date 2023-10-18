@@ -146,6 +146,7 @@ function create32ByteBuffer(inputString: string) {
 export function generateRandomString() {
   return crypto.randomBytes(32).toString("hex");
 }
-export function generateRandomStringLength(length: number) {
-  return crypto.randomBytes(length).toString("hex");
+
+export function randomId(): string {
+  return crypto.randomBytes(32).toString("hex").slice(0, 8);
 }
