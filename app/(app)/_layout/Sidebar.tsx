@@ -49,7 +49,7 @@ export default function Sidebar() {
 
   const navigation: NavigationElement[] = [
     {
-      href: "",
+      href: "/app",
       name: "home",
       label: "Home",
       icon: RiHome6Fill,

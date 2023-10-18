@@ -50,8 +50,7 @@ export default function FeaturedLists() {
       }
       if (bTitleLength) return 1;
       return -1;
-    })
-    .slice(0, 6);
+    });
 
   return (
     <Section>
