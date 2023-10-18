@@ -59,11 +59,6 @@ export default function ShortTextNoteModal() {
           slug: "content",
         },
         {
-          label: "Image",
-          type: "input",
-          slug: "image",
-        },
-        {
           label: "Add to list",
           type: "select-search",
           placeholder: "Search your lists",
