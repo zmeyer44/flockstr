@@ -24,6 +24,7 @@ export async function sendZap(
 ) {
   console.log("sendzap called", amount);
   const event = await new NDKEvent(ndk, _event);
+  console.log("Event", event);
   const pr = await event.zap(amount * 1000, comment);
   if (!pr) {
     console.log("No PR");

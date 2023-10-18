@@ -142,17 +142,10 @@ function create32ByteBuffer(inputString: string) {
   const buffer = Buffer.from(hash, "hex");
   return buffer;
 }
-export function randomId() {
-  // @ts-ignore
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
-    .replace(/[018]/g, (c: any) =>
-      (
-        c ^
-        (crypto.getRandomValues(new Uint8Array(1))[0]! & (15 >> (c / 4)))
-      ).toString(16),
-    )
-    .slice(0, 8) as string;
-}
+
 export function generateRandomString() {
   return crypto.randomBytes(32).toString("hex");
+}
+export function generateRandomStringLength(length: number) {
+  return crypto.randomBytes(length).toString("hex");
 }
