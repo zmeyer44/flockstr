@@ -60,6 +60,7 @@ export default function CreateList() {
       kind: 30001,
       tags: tags,
     });
+    console.log("EVENT Created", event);
     if (event && getTagValues("subscriptions", event.tags)) {
       await getSigner(new NDKList(ndk, event.rawEvent()))
         .then((delegateSigner) =>

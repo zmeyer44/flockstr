@@ -33,7 +33,7 @@ const ConfirmModal = dynamic(() => import("@/components/Modals/Confirm"), {
 export default function Header({ event }: { event: NDKEvent }) {
   const { currentUser } = useCurrentUser();
   const modal = useModal();
-  const { ndk, signer } = useNDK();
+  const { ndk } = useNDK();
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const [syncingUsers, setSyncingUsers] = useState(false);
@@ -88,11 +88,11 @@ export default function Header({ event }: { event: NDKEvent }) {
     }
   }
   async function handleSyncUsers() {
-    if (!event || !ndk || !signer) return;
+    if (!event || !ndk) return;
     setSyncingUsers(true);
     try {
       console.log("handleSyncUsers");
-      await updateListUsersFromZaps(ndk, event.tagId(), rawEvent, signer);
+      await updateListUsersFromZaps(ndk, event.tagId(), rawEvent);
       toast.success("Users Synced!");
     } catch (err) {
       console.log("error syncing users", err);

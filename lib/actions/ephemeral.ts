@@ -101,15 +101,16 @@ function generateContent(
 async function generateTags(mainSigner: NDKSigner, opts: ISaveOpts = {}) {
   const mainUser = await mainSigner.user();
   const tags = [
-    ["p", mainUser.hexpubkey],
+    ["p", mainUser.pubkey],
     ["client", "flockstr"],
   ];
 
   if (opts.associatedEvent) {
-    // TODO: This is trivially reversable; better to encrypt it or hash it with the hexpubkey
-    const hashedEventReference = await getHashedKeyName(
-      opts.associatedEvent.encode(),
-    );
+    const encodedEvent = opts.associatedEvent.encode();
+    console.log("encodedEvent", encodedEvent);
+    // TODO: This is trivially reversable; better to encrypt it or hash it with the pubkey
+    const hashedEventReference = await getHashedKeyName(encodedEvent);
+    console.log("hashedEventReference", hashedEventReference);
     tags.push(["e", hashedEventReference]);
   }
 
@@ -139,7 +140,7 @@ export async function saveEphemeralSigner(
     content: generateContent(targetSigner, opts),
     tags: await generateTags(mainSigner, opts),
   } as NostrEvent);
-  event.pubkey = mainUser.hexpubkey;
+  event.pubkey = mainUser.pubkey;
   await event.encrypt(mainUser, mainSigner);
   await event.publish();
 
@@ -152,7 +153,7 @@ export async function saveEphemeralSigner(
       content: JSON.stringify(opts.keyProfile),
       tags: [] as NDKTag[],
     } as NostrEvent);
-    event.pubkey = user.hexpubkey;
+    event.pubkey = user.pubkey;
     await event.sign(targetSigner);
     await event.publish();
   }

@@ -104,7 +104,6 @@ export async function updateListUsersFromZaps(
   ndk: NDK,
   tagId: string,
   event: NostrEvent,
-  signer: NDKSigner,
 ) {
   const SECONDS_IN_MONTH = 2_628_000;
   const SECONDS_IN_YEAR = SECONDS_IN_MONTH * 365;
@@ -122,7 +121,7 @@ export async function updateListUsersFromZaps(
     ([pubkey, relay, petname, expiryUnix]) =>
       parseInt(expiryUnix ?? "0") > unixTimeNowInSeconds(),
   );
-  const newUsers: string[] = [];
+  const newUsers: string[] = currentUsers.map(([pub]) => pub as string);
 
   for (const paymentInvoice of paymentInvoices) {
     if (
@@ -149,7 +148,7 @@ export async function updateListUsersFromZaps(
       // Send old codes to user
     }
   }
-  await sendCodesToNewUsers(ndk, newUsers, tagId, signer);
+  await sendCodesToNewUsers(ndk, newUsers, tagId, event);
 
   // Add self
   console.log("Adding self");
@@ -172,11 +171,10 @@ async function sendCodesToNewUsers(
   ndk: NDK,
   users: string[],
   tagId: string,
-  signer_: NDKSigner,
+  event: NostrEvent,
 ) {
-  console.log("sendCodesToNewUsers", users, signer_);
-  const signer = await findEphemeralSigner(ndk, signer_, {
-    associatedEventNip19: tagId,
+  const signer = await findEphemeralSigner(ndk, ndk.signer!, {
+    associatedEventNip19: new NDKEvent(ndk, event).encode(),
   });
   console.log("Signer", signer);
   if (!signer) return;
@@ -188,9 +186,10 @@ async function sendCodesToNewUsers(
   });
   const codes: [string, string][] = [];
   for (const message of Array.from(messages)) {
-    await message.decrypt(delegate, signer);
+    await message.decrypt();
     codes.push([getTagValues("e", message.tags) ?? "", message.content]);
   }
+  console.log("codes", codes);
 
   for (const user of users) {
     for (const [event, code] of codes) {
