@@ -7,7 +7,7 @@ import NDK, {
   type NostrEvent,
   NDKUser,
 } from "@nostr-dev-kit/ndk";
-import { generateRandomString, encryptMessage } from "@/lib/nostr";
+import { generateRandomString, encryptMessage, randomId } from "@/lib/nostr";
 import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 import { getTagsValues } from "@/lib/nostr/utils";
 
@@ -155,7 +155,7 @@ export async function createList(
     tags: [
       ["name", title],
       ["description", description ?? ""],
-      ["d", generateRandomString()],
+      ["d", randomId()],
     ],
   });
 }

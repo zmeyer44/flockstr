@@ -39,7 +39,6 @@ export async function checkPayment(
   pubkey: string,
   event: NostrEvent,
 ) {
-  console.log("Running check payment");
   const paymentEvent = await ndk.fetchEvent({
     kinds: [9735],
     ["#a"]: [tagId],

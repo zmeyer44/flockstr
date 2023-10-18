@@ -67,12 +67,12 @@ export default function Header({ event }: { event: NDKEvent }) {
   }, [isMember, currentUser]);
 
   async function handleCheckPayment() {
-    if (!event || !currentUser) return;
+    if (!event || !currentUser || !ndk) return;
     setCheckingPayment(true);
     console.log("Checking payment");
     try {
       const result = await checkPayment(
-        ndk!,
+        ndk,
         event.tagId(),
         currentUser.pubkey,
         rawEvent,
@@ -88,11 +88,11 @@ export default function Header({ event }: { event: NDKEvent }) {
     }
   }
   async function handleSyncUsers() {
-    if (!event) return;
+    if (!event || !ndk) return;
     setSyncingUsers(true);
     try {
       console.log("handleSyncUsers");
-      await updateListUsersFromZaps(ndk!, event.tagId(), rawEvent);
+      await updateListUsersFromZaps(ndk, event.tagId(), rawEvent);
       toast.success("Users Synced!");
     } catch (err) {
       console.log("error syncing users", err);
@@ -171,39 +171,43 @@ export default function Header({ event }: { event: NDKEvent }) {
                 </Button>
               </>
             )}
-            {subscriptionsEnabled && !isMember && (
-              <Button
-                onClick={() =>
-                  modal?.show(
-                    <ConfirmModal
-                      title={`Subscribe to ${title}`}
-                      onConfirm={handleSendZap}
-                      ctaBody={
-                        <>
-                          <span>Zap to Subscribe</span>
-                          <HiOutlineLightningBolt className="h-4 w-4" />
-                        </>
-                      }
-                    >
-                      <p className="text-muted-forground">
-                        {`Pay ${priceInBTC} BTC (${formatNumber(
-                          btcToSats(priceInBTC),
-                        )} sats) for year long access until ${formatDate(
-                          new Date(
-                            new Date().setFullYear(
-                              new Date().getFullYear() + 1,
+            {subscriptionsEnabled &&
+              !isMember &&
+              (hasValidPayment ? (
+                <Button variant={"outline"}>Pending Sync</Button>
+              ) : (
+                <Button
+                  onClick={() =>
+                    modal?.show(
+                      <ConfirmModal
+                        title={`Subscribe to ${title}`}
+                        onConfirm={handleSendZap}
+                        ctaBody={
+                          <>
+                            <span>Zap to Subscribe</span>
+                            <HiOutlineLightningBolt className="h-4 w-4" />
+                          </>
+                        }
+                      >
+                        <p className="text-muted-forground">
+                          {`Pay ${priceInBTC} BTC (${formatNumber(
+                            btcToSats(priceInBTC),
+                          )} sats) for year long access until ${formatDate(
+                            new Date(
+                              new Date().setFullYear(
+                                new Date().getFullYear() + 1,
+                              ),
                             ),
-                          ),
-                          "MMM Do, YYYY",
-                        )}`}
-                      </p>
-                    </ConfirmModal>,
-                  )
-                }
-              >
-                Subscribe
-              </Button>
-            )}
+                            "MMM Do, YYYY",
+                          )}`}
+                        </p>
+                      </ConfirmModal>,
+                    )
+                  }
+                >
+                  Subscribe
+                </Button>
+              ))}
           </div>
         </div>
 
