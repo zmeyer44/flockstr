@@ -40,11 +40,15 @@ export async function checkPayment(
   pubkey: string,
   event: NostrEvent,
 ) {
-  const paymentEvent = await ndk.fetchEvent({
+  console.log("CHeck payment called", tagId);
+  const paymentEvents = await ndk.fetchEvents({
     kinds: [9735],
     ["#a"]: [tagId],
-    ["#p"]: [pubkey],
   });
+  if (!paymentEvents) return;
+  const paymentEvent = Array.from(paymentEvents).find(
+    (e) => zapInvoiceFromEvent(e)?.zappee === pubkey,
+  );
   console.log("paymentEvent", paymentEvent);
   if (!paymentEvent) return;
   const invoice = zapInvoiceFromEvent(paymentEvent);
@@ -55,7 +59,7 @@ export async function checkPayment(
   }
 
   const zappedUser = ndk.getUser({
-    npub: invoice.zappee,
+    hexpubkey: invoice.zapped,
   });
   await zappedUser.fetchProfile();
   if (!zappedUser.profile) {
