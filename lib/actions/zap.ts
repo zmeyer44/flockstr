@@ -1,6 +1,7 @@
 import NDK, {
   NDKEvent,
   NDKUser,
+  NDKSigner,
   zapInvoiceFromEvent,
   type NostrEvent,
 } from "@nostr-dev-kit/ndk";
@@ -103,6 +104,7 @@ export async function updateListUsersFromZaps(
   ndk: NDK,
   tagId: string,
   event: NostrEvent,
+  signer: NDKSigner,
 ) {
   const SECONDS_IN_MONTH = 2_628_000;
   const SECONDS_IN_YEAR = SECONDS_IN_MONTH * 365;
@@ -120,6 +122,7 @@ export async function updateListUsersFromZaps(
     ([pubkey, relay, petname, expiryUnix]) =>
       parseInt(expiryUnix ?? "0") > unixTimeNowInSeconds(),
   );
+  const newUsers: string[] = [];
 
   for (const paymentInvoice of paymentInvoices) {
     if (
@@ -135,7 +138,6 @@ export async function updateListUsersFromZaps(
       event,
     );
     console.log("Is valid?", isValid);
-    const newUsers: string[] = [];
     if (isValid) {
       validUsers.push([
         paymentInvoice.zappee,
@@ -146,8 +148,8 @@ export async function updateListUsersFromZaps(
       newUsers.push(paymentInvoice.zappee);
       // Send old codes to user
     }
-    await sendCodesToNewUsers(ndk, newUsers, tagId);
   }
+  await sendCodesToNewUsers(ndk, newUsers, tagId, signer);
 
   // Add self
   console.log("Adding self");
@@ -166,10 +168,17 @@ export async function updateListUsersFromZaps(
   });
 }
 
-async function sendCodesToNewUsers(ndk: NDK, users: string[], tagId: string) {
-  const signer = await findEphemeralSigner(ndk, ndk!.signer!, {
+async function sendCodesToNewUsers(
+  ndk: NDK,
+  users: string[],
+  tagId: string,
+  signer_: NDKSigner,
+) {
+  console.log("sendCodesToNewUsers", users, signer_);
+  const signer = await findEphemeralSigner(ndk, signer_, {
     associatedEventNip19: tagId,
   });
+  console.log("Signer", signer);
   if (!signer) return;
   const delegate = await signer.user();
   const messages = await ndk.fetchEvents({
@@ -195,6 +204,7 @@ async function sendCodesToNewUsers(ndk: NDK, users: string[], tagId: string) {
         ],
         pubkey: delegate.pubkey,
       } as NostrEvent);
+      console.log("Sending message");
       await messageEvent.encrypt(new NDKUser({ hexpubkey: user }), signer);
       await messageEvent.sign(signer);
       await messageEvent.publish();

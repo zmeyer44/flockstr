@@ -26,7 +26,6 @@ export async function findEphemeralSigner(
   mainSigner: NDKSigner,
   opts: IFindEphemeralSignerLookups,
 ): Promise<NDKPrivateKeySigner | undefined> {
-  const mainUser = await mainSigner.user();
   const filter: NDKFilter = { kinds: [2600 as number] };
 
   if (opts.name) {
@@ -38,7 +37,7 @@ export async function findEphemeralSigner(
     );
     filter["#e"] = [hashedEventReference];
   }
-
+  console.log("filter", filter);
   const event = await ndk.fetchEvent(filter);
 
   if (event) {
