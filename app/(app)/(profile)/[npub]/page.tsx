@@ -10,6 +10,7 @@ import { getTwoLetters, truncateText } from "@/lib/utils";
 import ProfileFeed from "./_components/Feed";
 import Subscriptions from "./_components/Subscriptions";
 import { nip19 } from "nostr-tools";
+import useLists from "@/lib/hooks/useLists";
 
 export default function ProfilePage({
   params: { npub },
@@ -19,7 +20,6 @@ export default function ProfilePage({
   };
 }) {
   const [activeTab, setActiveTab] = useState("feed");
-  console.log("calling with ", npub);
   if (npub === "service-worker.js") {
     throw new Error("Invalid list");
   }
@@ -30,18 +30,8 @@ export default function ProfilePage({
   }
   const pubkey = data.toString();
   const { profile } = useProfile(pubkey);
+  const { init, lists } = useLists();
 
-  const demo = [
-    {
-      id: "1",
-      title: "BTC Radio",
-      description:
-        "BTC Radio is the best fuking show ever. you should sub to it. now",
-      picture:
-        "https://assets.whop.com/cdn-cgi/image/width=1080/https://assets.whop.com/images/images/51602.original.png?1693358530",
-      tags: ["music", "crypto", "art"],
-    },
-  ];
   return (
     <div className="relative mx-auto max-w-5xl space-y-6">
       <div className="relative @container">
@@ -116,9 +106,9 @@ export default function ProfilePage({
       </div>
       <div className="mx-auto max-w-[800px] space-y-6">
         <div className="flex max-w-2xl flex-col gap-4 px-4">
-          {demo.map((e) => (
+          {/* {[].map((e) => (
             <SubscriptionCard key={e.id} {...e} />
-          ))}
+          ))} */}
         </div>
         <div className="">
           <Tabs

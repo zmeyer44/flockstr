@@ -13,6 +13,7 @@ import { getTagValues } from "@/lib/nostr/utils";
 import { NDKList } from "@nostr-dev-kit/ndk";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
 import { useRouter } from "next/navigation";
+
 const CreateListSchema = z.object({
   title: z.string(),
   image: z.string().optional(),
@@ -49,6 +50,7 @@ export default function CreateList() {
     }
     if (data.subscriptions) {
       tags.push(["subscriptions", "true"]);
+      tags.push(["p", currentUser!.pubkey, "", "self", "4000000000"]);
     }
     if (data.price) {
       tags.push(["price", satsToBtc(data.price).toString(), "btc", "year"]);

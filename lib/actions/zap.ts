@@ -146,22 +146,8 @@ export async function updateListUsersFromZaps(
   // Add self
   console.log("Adding self");
   const selfIndex = validUsers.findIndex(([vu]) => vu === event.pubkey);
-  if (selfIndex !== -1) {
-    console.log("Already there");
-
-    validUsers[selfIndex] = [
-      event.pubkey,
-      "",
-      "self",
-      (unixTimeNowInSeconds() + SECONDS_IN_YEAR).toString(),
-    ];
-  } else {
-    validUsers.push([
-      event.pubkey,
-      "",
-      "self",
-      (unixTimeNowInSeconds() + SECONDS_IN_YEAR).toString(),
-    ]);
+  if (selfIndex === -1) {
+    validUsers.push([event.pubkey, "", "self", "4000000000"]);
   }
   console.log("Valid users", validUsers);
   return createEvent(ndk, {
