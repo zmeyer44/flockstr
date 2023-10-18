@@ -5,8 +5,9 @@ import Link from "next/link";
 import Spinner from "@/components/spinner";
 import { Event } from "nostr-tools";
 import useEvents from "@/lib/hooks/useEvents";
-import NDK, { NDKEvent, type NDKFilter } from "@nostr-dev-kit/ndk";
 import ListCard from "@/components/ListCard";
+import { uniqBy } from "ramda";
+import { getTagValues } from "@/lib/nostr/utils";
 
 type SubscriptionsProps = {
   pubkey: string;
@@ -41,7 +42,7 @@ export default function Subscriptions({
   if (link) {
     return (
       <>
-        {events.map((e) => {
+        {uniqBy((e) => !!getTagValues("d", e.tags), events).map((e) => {
           return (
             <Link href={`/list/${e.encode()}`}>
               <ListCard key={e.id} event={e} />;
@@ -53,7 +54,7 @@ export default function Subscriptions({
   }
   return (
     <>
-      {events.map((e) => {
+      {uniqBy((e) => !!getTagValues("d", e.tags), events).map((e) => {
         return <ListCard key={e.id} event={e} />;
       })}
     </>

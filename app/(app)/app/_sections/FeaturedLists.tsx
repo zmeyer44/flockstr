@@ -6,19 +6,8 @@ import {
   SectionTitle,
   SectionContent,
 } from "@/containers/PageSection";
-import LiveBadge from "@/components/Badges/LiveBadge";
 import { Button } from "@/components/ui/button";
 import { RiArrowRightLine } from "react-icons/ri";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
-import Image from "next/image";
-import { cn, formatNumber, getTwoLetters } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useEvents from "@/lib/hooks/useEvents";
 import { Event } from "nostr-tools";
 import KindLoading from "@/components/KindCard/loading";
@@ -34,11 +23,11 @@ export default function FeaturedLists() {
     filter: {
       kinds: [30001 as NDKKind],
       authors: NOTABLE_ACCOUNTS.map((a) => nip19.decode(a).data.toString()),
-      limit: 50,
+      limit: 60,
     },
   });
 
-  const processedEvents = events
+  const processedEvents = uniqBy((e) => getTagValues("d", e.tags), events)
     .filter(
       (a) =>
         !!getTagValues("image", a.tags) ?? !!getTagValues("picture", a.tags),
