@@ -5,7 +5,7 @@ import currentUserStore from "@/lib/stores/currentUser";
 import { UserSchema } from "@/types";
 import { useNDK } from "@/app/_providers/ndk";
 import { nip19 } from "nostr-tools";
-
+import useLists from "./useLists";
 export default function useCurrentUser() {
   const {
     currentUser,
@@ -15,30 +15,7 @@ export default function useCurrentUser() {
     follows,
   } = currentUserStore();
   const { loginWithNip07, getProfile, ndk } = useNDK();
-
-  // const {
-  //   events: contactList,
-  //   isLoading,
-  //   onEvent,
-  // } = useEvents({
-  //   filter: {
-  //     kinds: [3],
-  //     authors: [currentUser?.pubkey ?? ""],
-  //     limit: 1,
-  //   },
-  //   enabled: !!currentUser,
-  // });
-  // onEvent((event) => {
-  //   console.log("EVENT", event);
-  //   const foundFollows = event.tags
-  //     .filter(([key]) => key === "p")
-  //     .map(([key, pubkey]) => pubkey);
-  //   console.log("Found follows", foundFollows);
-  //   if (follows.length !== foundFollows.length) {
-  //     setFollows(follows);
-  //   }
-  // });
-
+  const { init } = useLists();
   async function attemptLogin() {
     try {
       const shouldReconnect = localStorage.getItem("shouldReconnect");
@@ -86,6 +63,7 @@ export default function useCurrentUser() {
     console.log("user", user);
     await user.fetchProfile();
     setCurrentUser(user);
+    void init(user.pubkey);
   }
 
   return {

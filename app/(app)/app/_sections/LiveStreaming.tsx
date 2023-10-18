@@ -47,7 +47,6 @@ export default function LiveStreamingSection() {
     if (bParticipants) return 1;
     return -1;
   });
-  console.log(processedEvents);
   return (
     <Section className="max-sm:-mx-5">
       <SectionHeader>

@@ -228,9 +228,15 @@ export default function FormModal<TSchema extends FieldValues>({
                                   {fieldProps.options?.map((o) => (
                                     <CommandItem
                                       key={o.value}
-                                      onClick={() =>
-                                        console.log("Captured", o.value)
-                                      }
+                                      onSelect={() => {
+                                        setValue(
+                                          field.name,
+                                          o.value as PathValue<
+                                            TSchema,
+                                            Path<TSchema>
+                                          >,
+                                        );
+                                      }}
                                       className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
                                     >
                                       <p>{o.label}</p>

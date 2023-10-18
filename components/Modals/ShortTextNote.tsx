@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import FormModal from "./FormModal";
 import { z } from "zod";
 import useEvents from "@/lib/hooks/useEvents";
-import { updateList } from "@/lib/actions/create";
+import { createEventHandler } from "@/lib/actions/create";
 import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 import { useModal } from "@/app/_providers/modal/provider";
 import { toast } from "sonner";
 import { useNDK } from "@/app/_providers/ndk";
-import { NostrEvent } from "@nostr-dev-kit/ndk";
+import { useSigner, type SignerStoreItem } from "@/app/_providers/signer";
 import { getTagValues } from "@/lib/nostr/utils";
+import useCurrentUser from "@/lib/hooks/useCurrentUser";
+import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
+import useLists from "@/lib/hooks/useLists";
 
 const ShortTextNoteSchema = z.object({
   content: z.string(),
-  image: z.string().optional(),
   list: z.string().optional(),
   isPrivate: z.boolean().optional(),
 });
@@ -21,18 +23,19 @@ type ShortTextNoteType = z.infer<typeof ShortTextNoteSchema>;
 
 export default function ShortTextNoteModal() {
   const modal = useModal();
+  const { lists, init } = useLists();
   const [isLoading, setIsLoading] = useState(false);
+  const { currentUser } = useCurrentUser();
   const [sent, setSent] = useState(false);
   const { ndk } = useNDK();
-  //   const { events } = useEvents({
-  //     filter: {
-  //       kinds: [listEvent.kind as number],
-  //       authors: [listEvent.pubkey],
-  //       since: unixTimeNowInSeconds() - 10,
-  //       limit: 1,
-  //     },
-  //     enabled: sent,
-  //   });
+  const { getSigner } = useSigner()!;
+
+  useEffect(() => {
+    if (currentUser) {
+      void init(currentUser.pubkey);
+    }
+  }, [currentUser]);
+
   //   useEffect(() => {
   //     if (events.length) {
   //       console.log("Done!");
@@ -42,11 +45,69 @@ export default function ShortTextNoteModal() {
   //     }
   //   }, [events]);
 
-  async function handleSubmit(listData: ShortTextNoteType) {
+  async function handleSubmit(data: ShortTextNoteType) {
     setIsLoading(true);
-    const newTags = Object.entries(listData);
-    setSent(true);
-    // const result = await updateList(ndk!, listEvent, newTags);
+    if (!ndk) {
+      toast.error("Error connecting");
+      return;
+    }
+    if (data.list) {
+      const list = lists.find((l) => getTagValues("d", l.tags) === data.list);
+      if (!list) {
+        toast.error("No list found");
+        return;
+      }
+      let listSigner: SignerStoreItem | undefined = undefined;
+      if (data.isPrivate) {
+        listSigner = await getSigner(list);
+        if (!listSigner?.signer) {
+          toast.error("Error creating signer");
+          return;
+        }
+        if (!listSigner?.saved) {
+          console.log("Saving delegate...");
+          await saveEphemeralSigner(ndk!, listSigner.signer, {
+            associatedEvent: list,
+            keyProfile: {
+              name: listSigner.title,
+              picture: currentUser?.profile?.image,
+              lud06: currentUser?.profile?.lud06,
+              lud16: currentUser?.profile?.lud16,
+            },
+          });
+        }
+      }
+
+      const result = await createEventHandler(
+        ndk,
+        {
+          content: data.content,
+          kind: 1,
+          tags: [],
+        },
+        data.isPrivate,
+        list,
+        listSigner?.signer,
+      );
+      if (result) {
+        toast.success("Note added!");
+        modal?.hide();
+      }
+    } else {
+      const result = await createEventHandler(
+        ndk,
+        {
+          content: data.content,
+          kind: 1,
+          tags: [],
+        },
+        data.isPrivate,
+      );
+      if (result) {
+        toast.success("Note added!");
+        modal?.hide();
+      }
+    }
   }
 
   return (
@@ -63,20 +124,23 @@ export default function ShortTextNoteModal() {
           type: "select-search",
           placeholder: "Search your lists",
           slug: "list",
-          options: [
-            {
-              label: "Spicy Takes 🌶️",
-              value: "325grg ",
-            },
-            {
-              label: "Public reading list",
-              value: "grherh ",
-            },
-            {
-              label: "Radnosm other",
-              value: "grhfaggferh ",
-            },
-          ],
+          options: lists
+            .map((l) => {
+              console.log("MApping", l);
+              const title =
+                getTagValues("title", l.tags) ??
+                getTagValues("name", l.tags) ??
+                "Untitled";
+              const description = getTagValues("description", l.tags);
+              const value = getTagValues("d", l.tags);
+              if (!value) return;
+              return {
+                label: title,
+                description,
+                value: value,
+              };
+            })
+            .filter(Boolean),
         },
         {
           label: "Private",

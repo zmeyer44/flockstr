@@ -41,6 +41,90 @@ export async function createEvent(
     return false;
   }
 }
+export async function createEventHandler(
+  ndk: NDK,
+  event: {
+    content: string;
+    kind: number;
+    tags: string[][];
+  },
+  isPrivate?: boolean,
+  list?: NDKList,
+  delegateSigner?: NDKPrivateKeySigner,
+) {
+  const pubkey = await window.nostr?.getPublicKey();
+  if (!pubkey || !window.nostr) {
+    throw new Error("No public key provided!");
+  }
+  const eventToPublish = new NDKEvent(ndk, {
+    ...event,
+    tags: [...event.tags, ["client", "ordstr"]],
+    pubkey,
+    created_at: unixTimeNowInSeconds(),
+  } as NostrEvent);
+
+  await eventToPublish.sign();
+
+  let publishedEvent: NDKEvent | null = null;
+  // Check if is private event
+  if (isPrivate) {
+    const rawEventString = JSON.stringify(eventToPublish.rawEvent());
+    const passphrase = generateRandomString();
+    const encryptedRawEventString = await encryptMessage(
+      rawEventString,
+      passphrase,
+    );
+    const signer = delegateSigner ?? ndk.signer!;
+    const user = await signer.user();
+    const newEvent = new NDKEvent(ndk, {
+      content: encryptedRawEventString,
+      kind: 3745,
+      tags: [
+        ["kind", event.kind.toString()],
+        ["client", "ordstr"],
+      ],
+      pubkey: user.pubkey,
+    } as NostrEvent);
+    await newEvent.sign(signer);
+    await newEvent.publish();
+
+    if (list) {
+      // Send DMs to subscribers
+      const subscribers = getTagsValues("p", list.tags);
+      for (const subscriber of subscribers) {
+        const messageEvent = new NDKEvent(ndk, {
+          content: passphrase,
+          kind: 4,
+          tags: [
+            ["p", subscriber],
+            ["e", newEvent.id],
+            ["client", "ordstr"],
+          ],
+          pubkey: user.pubkey,
+        } as NostrEvent);
+        await messageEvent.encrypt(
+          new NDKUser({ hexpubkey: subscriber }),
+          signer,
+        );
+        await messageEvent.sign(signer);
+        await messageEvent.publish();
+      }
+    }
+    publishedEvent = newEvent;
+  } else {
+    await eventToPublish.publish();
+    publishedEvent = eventToPublish;
+  }
+  if (list) {
+    const tag = publishedEvent.tagReference();
+    if (!tag) return;
+    // Add event to list
+    await list.addItem(tag, undefined, false);
+    await list.sign();
+    await list.publish();
+  }
+  return true;
+}
 export async function createEncryptedEventOnPrivateList(
   ndk: NDK,
   event: {
@@ -64,7 +148,6 @@ export async function createEncryptedEventOnPrivateList(
   await eventToPublish.sign();
   const rawEventString = JSON.stringify(eventToPublish.rawEvent());
   const passphrase = generateRandomString();
-  // const passphrase = "test";
   const encryptedRawEventString = await encryptMessage(
     rawEventString,
     passphrase,
@@ -79,7 +162,7 @@ export async function createEncryptedEventOnPrivateList(
       ["kind", event.kind.toString()],
       ["client", "ordstr"],
     ],
-    pubkey: user.hexpubkey,
+    pubkey: user.pubkey,
   } as NostrEvent);
 
   await newEvent.sign(signer);
