@@ -34,6 +34,7 @@ export const NOTABLE_ACCOUNTS = [
   "npub1ejxswthae3nkljavznmv66p9ahp4wmj4adux525htmsrff4qym9sz2t3tv",
   "npub107jk7htfv243u0x5ynn43scq9wrxtaasmrwwa8lfu2ydwag6cx2quqncxg",
   "npub1zach44xjpc4yyhx6pgse2cj2pf98838kja03dv2e8ly8lfr094vqvm5dy5",
+  "npub1hfjy5e49uxr97x0rduxtnk748vcaupj35lamyhdt9xswxc4khw2s6vxa9q",
 ];
 
 export const BANNER =

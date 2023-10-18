@@ -39,6 +39,10 @@ export default function FeaturedLists() {
   });
 
   const processedEvents = events
+    .filter(
+      (a) =>
+        !!getTagValues("image", a.tags) ?? !!getTagValues("picture", a.tags),
+    )
     .sort((a, b) => {
       const aTitle =
         getTagValues("title", a.tags) ??
