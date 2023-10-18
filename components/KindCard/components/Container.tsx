@@ -60,10 +60,12 @@ export default function Container({
       <CardContent className="flex grow flex-col px-4 pb-3">
         {children}
         <div className="mt-auto">
-          {!!contentTags?.length && (
+          {!!contentTags?.length ? (
             <div className="mb-2.5 mt-1 max-h-[52px] overflow-hidden">
               <Tags tags={contentTags} />
             </div>
+          ) : (
+            <div className="h-1.5" />
           )}
           <div className="border-t">
             <Actions />

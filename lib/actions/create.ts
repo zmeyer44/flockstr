@@ -58,7 +58,7 @@ export async function createEventHandler(
   }
   const eventToPublish = new NDKEvent(ndk, {
     ...event,
-    tags: [...event.tags, ["client", "ordstr"]],
+    tags: [...event.tags, ["client", "flockstr"]],
     pubkey,
     created_at: unixTimeNowInSeconds(),
   } as NostrEvent);
@@ -68,20 +68,27 @@ export async function createEventHandler(
   let publishedEvent: NDKEvent | null = null;
   // Check if is private event
   if (isPrivate) {
+    console.log("isPrivate");
     const rawEventString = JSON.stringify(eventToPublish.rawEvent());
+    console.log("rawEventString", rawEventString);
     const passphrase = generateRandomString();
+    console.log("passphrase", passphrase);
     const encryptedRawEventString = await encryptMessage(
       rawEventString,
       passphrase,
     );
+    console.log("encryptedRawEventString", encryptedRawEventString);
+    console.log("delegateSigner", delegateSigner);
     const signer = delegateSigner ?? ndk.signer!;
     const user = await signer.user();
+    console.log("signer user", user);
+
     const newEvent = new NDKEvent(ndk, {
       content: encryptedRawEventString,
       kind: 3745,
       tags: [
         ["kind", event.kind.toString()],
-        ["client", "ordstr"],
+        ["client", "flockstr"],
       ],
       pubkey: user.pubkey,
     } as NostrEvent);
@@ -98,7 +105,7 @@ export async function createEventHandler(
           tags: [
             ["p", subscriber],
             ["e", newEvent.id],
-            ["client", "ordstr"],
+            ["client", "flockstr"],
           ],
           pubkey: user.pubkey,
         } as NostrEvent);
@@ -141,7 +148,7 @@ export async function createEncryptedEventOnPrivateList(
   }
   const eventToPublish = new NDKEvent(ndk, {
     ...event,
-    tags: [...event.tags, ["client", "ordstr"]],
+    tags: [...event.tags, ["client", "flockstr"]],
     pubkey,
     created_at: unixTimeNowInSeconds(),
   } as NostrEvent);
@@ -160,7 +167,7 @@ export async function createEncryptedEventOnPrivateList(
     kind: 3745,
     tags: [
       ["kind", event.kind.toString()],
-      ["client", "ordstr"],
+      ["client", "flockstr"],
     ],
     pubkey: user.pubkey,
   } as NostrEvent);
@@ -186,7 +193,7 @@ export async function createEncryptedEventOnPrivateList(
       tags: [
         ["p", subscriber],
         ["e", newEvent.id],
-        ["client", "ordstr"],
+        ["client", "flockstr"],
       ],
       pubkey: user.hexpubkey,
     } as NostrEvent);

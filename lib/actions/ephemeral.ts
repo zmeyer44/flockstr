@@ -103,7 +103,7 @@ async function generateTags(mainSigner: NDKSigner, opts: ISaveOpts = {}) {
   const mainUser = await mainSigner.user();
   const tags = [
     ["p", mainUser.hexpubkey],
-    ["client", "ordstr"],
+    ["client", "flockstr"],
   ];
 
   if (opts.associatedEvent) {

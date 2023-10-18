@@ -46,7 +46,8 @@ export default function ListPage({
     );
   }
   const noteIds = getTagsValues("e", event.tags).filter(Boolean);
-  console.log("notes", event.tags);
+  console.log("notes", noteIds);
+  console.log("tags", event.tags);
 
   return (
     <div className="relative mx-auto max-w-5xl space-y-4 p-2 sm:p-4">

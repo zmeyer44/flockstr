@@ -77,7 +77,7 @@ export default function ShortTextNoteModal() {
           });
         }
       }
-
+      console.log("about to create private event with ", listSigner);
       const result = await createEventHandler(
         ndk,
         {

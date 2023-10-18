@@ -8,6 +8,7 @@ import Tabs from "@/components/Tabs";
 import useProfile from "@/lib/hooks/useProfile";
 import { getTwoLetters, truncateText } from "@/lib/utils";
 import ProfileFeed from "./_components/Feed";
+import Subscriptions from "./_components/Subscriptions";
 import { nip19 } from "nostr-tools";
 
 export default function ProfilePage({
@@ -114,7 +115,7 @@ export default function ProfilePage({
         </div>
       </div>
       <div className="mx-auto max-w-[800px] space-y-6">
-        <div className="flex max-w-2xl flex-col gap-5">
+        <div className="flex max-w-2xl flex-col gap-5 px-5">
           {demo.map((e) => (
             <SubscriptionCard key={e.id} {...e} />
           ))}
@@ -127,10 +128,6 @@ export default function ProfilePage({
                 label: "Feed",
               },
               {
-                name: "media",
-                label: "Media",
-              },
-              {
                 name: "subscriptions",
                 label: "Subscriptions",
               },
@@ -140,6 +137,7 @@ export default function ProfilePage({
           />
         </div>
         {activeTab === "feed" ? <ProfileFeed pubkey={pubkey} /> : ""}
+        {activeTab === "subscriptions" ? <Subscriptions pubkey={pubkey} /> : ""}
       </div>
     </div>
   );
