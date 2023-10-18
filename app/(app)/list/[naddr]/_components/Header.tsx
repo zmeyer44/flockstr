@@ -148,7 +148,7 @@ export default function Header({ event }: { event: NDKEvent }) {
               <ProfileInfo pubkey={pubkey} />
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {!!currentUser && currentUser.pubkey === pubkey && (
               <>
                 <Button onClick={() => modal?.show(<CreateEventModal />)}>

@@ -35,10 +35,12 @@ export default function Kind3745(props: Event) {
         ["#e"]: [id],
       });
       if (directMessageEvent) {
+        console.log("Found DM", directMessageEvent);
         await directMessageEvent.decrypt(
           new NDKUser({ hexpubkey: pubkey }),
-          ndk?.signer,
+          ndk!.signer,
         );
+        console.log("Decryped DM", directMessageEvent);
         const passphrase = directMessageEvent.content;
         if (!passphrase) {
           setError("Unable to parse event");
