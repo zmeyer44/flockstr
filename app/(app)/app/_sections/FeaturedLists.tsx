@@ -26,7 +26,7 @@ export default function FeaturedLists() {
       limit: 60,
     },
   });
-  const uniq = uniqBy((e) => e.id, events);
+  const uniq = uniqBy((e) => getTagValues("title", e.tags), events);
   const processedEvents = uniqBy((e) => getTagValues("d", e.tags), uniq)
     .filter(
       (a) =>
