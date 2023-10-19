@@ -69,7 +69,7 @@ export default function useEvents({
         }
       });
     } catch (err) {
-      log(debug, "error", `❌ nostr (${err})`);
+      log("error", `❌ nostr (${err})`);
     } finally {
       setIsLoading(false);
     }

@@ -85,12 +85,23 @@ export function formatNumber(number: number) {
   } else return "not a number";
 }
 export function log(
-  isOn: boolean | undefined,
-  type: "info" | "error" | "warn",
+  type: "info" | "error" | "warn" | "func",
   ...args: unknown[]
 ) {
+  const isOn = true;
   if (!isOn) return;
-  console[type](...args);
+  const consoleType = type === "func" ? "info" : type;
+  const items = [...args].map((a) => `%c${a}`);
+  console[consoleType](
+    ...items,
+    type === "info"
+      ? "color: aqua;"
+      : type === "warn"
+      ? "color: yellow;"
+      : type === "func"
+      ? "color: green;"
+      : "color: red;",
+  );
 }
 
 export function validateUrl(value: string) {

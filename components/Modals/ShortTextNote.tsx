@@ -126,7 +126,6 @@ export default function ShortTextNoteModal() {
           slug: "list",
           options: lists
             .map((l) => {
-              console.log("MApping", l);
               const title =
                 getTagValues("title", l.tags) ??
                 getTagValues("name", l.tags) ??

@@ -10,6 +10,7 @@ import NDK, {
 import { generateRandomString, encryptMessage, randomId } from "@/lib/nostr";
 import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 import { getTagsValues } from "@/lib/nostr/utils";
+import { log } from "@/lib/utils";
 
 export async function createEvent(
   ndk: NDK,
@@ -19,6 +20,7 @@ export async function createEvent(
     tags: string[][];
   },
 ) {
+  log("func", "createEvent");
   try {
     const pubkey = await window.nostr?.getPublicKey();
     if (!pubkey || !window.nostr) {
@@ -29,14 +31,11 @@ export async function createEvent(
       pubkey,
       created_at: unixTimeNowInSeconds(),
     } as NostrEvent);
-    console.log("eventToPublish ", eventToPublish);
-
-    const signed = await eventToPublish.sign();
-    console.log("signed", signed);
+    await eventToPublish.sign();
     await eventToPublish.publish();
     return eventToPublish;
   } catch (err) {
-    console.log(err);
+    log("error", err);
     alert("An error has occured");
     return false;
   }
@@ -52,6 +51,7 @@ export async function createEventHandler(
   list?: NDKList,
   delegateSigner?: NDKPrivateKeySigner,
 ) {
+  log("func", "createEventHandler");
   const pubkey = await window.nostr?.getPublicKey();
   if (!pubkey || !window.nostr) {
     throw new Error("No public key provided!");
@@ -68,6 +68,7 @@ export async function createEventHandler(
   let publishedEvent: NDKEvent | null = null;
   // Check if is private event
   if (isPrivate) {
+    log("info", "isPrivate");
     const rawEventString = JSON.stringify(eventToPublish.rawEvent());
     const passphrase = generateRandomString();
     const encryptedRawEventString = await encryptMessage(
@@ -76,7 +77,7 @@ export async function createEventHandler(
     );
     const signer = delegateSigner ?? ndk.signer!;
     const user = await signer.user();
-
+    log("info", "Signer", user.toString());
     const newEvent = new NDKEvent(ndk, {
       content: encryptedRawEventString,
       kind: 3745,
@@ -141,21 +142,6 @@ export async function createReaction(
     tags: [
       ["e", event.id],
       ["p", event.pubkey],
-    ],
-  });
-}
-export async function createList(
-  ndk: NDK,
-  title: string,
-  description?: string,
-) {
-  return createEvent(ndk, {
-    content: "",
-    kind: 30001,
-    tags: [
-      ["name", title],
-      ["description", description ?? ""],
-      ["d", randomId()],
     ],
   });
 }

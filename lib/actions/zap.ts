@@ -13,6 +13,8 @@ import { getTagValues, getTagsAllValues } from "../nostr/utils";
 import { unixTimeNowInSeconds } from "../nostr/dates";
 import { createEvent } from "./create";
 import { findEphemeralSigner } from "@/lib/actions/ephemeral";
+import { log } from "@/lib/utils";
+
 const fetchWithZod = createZodFetcher();
 const ZapEndpointResponseSchema = z.object({
   nostrPubkey: z.string(),
@@ -24,15 +26,14 @@ export async function sendZap(
   _event: NostrEvent,
   comment?: string,
 ) {
-  console.log("sendzap called", amount);
+  log("func", "sendZap");
   const event = await new NDKEvent(ndk, _event);
-  console.log("Event", event);
+  log("info", event.toString());
   const pr = await event.zap(amount * 1000, comment);
   if (!pr) {
-    console.log("No PR");
+    log("info", "No PR");
     return;
   }
-  console.log("PR", pr);
   const webln = await requestProvider();
   return await webln.sendPayment(pr);
 }
@@ -105,6 +106,7 @@ export async function updateListUsersFromZaps(
   tagId: string,
   event: NostrEvent,
 ) {
+  log("func", "updateListUsersFromZaps");
   const SECONDS_IN_MONTH = 2_628_000;
   const SECONDS_IN_YEAR = SECONDS_IN_MONTH * 365;
   const paymentEvents = await ndk.fetchEvents({
@@ -136,7 +138,6 @@ export async function updateListUsersFromZaps(
       paymentInvoice.zappee,
       event,
     );
-    console.log("Is valid?", isValid);
     if (isValid) {
       validUsers.push([
         paymentInvoice.zappee,
@@ -148,15 +149,15 @@ export async function updateListUsersFromZaps(
       // Send old codes to user
     }
   }
+  log("info", "New users", newUsers.toString());
+
   await sendCodesToNewUsers(ndk, newUsers, tagId, event);
 
-  // Add self
-  console.log("Adding self");
+  // Add self;
   const selfIndex = validUsers.findIndex(([vu]) => vu === event.pubkey);
   if (selfIndex === -1) {
     validUsers.push([event.pubkey, "", "self", "4000000000"]);
   }
-  console.log("Valid users", validUsers);
   return createEvent(ndk, {
     ...event,
     kind: event.kind as number,
@@ -176,7 +177,9 @@ async function sendCodesToNewUsers(
   const signer = await findEphemeralSigner(ndk, ndk.signer!, {
     associatedEventNip19: new NDKEvent(ndk, event).encode(),
   });
-  console.log("Signer", signer);
+  log("func", "sendCodesToNewUsers");
+  log("info", "Signer", signer?.toString());
+
   if (!signer) return;
   const delegate = await signer.user();
   const messages = await ndk.fetchEvents({
@@ -189,7 +192,7 @@ async function sendCodesToNewUsers(
     await message.decrypt();
     codes.push([getTagValues("e", message.tags) ?? "", message.content]);
   }
-  console.log("codes", codes);
+  log("info", "codes", codes.toString());
 
   for (const user of users) {
     for (const [event, code] of codes) {
@@ -203,7 +206,7 @@ async function sendCodesToNewUsers(
         ],
         pubkey: delegate.pubkey,
       } as NostrEvent);
-      console.log("Sending message");
+      log("info", "sending message");
       await messageEvent.encrypt(new NDKUser({ hexpubkey: user }), signer);
       await messageEvent.sign(signer);
       await messageEvent.publish();

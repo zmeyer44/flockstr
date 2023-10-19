@@ -9,6 +9,8 @@ import NDK, {
 } from "@nostr-dev-kit/ndk";
 import { getHashedKeyName } from "@/lib/nostr";
 import { z } from "zod";
+import { log } from "@/lib/utils";
+
 const SignerSchema = z.object({
   key: z.string(),
 });
@@ -26,6 +28,7 @@ export async function findEphemeralSigner(
   mainSigner: NDKSigner,
   opts: IFindEphemeralSignerLookups,
 ): Promise<NDKPrivateKeySigner | undefined> {
+  log("func", "findEphemeralSigner");
   const filter: NDKFilter = { kinds: [2600 as number] };
 
   if (opts.name) {
@@ -37,13 +40,11 @@ export async function findEphemeralSigner(
     );
     filter["#e"] = [hashedEventReference];
   }
-  console.log("filter", filter);
+  log("info", "filter", filter.toString());
   const event = await ndk.fetchEvent(filter);
-
   if (event) {
     const decryptEventFunction = async (event: NDKEvent) => {
       await event.decrypt(await mainSigner.user());
-
       const content = SignerSchema.parse(JSON.parse(event.content));
       return new NDKPrivateKeySigner(content.key as string);
     };
@@ -99,18 +100,18 @@ function generateContent(
   return JSON.stringify(content);
 }
 async function generateTags(mainSigner: NDKSigner, opts: ISaveOpts = {}) {
+  log("func", "generateTags", opts.toString());
   const mainUser = await mainSigner.user();
   const tags = [
     ["p", mainUser.pubkey],
     ["client", "flockstr"],
   ];
-
   if (opts.associatedEvent) {
     const encodedEvent = opts.associatedEvent.encode();
-    console.log("encodedEvent", encodedEvent);
+    log("info", "encodedEvent", encodedEvent.toString());
     // TODO: This is trivially reversable; better to encrypt it or hash it with the pubkey
     const hashedEventReference = await getHashedKeyName(encodedEvent);
-    console.log("hashedEventReference", hashedEventReference);
+    log("info", "hashedEventReference", hashedEventReference.toString());
     tags.push(["e", hashedEventReference]);
   }
 
@@ -127,6 +128,7 @@ export async function saveEphemeralSigner(
   targetSigner: NDKPrivateKeySigner,
   opts: ISaveOpts = {},
 ) {
+  log("func", "saveEphemeralSigner");
   // Determine current user signer
   const mainSigner = opts.mainSigner || ndk.signer;
 
@@ -145,7 +147,7 @@ export async function saveEphemeralSigner(
   await event.publish();
 
   // Update Ephemeral signers metadata
-  console.log("Checking keyProfile", opts.keyProfile);
+  log("info", "Checking keyProfile", opts.keyProfile?.toString());
   const user = await targetSigner.user();
   if (opts.keyProfile) {
     const event = new NDKEvent(ndk, {

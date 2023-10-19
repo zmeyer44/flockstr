@@ -13,6 +13,7 @@ import { getTagValues } from "@/lib/nostr/utils";
 import { NDKList } from "@nostr-dev-kit/ndk";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
 import { useRouter } from "next/navigation";
+import { log } from "@/lib/utils";
 
 const CreateListSchema = z.object({
   title: z.string(),
@@ -32,6 +33,7 @@ export default function CreateList() {
   const { currentUser, updateUser } = useCurrentUser();
   const { ndk } = useNDK();
   const { getSigner } = useSigner()!;
+
   async function handleSubmit(data: CreateListType) {
     setIsLoading(true);
     const random = randomId();
@@ -60,7 +62,6 @@ export default function CreateList() {
       kind: 30001,
       tags: tags,
     });
-    console.log("EVENT Created", event);
     if (event && getTagValues("subscriptions", event.tags)) {
       await getSigner(new NDKList(ndk, event.rawEvent()))
         .then((delegateSigner) =>
@@ -75,7 +76,9 @@ export default function CreateList() {
           }),
         )
         .then(
-          (savedSigner) => savedSigner,
+          (savedSigner) => {
+            log("info", "savedSigner", savedSigner.toString());
+          },
           //   updateList(ndk!, event.rawEvent(), [
           //     ["delegate", savedSigner.hexpubkey],
           //   ]),

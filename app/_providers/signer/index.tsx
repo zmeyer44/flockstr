@@ -15,6 +15,7 @@ import {
   type NDKList,
 } from "@nostr-dev-kit/ndk";
 import { useNDK } from "../ndk";
+import { log } from "@/lib/utils";
 
 export type SignerStoreItem = {
   signer: NDKPrivateKeySigner;
@@ -67,15 +68,19 @@ export default function SignerProvider({
   }
 
   async function getSigner(list: NDKList): Promise<SignerStoreItem> {
+    log("func", "getSigner");
     const id = list.encode();
+    log("info", "list ID", id.toString());
     let item = signers.get(id);
     if (item) return item;
+    log("info", "NO local signer");
+
     let signer = await findEphemeralSigner(ndk!, ndk!.signer!, {
       associatedEventNip19: list.encode(),
     });
 
     if (signer) {
-      console.log(`found a signer for list ${list.title}`);
+      log("info", `found a signer for list ${list.title}`, signer.toString());
       item = {
         signer: signer!,
         user: await signer.user(),
@@ -83,9 +88,9 @@ export default function SignerProvider({
         id,
       };
     } else {
-      console.log(`no signer found for list ${list.title}`);
+      log("info", `no signer found for list ${list.title}`);
       signer = NDKPrivateKeySigner.generate();
-      console.log(`Signer generated ${JSON.stringify(signer)}`);
+      log("info", "generated signer", signer.toString());
       item = {
         signer,
         user: await signer.user(),

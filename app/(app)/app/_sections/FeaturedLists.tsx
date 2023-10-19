@@ -64,7 +64,7 @@ export default function FeaturedLists() {
       </SectionHeader>
       <SectionContent className="sm:md-feed-cols relative flex flex-col gap-3">
         {processedEvents.map((e) => (
-          <Link href={`/list/${e.encode()}`}>
+          <Link key={e.id} href={`/list/${e.encode()}`}>
             <ListCard key={e.id} event={e} />
           </Link>
         ))}
