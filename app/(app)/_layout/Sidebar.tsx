@@ -43,6 +43,19 @@ type NavigationElement = {
   current: boolean;
   active: boolean;
 } & (NavigationLink | NavigationButton);
+const flockstrEvent = {
+  created_at: 1697736945,
+  content:
+    "Officially announcing Flockstr. Check it out at https://flockstr.com",
+  tags: [
+    ["r", "https://flockstr.com"],
+    ["client", "flockstr"],
+  ],
+  kind: 1,
+  pubkey: "17717ad4d20e2a425cda0a2195624a0a4a73c4f6975f16b1593fc87fa46f2d58",
+  id: "a867ff28711eeab4767fb6bacbb33dfe17b2b5bbbff98f8e57f90a85ea684b0a",
+  sig: "37d8918e6da88d989467021a1f5809a3fbcab941ca1044d109ce261f29270d2d545aaa84297b7f224ae1ad7760263e50c317c24abc809034bcdb5c3260faf4b0",
+};
 
 export default function Sidebar() {
   const modal = useModal();
@@ -76,7 +89,7 @@ export default function Sidebar() {
       active: false,
     },
     {
-      onClick: () => modal?.show(<ZapPickerModal />),
+      onClick: () => modal?.show(<ZapPickerModal event={flockstrEvent} />),
       name: "zap",
       label: "Zap Flockstr",
       icon: HiOutlineLightningBolt,

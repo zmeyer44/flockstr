@@ -19,9 +19,7 @@ export default function Kind30023(props: Event) {
 
   return (
     <Container
-      pubkey={pubkey}
-      contentTags={contentTags}
-      createdAt={createdAt}
+      event={props}
       actionOptions={[
         {
           label: "View profile",

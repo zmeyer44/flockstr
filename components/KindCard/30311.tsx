@@ -10,19 +10,16 @@ import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import ReactPlayer from "react-player";
 
 export default function Kind30311(props: Event) {
-  const { pubkey, created_at: createdAt, tags } = props;
+  const { pubkey, tags } = props;
   const streamingUrl =
     getTagValues("streaming", tags) ?? getTagValues("recording", tags);
   const title = getTagValues("title", tags);
   const summary = getTagValues("summary", tags);
-  const contentTags = getTagsValues("t", tags).filter(Boolean);
   const npub = nip19.npubEncode(pubkey);
 
   return (
     <Container
-      pubkey={pubkey}
-      createdAt={createdAt}
-      contentTags={contentTags}
+      event={props}
       actionOptions={[
         {
           label: "View profile",

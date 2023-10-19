@@ -16,8 +16,7 @@ export default function KindDefault(props: Event) {
 
   return (
     <Container
-      pubkey={pubkey}
-      createdAt={createdAt}
+      event={props}
       actionOptions={[
         {
           label: "View profile",

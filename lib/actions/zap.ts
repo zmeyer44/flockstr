@@ -28,7 +28,7 @@ export async function sendZap(
 ) {
   log("func", "sendZap");
   const event = await new NDKEvent(ndk, _event);
-  log("info", event.toString());
+  log("info", JSON.stringify(event));
   const pr = await event.zap(amount * 1000, comment);
   if (!pr) {
     log("info", "No PR");

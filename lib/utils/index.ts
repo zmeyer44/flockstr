@@ -88,7 +88,7 @@ export function log(
   type: "info" | "error" | "warn" | "func",
   ...args: unknown[]
 ) {
-  const isOn = true;
+  const isOn = process.env.NODE_ENV === "development";
   if (!isOn) return;
   const consoleType = type === "func" ? "info" : type;
   const items = [...args].map((a) => `%c${a}`);
@@ -114,4 +114,9 @@ export function btcToSats(amount: number) {
 }
 export function satsToBtc(amount: number) {
   return amount / 100_000_000;
+}
+export function stopPropagation(e: React.MouseEvent) {
+  e.stopPropagation();
+  e.nativeEvent.stopImmediatePropagation();
+  e.preventDefault();
 }

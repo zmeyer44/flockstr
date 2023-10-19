@@ -1,7 +1,10 @@
-import { Search } from "./components/Search";
 import AuthActions from "./components/AuthActions";
 import Logo from "@/assets/Logo";
+import dynamic from "next/dynamic";
 
+const Search = dynamic(() => import("./components/Search"), {
+  ssr: false,
+});
 export default function Header() {
   return (
     <header className="flex h-[var(--header-height)] shrink-0 grow-0 ">

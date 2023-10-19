@@ -65,7 +65,7 @@ export default function Kind3745(props: Event) {
     return <KindCard {...decryptedEvent} />;
   }
   return (
-    <Container pubkey={pubkey}>
+    <Container event={props}>
       <div className="relative ">
         <div className=" blur">
           <CardTitle className="mb-1.5 line-clamp-2 text-lg font-semibold">

@@ -3,7 +3,11 @@ import Header from "./Header";
 import Keystone from "./Keystone";
 import MobileBanner from "./MobileBanner";
 import Sidebar from "./Sidebar";
+import dynamic from "next/dynamic";
 
+const CommandDialog = dynamic(() => import("./components/CommandDialog"), {
+  ssr: false,
+});
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="app-layout w-screen sm:absolute sm:inset-0">
@@ -23,6 +27,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* BottomNav */}
       <BottomNav />
+      <CommandDialog />
     </main>
   );
 }
