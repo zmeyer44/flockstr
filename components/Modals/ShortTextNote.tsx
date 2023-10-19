@@ -12,6 +12,7 @@ import { getTagValues } from "@/lib/nostr/utils";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
 import useLists from "@/lib/hooks/useLists";
+import { getUrls } from "@/components/TextRendering";
 
 const ShortTextNoteSchema = z.object({
   content: z.string(),
@@ -51,6 +52,8 @@ export default function ShortTextNoteModal() {
       toast.error("Error connecting");
       return;
     }
+    const urls = getUrls(data.content);
+    const urlTags = urls.map((u) => ["r", u]);
     if (data.list) {
       const list = lists.find((l) => getTagValues("d", l.tags) === data.list);
       if (!list) {
@@ -83,7 +86,7 @@ export default function ShortTextNoteModal() {
         {
           content: data.content,
           kind: 1,
-          tags: [],
+          tags: [...urlTags],
         },
         data.isPrivate,
         list,
@@ -99,7 +102,7 @@ export default function ShortTextNoteModal() {
         {
           content: data.content,
           kind: 1,
-          tags: [],
+          tags: [...urlTags],
         },
         data.isPrivate,
       );

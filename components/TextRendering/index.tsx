@@ -3,13 +3,14 @@ import Link from "next/link";
 import ProfileMention from "./ProfileMention";
 import EventMention from "./EventMention";
 
+const urlRegex =
+  /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
+const hashtagRegex = /#\b\w+\b/g;
+const nostrPrefixRegex = /nostr:[a-z0-9]+/g;
+
 const RenderText = ({ text }: { text?: string }) => {
   if (!text) return null;
   const Elements: JSX.Element[] = [];
-  const urlRegex =
-    /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
-  const hashtagRegex = /#\b\w+\b/g;
-  const nostrPrefixRegex = /nostr:[a-z0-9]+/g;
   // const usernameRegex = /(?:^|\s)\@(\w+)\b/g;
   const combinedRegex = new RegExp(
     `(${urlRegex.source}|${hashtagRegex.source}|${nostrPrefixRegex.source})`,
@@ -79,4 +80,10 @@ const RenderText = ({ text }: { text?: string }) => {
   );
 };
 
-export { RenderText };
+function getUrls(content: string) {
+  const urls = content.match(urlRegex)?.map((u) => cleanUrl(u)) ?? [];
+
+  return urls;
+}
+
+export { RenderText, getUrls };
