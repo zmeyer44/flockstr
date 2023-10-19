@@ -11,7 +11,9 @@ import ProfileFeed from "./_components/Feed";
 import Subscriptions from "./_components/Subscriptions";
 import { nip19 } from "nostr-tools";
 import useLists from "@/lib/hooks/useLists";
-
+import EditProfileModal from "@/components/Modals/EditProfile";
+import { useModal } from "@/app/_providers/modal/provider";
+import useCurrentUser from "@/lib/hooks/useCurrentUser";
 export default function ProfilePage({
   params: { npub },
 }: {
@@ -19,10 +21,9 @@ export default function ProfilePage({
     npub: string;
   };
 }) {
+  const modal = useModal();
+  const { currentUser, follows } = useCurrentUser();
   const [activeTab, setActiveTab] = useState("feed");
-  if (npub === "service-worker.js") {
-    throw new Error("Invalid list");
-  }
   const { type, data } = nip19.decode(npub);
 
   if (type !== "npub") {
@@ -72,10 +73,26 @@ export default function ProfilePage({
               </div>
             )}
           </div>
-          <Button size={"sm"} className="rounded-sm px-5 sm:hidden">
-            Follow
-          </Button>
-          <Button className="rounded-sm px-5 max-sm:hidden">Follow</Button>
+          <div className="flex items-center gap-3">
+            {currentUser?.pubkey === pubkey && (
+              <Button
+                onClick={() => modal?.show(<EditProfileModal />)}
+                variant={"outline"}
+                className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
+              >
+                Edit
+              </Button>
+            )}
+            {!follows.includes(pubkey) && (
+              <Button
+                onClick={() => modal?.show(<EditProfileModal />)}
+                variant={"default"}
+                className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
+              >
+                Follow
+              </Button>
+            )}
+          </div>
         </div>
         <div className="mx-auto max-w-[800px] space-y-1 px-4">
           <div className="flex items-center gap-x-1.5 lg:gap-x-2.5">

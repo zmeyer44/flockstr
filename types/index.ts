@@ -19,7 +19,7 @@ const UserSchema = z.object({
   name: z.string().optional(),
   username: z.string().optional(),
   display_name: z.string().optional(),
-  picture: z.string().optional(),
+  image: z.string().optional(),
   banner: z.string().optional(),
   about: z.string().optional(),
   website: z.string().optional(),

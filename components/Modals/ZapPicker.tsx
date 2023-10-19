@@ -10,6 +10,17 @@ import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { HiOutlineLightningBolt } from "react-icons/hi";
 import { RiSubtractFill, RiAddFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
 const intervals = [
   10, 25, 50, 75, 100, 150, 200, 250, 350, 500, 750, 1000, 1250, 1500, 2_000,
   2_500, 3_000, 3_500, 4_000, 5_000, 6_000, 7_500, 10_000, 12_500, 15_000,
@@ -20,6 +31,7 @@ export default function ZapPicker() {
   const { loginWithNip07 } = useNDK();
   const { loginWithPubkey, currentUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [note, setNote] = useState("");
   const modal = useModal();
   const [sats, setSats] = useState(2000);
 
@@ -58,6 +70,15 @@ export default function ZapPicker() {
               <div className="text-[0.70rem] uppercase text-muted-foreground">
                 Satoshis
               </div>
+            </div>
+            <div className="">
+              <FormLabel>Note</FormLabel>
+              <Textarea
+                placeholder="Add a note..."
+                onChange={(e) => setNote(e.target.value)}
+                value={note}
+                className="auto-sizing"
+              />
             </div>
             <Button
               variant="outline"
