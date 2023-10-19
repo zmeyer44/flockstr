@@ -48,7 +48,7 @@ export default function EditProfileModal() {
 
   async function handleSubmit(userData: EditProfileType) {
     setIsLoading(true);
-    const content = JSON.stringify(userData);
+    const content = JSON.stringify({ ...userData, picture: userData.image });
     const result = await createEvent(ndk!, {
       content,
       kind: 0,
