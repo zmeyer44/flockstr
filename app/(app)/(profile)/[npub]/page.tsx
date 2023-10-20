@@ -27,6 +27,9 @@ const CreateSubecriptionTierModal = dynamic(
     ssr: false,
   },
 );
+const FollowButton = dynamic(() => import("./_components/FollowButton"), {
+  ssr: false,
+});
 
 export default function ProfilePage({
   params: { npub },
@@ -104,22 +107,7 @@ export default function ProfilePage({
                 Edit
               </Button>
             )}
-            {currentUser &&
-              !Array.from(follows).find((i) => i.pubkey === pubkey) && (
-                <Button
-                  onClick={() =>
-                    void currentUser.follow(
-                      new NDKUser({
-                        hexpubkey: pubkey,
-                      }),
-                    )
-                  }
-                  variant={"default"}
-                  className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
-                >
-                  Follow
-                </Button>
-              )}
+            {currentUser && <FollowButton pubkey={pubkey} follows={follows} />}
           </div>
         </div>
         <div className="mx-auto max-w-[800px] space-y-1 px-4">
