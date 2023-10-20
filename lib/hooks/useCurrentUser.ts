@@ -15,6 +15,7 @@ export default function useCurrentUser() {
     updateCurrentUser,
     follows,
     setFollows,
+    addFollow,
   } = currentUserStore();
   const { loginWithNip07, getProfile, ndk, fetchEvents } = useNDK();
   const { init } = useLists();
@@ -90,5 +91,7 @@ export default function useCurrentUser() {
     attemptLogin,
     initSubscriptions,
     mySubscription,
+    addFollow,
+    setFollows,
   };
 }

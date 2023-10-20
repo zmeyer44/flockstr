@@ -107,7 +107,7 @@ export default function ProfilePage({
                 Edit
               </Button>
             )}
-            {currentUser && <FollowButton pubkey={pubkey} follows={follows} />}
+            {currentUser && <FollowButton pubkey={pubkey} />}
           </div>
         </div>
         <div className="mx-auto max-w-[800px] space-y-1 px-4">

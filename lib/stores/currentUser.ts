@@ -10,6 +10,7 @@ interface CurrentUserState {
   setCurrentUser: (user: NDKUser | null) => void;
   updateCurrentUser: (user: Partial<NDKUser>) => void;
   setFollows: (follows: Set<NDKUser>) => void;
+  addFollow: (follow: NDKUser) => void;
 }
 
 const currentUserStore = create<CurrentUserState>()((set) => ({
@@ -23,6 +24,8 @@ const currentUserStore = create<CurrentUserState>()((set) => ({
       currentUser: { ...state.currentUser, ...user } as NDKUser,
     })),
   setFollows: (follows) => set((state) => ({ ...state, follows: follows })),
+  addFollow: (follow) =>
+    set((state) => ({ ...state, follows: new Set(state.follows).add(follow) })),
 }));
 
 export default currentUserStore;

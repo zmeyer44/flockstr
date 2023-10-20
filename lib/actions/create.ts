@@ -281,16 +281,29 @@ export async function unlockEvent(
   return publishedEvent;
 }
 
-export async function follow(ndk: NDK, currentUser: NDKUser, pubkey: string) {
+export async function follow(
+  ndk: NDK,
+  currentUser: NDKUser,
+  pubkey: string,
+  unfollow?: boolean,
+) {
   const userContacts = await ndk.fetchEvent({
     kinds: [3],
     authors: [currentUser.pubkey],
   });
   if (!userContacts) return;
+  let newTags = userContacts.tags;
+  if (unfollow) {
+    newTags = newTags.filter(([t, k]) =>
+      t === "p" && k === pubkey ? false : true,
+    );
+  } else {
+    newTags.push(["p", pubkey]);
+  }
   const newEvent = {
     kind: 3,
     ...userContacts.rawEvent(),
-    tags: [...userContacts.tags, ["p", pubkey]],
+    tags: newTags,
   };
   const newContacts = await createEvent(ndk, newEvent);
   return newContacts;
