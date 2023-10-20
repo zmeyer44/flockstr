@@ -43,7 +43,7 @@ export default function LinkCard({
   }, [url]);
   if (metadata) {
     return (
-      <a href={url} target="_blank" rel="nonreferrer">
+      <a href={url} target="_blank" rel="nonreferrer" className="w-full">
         <Card className={cn("group", className)}>
           {metadata.image && (
             <div className="max-h-[100px] overflow-hidden rounded-t-md">

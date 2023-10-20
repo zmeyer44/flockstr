@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { commandDialogAtom } from "./CommandDialog";
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";

@@ -14,6 +14,7 @@ import { NDKList, NDKUser } from "@nostr-dev-kit/ndk";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
 import { useRouter } from "next/navigation";
 import { log } from "@/lib/utils";
+import { follow } from "@/lib/actions/create";
 
 const CreateSubscriptionTierSchema = z.object({
   title: z.string(),
@@ -56,7 +57,7 @@ export default function CreateSubscriptionTier() {
       tags.push(["price", satsToBtc(data.price).toString(), "btc", "year"]);
     }
     const event = await createEvent(ndk!, {
-      content: "[]",
+      content: "",
       kind: 30044,
       tags: tags,
     });
@@ -73,17 +74,13 @@ export default function CreateSubscriptionTier() {
             },
           }),
         )
-        .then((savedSigner) => {
-          log("info", "savedSigner", savedSigner.toString());
-          currentUser.follow(
-            new NDKUser({
-              hexpubkey: savedSigner.pubkey,
-            }),
-          );
-          return updateList(ndk!, event.rawEvent(), [
+        .then(async (savedSigner) => {
+          await updateList(ndk!, event.rawEvent(), [
             ["delegate", savedSigner.pubkey],
           ]);
+          return savedSigner.pubkey;
         })
+        .then((delegate) => follow(ndk!, currentUser, delegate))
         .catch((err) => console.log("Error creating delegate"));
     }
     // getSubscriptionTiers(currentUser!.hexpubkey);
