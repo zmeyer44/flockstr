@@ -280,3 +280,18 @@ export async function unlockEvent(
   await deleteEvent(ndk, [["e", event.id ?? ""]], "Content unlocked");
   return publishedEvent;
 }
+
+export async function follow(ndk: NDK, currentUser: NDKUser, pubkey: string) {
+  const userContacts = await ndk.fetchEvent({
+    kinds: [3],
+    authors: [currentUser.pubkey],
+  });
+  if (!userContacts) return;
+  const newEvent = {
+    kind: 3,
+    ...userContacts.rawEvent(),
+    tags: [...userContacts.tags, ["p", pubkey]],
+  };
+  const newContacts = await createEvent(ndk, newEvent);
+  return newContacts;
+}
