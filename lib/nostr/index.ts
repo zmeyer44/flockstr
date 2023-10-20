@@ -6,6 +6,7 @@ import { sha256 as SHA256 } from "@noble/hashes/sha256";
 import { bytesToHex } from "@noble/hashes/utils";
 import crypto from "crypto";
 import { Buffer } from "buffer";
+import { log } from "../utils";
 
 export enum Kind {
   Metadata = 0,
@@ -121,22 +122,25 @@ export function encryptMessage(message: string, password: string) {
 // Function to decrypt a hashed message using a passphrase
 // Function to decrypt a hashed message using a passphrase
 export function decryptMessage(encryptedMessage: string, password: string) {
+  log("func", "decryptMessage");
   try {
     const buffer = create32ByteBuffer(password);
     // Extract IV from the received message
-    const ivBase64 = encryptedMessage.split("?iv=")[1];
-    if (!ivBase64) {
+    const [message, ivBase64] = encryptedMessage.split("?iv=");
+    if (!message || !ivBase64) {
       return;
     }
+
     const iv = Buffer.from(ivBase64, "base64");
-    const encryptedText = Buffer.from(encryptedMessage, "base64");
+    const encryptedText = Buffer.from(message, "base64");
     const decipher = crypto.createDecipheriv("aes-256-cbc", buffer, iv);
     const decrypted = decipher.update(encryptedText);
     return Buffer.concat([decrypted, decipher.final()]).toString();
   } catch (e) {
-    console.error(e);
+    console.error("Error decrypting", e);
   }
 }
+
 function create32ByteBuffer(inputString: string) {
   const hash = crypto.createHash("sha256").update(inputString).digest("hex");
   const buffer = Buffer.from(hash, "hex");
