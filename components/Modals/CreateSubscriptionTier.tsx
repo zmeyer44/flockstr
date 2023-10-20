@@ -8,40 +8,42 @@ import { satsToBtc } from "@/lib/utils";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { useNDK } from "@/app/_providers/ndk";
 import { useSigner, type SignerStoreItem } from "@/app/_providers/signer";
-import { createEvent } from "@/lib/actions/create";
+import { createEvent, updateList } from "@/lib/actions/create";
 import { getTagValues } from "@/lib/nostr/utils";
-import { NDKList } from "@nostr-dev-kit/ndk";
+import { NDKList, NDKUser } from "@nostr-dev-kit/ndk";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
 import { useRouter } from "next/navigation";
 import { log } from "@/lib/utils";
 
-const CreateListSchema = z.object({
+const CreateSubscriptionTierSchema = z.object({
   title: z.string(),
   image: z.string().optional(),
   description: z.string().optional(),
-  subscriptions: z.boolean().optional(),
   price: z.number().optional(),
 });
 
-type CreateListType = z.infer<typeof CreateListSchema>;
+type CreateSubscriptionTierType = z.infer<typeof CreateSubscriptionTierSchema>;
 
-export default function CreateList() {
+export default function CreateSubscriptionTier() {
   const [isLoading, setIsLoading] = useState(false);
   const modal = useModal();
   const router = useRouter();
 
-  const { currentUser, updateUser } = useCurrentUser();
+  const { currentUser, initSubscriptions } = useCurrentUser();
   const { ndk } = useNDK();
   const { getSigner } = useSigner()!;
 
-  async function handleSubmit(data: CreateListType) {
+  async function handleSubmit(data: CreateSubscriptionTierType) {
+    if (!currentUser) return;
     setIsLoading(true);
     const random = randomId();
     const tags = [
       ["title", data.title],
       ["name", data.title],
       ["d", random],
+      ["p", currentUser!.pubkey, "", "self", "4000000000"],
     ];
+
     if (data.description) {
       tags.push(["description", data.description]);
       tags.push(["summary", data.description]);
@@ -50,19 +52,15 @@ export default function CreateList() {
       tags.push(["image", data.image]);
       tags.push(["picture", data.image]);
     }
-    if (data.subscriptions) {
-      tags.push(["subscriptions", "true"]);
-      tags.push(["p", currentUser!.pubkey, "", "self", "4000000000"]);
-    }
     if (data.price) {
       tags.push(["price", satsToBtc(data.price).toString(), "btc", "year"]);
     }
     const event = await createEvent(ndk!, {
-      content: "",
-      kind: 30001,
+      content: "[]",
+      kind: 30044,
       tags: tags,
     });
-    if (event && getTagValues("subscriptions", event.tags)) {
+    if (event) {
       await getSigner(new NDKList(ndk, event.rawEvent()))
         .then((delegateSigner) =>
           saveEphemeralSigner(ndk!, delegateSigner.signer, {
@@ -75,32 +73,36 @@ export default function CreateList() {
             },
           }),
         )
-        .then(
-          (savedSigner) => {
-            log("info", "savedSigner", savedSigner.toString());
-          },
-          //   updateList(ndk!, event.rawEvent(), [
-          //     ["delegate", savedSigner.hexpubkey],
-          //   ]),
-        )
+        .then((savedSigner) => {
+          log("info", "savedSigner", savedSigner.toString());
+          currentUser.follow(
+            new NDKUser({
+              hexpubkey: savedSigner.pubkey,
+            }),
+          );
+          return updateList(ndk!, event.rawEvent(), [
+            ["delegate", savedSigner.pubkey],
+          ]);
+        })
         .catch((err) => console.log("Error creating delegate"));
     }
-    // getLists(currentUser!.hexpubkey);
+    // getSubscriptionTiers(currentUser!.hexpubkey);
     setIsLoading(false);
     if (event) {
-      toast.success("List Created!");
+      initSubscriptions(currentUser.pubkey);
+      toast.success("Subscription Tier Created!");
       modal?.hide();
-      router.push(`/list/${event.encode()}`);
+      router.push(`/sub/${event.encode()}`);
     } else {
       toast.error("An error occured");
     }
   }
   return (
     <FormModal
-      title="Create List"
+      title="Create Subscription Tier"
       fields={[
         {
-          label: "Title",
+          label: "Tier name",
           type: "input",
           slug: "title",
         },
@@ -115,23 +117,17 @@ export default function CreateList() {
           slug: "image",
         },
         {
-          label: "Enable subscriptions",
-          type: "toggle",
-          slug: "subscriptions",
-        },
-        {
           label: "Price",
           subtitle: "sats/year",
           type: "number",
           slug: "price",
-          condition: "subscriptions",
         },
       ]}
-      formSchema={CreateListSchema}
+      formSchema={CreateSubscriptionTierSchema}
       onSubmit={handleSubmit}
       isSubmitting={isLoading}
       cta={{
-        text: "Create List",
+        text: "Create Subscription Tier",
       }}
     />
   );

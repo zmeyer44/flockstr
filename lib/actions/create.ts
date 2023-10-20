@@ -7,7 +7,12 @@ import NDK, {
   type NostrEvent,
   NDKUser,
 } from "@nostr-dev-kit/ndk";
-import { generateRandomString, encryptMessage, randomId } from "@/lib/nostr";
+import { EventSchema } from "@/types";
+import {
+  generateRandomString,
+  encryptMessage,
+  decryptMessage,
+} from "@/lib/nostr";
 import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 import { getTagsValues } from "@/lib/nostr/utils";
 import { log } from "@/lib/utils";
@@ -261,4 +266,17 @@ export async function updateList(
     kind: list.kind as number,
     tags: tags.filter(([_, value]) => value !== undefined),
   });
+}
+
+export async function unlockEvent(
+  ndk: NDK,
+  event: NostrEvent,
+  passphrase: string,
+) {
+  const decrypedData = await decryptMessage(event.content, passphrase);
+  const hiddenEvent = EventSchema.parse(JSON.parse(decrypedData ?? ""));
+  // Create New public event
+  const publishedEvent = await new NDKEvent(ndk, hiddenEvent).publish();
+  await deleteEvent(ndk, [["e", event.id ?? ""]], "Content unlocked");
+  return publishedEvent;
 }

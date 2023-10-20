@@ -23,12 +23,9 @@ import { formatDate } from "@/lib/utils/dates";
 const EditListModal = dynamic(() => import("@/components/Modals/EditList"), {
   ssr: false,
 });
-const CreateListEvent = dynamic(
-  () => import("@/components/Modals/ShortTextNoteOnList"),
-  {
-    ssr: false,
-  },
-);
+const CreateEventModal = dynamic(() => import("@/components/Modals/NewEvent"), {
+  ssr: false,
+});
 const ConfirmModal = dynamic(() => import("@/components/Modals/Confirm"), {
   ssr: false,
 });
@@ -154,8 +151,8 @@ export default function Header({ event }: { event: NDKEvent }) {
           <div className="flex flex-wrap items-center gap-3">
             {!!currentUser && currentUser.pubkey === pubkey && (
               <>
-                <Button onClick={() => modal?.show(<CreateListEvent />)}>
-                  Add Event
+                <Button onClick={() => modal?.show(<CreateEventModal />)}>
+                  Add Note
                 </Button>
                 <Button
                   variant={"outline"}
@@ -164,14 +161,14 @@ export default function Header({ event }: { event: NDKEvent }) {
                 >
                   Sync users
                 </Button>
-                <Button
+                {/* <Button
                   variant="ghost"
                   onClick={() =>
                     modal?.show(<EditListModal listEvent={rawEvent} />)
                   }
                 >
                   Edit
-                </Button>
+                </Button> */}
               </>
             )}
             {subscriptionsEnabled &&

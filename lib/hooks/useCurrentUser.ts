@@ -1,21 +1,24 @@
 "use client";
-
+import { useEffect } from "react";
 import currentUserStore from "@/lib/stores/currentUser";
 // import useEvents from "@/lib/hooks/useEvents";
 import { UserSchema } from "@/types";
 import { useNDK } from "@/app/_providers/ndk";
 import { nip19 } from "nostr-tools";
 import useLists from "./useLists";
+import useSubscriptions from "./useSubscriptions";
+
 export default function useCurrentUser() {
   const {
     currentUser,
     setCurrentUser,
-    setFollows,
     updateCurrentUser,
     follows,
+    setFollows,
   } = currentUserStore();
-  const { loginWithNip07, getProfile, ndk } = useNDK();
+  const { loginWithNip07, getProfile, ndk, fetchEvents } = useNDK();
   const { init } = useLists();
+  const { init: initSubscriptions, mySubscription } = useSubscriptions();
   async function attemptLogin() {
     try {
       const shouldReconnect = localStorage.getItem("shouldReconnect");
@@ -24,8 +27,9 @@ export default function useCurrentUser() {
       if (!user) {
         throw new Error("NO auth");
       }
-      console.log("LOGIN", user);
-      await loginWithPubkey(nip19.decode(user.npub).data.toString());
+      const pubkey = nip19.decode(user.npub).data.toString();
+      await loginWithPubkey(pubkey);
+      void initSubscriptions(pubkey);
       if (typeof window.webln !== "undefined") {
         await window.webln.enable();
       }
@@ -66,6 +70,15 @@ export default function useCurrentUser() {
     void init(user.pubkey);
   }
 
+  useEffect(() => {
+    if (!currentUser) return;
+    console.log("fetching follows");
+    (async () => {
+      const following = await currentUser.follows();
+      setFollows(following);
+    })();
+  }, [currentUser]);
+
   return {
     currentUser,
     isLoading: false,
@@ -75,5 +88,7 @@ export default function useCurrentUser() {
     updateUser: handleUpdateUser,
     loginWithPubkey,
     attemptLogin,
+    initSubscriptions,
+    mySubscription,
   };
 }

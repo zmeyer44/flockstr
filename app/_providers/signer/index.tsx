@@ -16,6 +16,7 @@ import {
 } from "@nostr-dev-kit/ndk";
 import { useNDK } from "../ndk";
 import { log } from "@/lib/utils";
+import { getTagValues } from "@/lib/nostr/utils";
 
 export type SignerStoreItem = {
   signer: NDKPrivateKeySigner;
@@ -52,7 +53,10 @@ export default function SignerProvider({
 
   async function getDelegatedSignerName(list: NDKList) {
     let name = "";
-    console.log("getDelegatedSignerName", list);
+    console.log("getDelegatedSignerName", JSON.stringify(list));
+    if (list.kind === 30044) {
+      return list.title;
+    }
     if (!currentUser?.profile) {
       console.log("fetching user profile");
       await currentUser?.fetchProfile();
@@ -64,7 +68,9 @@ export default function SignerProvider({
       `${currentUser?.npub.slice(0, 9)}...`
     }'s `;
 
-    return name + list.title ?? "List";
+    const suffix = list.kind === 30044 ? "Subscription" : "List";
+
+    return name + list.title ?? suffix;
   }
 
   async function getSigner(list: NDKList): Promise<SignerStoreItem> {
@@ -80,7 +86,7 @@ export default function SignerProvider({
     });
 
     if (signer) {
-      log("info", `found a signer for list ${list.title}`, signer.toString());
+      log("info", `found a signer for ${list.title}`, JSON.stringify(signer));
       item = {
         signer: signer!,
         user: await signer.user(),
@@ -88,9 +94,10 @@ export default function SignerProvider({
         id,
       };
     } else {
-      log("info", `no signer found for list ${list.title}`);
+      log("info", `no signer found for ${list.title}`);
+
       signer = NDKPrivateKeySigner.generate();
-      log("info", "generated signer", signer.toString());
+      log("info", "generated signer", JSON.stringify(signer));
       item = {
         signer,
         user: await signer.user(),

@@ -37,7 +37,8 @@ const LoginModal = dynamic(() => import("@/components/Modals/Login"), {
 export default function AuthActions() {
   const router = useRouter();
   const modal = useModal();
-  const { currentUser, logout, attemptLogin } = useCurrentUser();
+  const { currentUser, logout, attemptLogin, initSubscriptions } =
+    useCurrentUser();
   const { ndk } = useNDK();
 
   useKeyboardShortcut(["shift", "ctrl", "u"], () => {

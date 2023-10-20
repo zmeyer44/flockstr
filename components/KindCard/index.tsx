@@ -27,7 +27,9 @@ const componentMap: Record<number, ComponentType<KindCardProps>> = {
   30311: KindCard30311,
 };
 
-type KindCardProps = Event<number>;
+export type KindCardProps = Event<number> & {
+  locked?: boolean;
+};
 export default function KindCard(props: KindCardProps) {
   const { kind } = props;
   const KindCard_ = componentMap[kind] ?? KindCardDefault;

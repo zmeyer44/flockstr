@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import SubscriptionCard from "@/components/SubscriptionCard";
 import { HiCheckBadge } from "react-icons/hi2";
 import Tabs from "@/components/Tabs";
 import useProfile from "@/lib/hooks/useProfile";
@@ -11,9 +11,23 @@ import ProfileFeed from "./_components/Feed";
 import Subscriptions from "./_components/Subscriptions";
 import { nip19 } from "nostr-tools";
 import useLists from "@/lib/hooks/useLists";
-import EditProfileModal from "@/components/Modals/EditProfile";
 import { useModal } from "@/app/_providers/modal/provider";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
+import { NDKUser } from "@nostr-dev-kit/ndk";
+import MySubscription from "./_components/MySubscription";
+const EditProfileModal = dynamic(
+  () => import("@/components/Modals/EditProfile"),
+  {
+    ssr: false,
+  },
+);
+const CreateSubecriptionTierModal = dynamic(
+  () => import("@/components/Modals/CreateSubscriptionTier"),
+  {
+    ssr: false,
+  },
+);
+
 export default function ProfilePage({
   params: { npub },
 }: {
@@ -22,7 +36,7 @@ export default function ProfilePage({
   };
 }) {
   const modal = useModal();
-  const { currentUser, follows } = useCurrentUser();
+  const { currentUser, mySubscription, follows } = useCurrentUser();
   const [activeTab, setActiveTab] = useState("feed");
   const { type, data } = nip19.decode(npub);
 
@@ -31,7 +45,6 @@ export default function ProfilePage({
   }
   const pubkey = data.toString();
   const { profile } = useProfile(pubkey);
-  const { init, lists } = useLists();
 
   return (
     <div className="relative mx-auto max-w-5xl space-y-6">
@@ -74,6 +87,14 @@ export default function ProfilePage({
             )}
           </div>
           <div className="flex items-center gap-3">
+            {currentUser?.pubkey === pubkey && !mySubscription && (
+              <Button
+                onClick={() => modal?.show(<CreateSubecriptionTierModal />)}
+                className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
+              >
+                Add Subscription Tier
+              </Button>
+            )}
             {currentUser?.pubkey === pubkey && (
               <Button
                 onClick={() => modal?.show(<EditProfileModal />)}
@@ -83,15 +104,22 @@ export default function ProfilePage({
                 Edit
               </Button>
             )}
-            {!follows.includes(pubkey) && (
-              <Button
-                onClick={() => modal?.show(<EditProfileModal />)}
-                variant={"default"}
-                className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
-              >
-                Follow
-              </Button>
-            )}
+            {currentUser &&
+              !Array.from(follows).find((i) => i.pubkey === pubkey) && (
+                <Button
+                  onClick={() =>
+                    void currentUser.follow(
+                      new NDKUser({
+                        hexpubkey: pubkey,
+                      }),
+                    )
+                  }
+                  variant={"default"}
+                  className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
+                >
+                  Follow
+                </Button>
+              )}
           </div>
         </div>
         <div className="mx-auto max-w-[800px] space-y-1 px-4">
@@ -123,9 +151,7 @@ export default function ProfilePage({
       </div>
       <div className="mx-auto max-w-[800px] space-y-6">
         <div className="flex max-w-2xl flex-col gap-4 px-4">
-          {/* {[].map((e) => (
-            <SubscriptionCard key={e.id} {...e} />
-          ))} */}
+          <MySubscription pubkey={pubkey} />
         </div>
         <div className="">
           <Tabs

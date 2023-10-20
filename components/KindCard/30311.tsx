@@ -1,15 +1,15 @@
 "use client";
 import Container from "./components/Container";
 import { CardTitle, CardDescription } from "@/components/ui/card";
-import { type Event } from "nostr-tools";
 import { nip19 } from "nostr-tools";
 import { toast } from "sonner";
 import { copyText } from "@/lib/utils";
 import { RenderText } from "../TextRendering";
 import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import ReactPlayer from "react-player";
+import { type KindCardProps } from "./";
 
-export default function Kind30311(props: Event) {
+export default function Kind30311(props: KindCardProps) {
   const { pubkey, tags } = props;
   const streamingUrl =
     getTagValues("streaming", tags) ?? getTagValues("recording", tags);

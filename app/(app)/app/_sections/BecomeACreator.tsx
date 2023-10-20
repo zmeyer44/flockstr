@@ -1,7 +1,11 @@
+"use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/app/_providers/modal/provider";
+import CreateSubscriptionTier from "@/components/Modals/CreateSubscriptionTier";
 
 export default function BecomeACreator() {
+  const modal = useModal();
   return (
     <div className="padded-container overflow-x-clip pb-8 max-sm:-mx-5 md:py-[120px]">
       <div className="flex w-full flex-col items-center justify-between gap-8 lg:flex-row">
@@ -19,10 +23,12 @@ export default function BecomeACreator() {
             Start earning on Nostr
           </h2>
           <div className="mb-6 mt-2 text-muted-foreground">
-            Start earning bitcoin from your content. Create lists that for fans
-            can subscribe to!
+            Create a subscrition tier so you can start offering your users
+            access to private content!
           </div>
-          <Button>Become a Creator</Button>
+          <Button onClick={() => modal?.show(<CreateSubscriptionTier />)}>
+            Become a Creator
+          </Button>
         </div>
       </div>
     </div>

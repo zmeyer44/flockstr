@@ -5,16 +5,16 @@ type Settings = {};
 
 interface CurrentUserState {
   currentUser: NDKUser | null;
-  follows: string[];
+  follows: Set<NDKUser>;
   settings: Settings;
   setCurrentUser: (user: NDKUser | null) => void;
   updateCurrentUser: (user: Partial<NDKUser>) => void;
-  setFollows: (follows: string[]) => void;
+  setFollows: (follows: Set<NDKUser>) => void;
 }
 
 const currentUserStore = create<CurrentUserState>()((set) => ({
   currentUser: null,
-  follows: [],
+  follows: new Set(),
   settings: {},
   setCurrentUser: (user) => set((state) => ({ ...state, currentUser: user })),
   updateCurrentUser: (user) =>

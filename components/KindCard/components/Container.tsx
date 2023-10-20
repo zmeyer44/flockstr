@@ -11,8 +11,9 @@ import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import Actions from "./Actions";
 import Tags from "./Tags";
 import DropDownMenu from "@/components/DropDownMenu";
-import { NostrEvent } from "@nostr-dev-kit/ndk";
 import { removeDuplicates } from "@/lib/utils";
+import { type KindCardProps } from "..";
+
 type OptionLink = {
   href: string;
   type: "link";
@@ -28,7 +29,7 @@ type Option = {
 type CreatorCardProps = {
   children: ReactNode;
   actionOptions?: Option[];
-  event?: NostrEvent;
+  event?: KindCardProps;
 };
 
 export default function Container({
@@ -60,20 +61,19 @@ export default function Container({
       </Card>
     );
   }
-  const { pubkey, tags, created_at: createdAt } = event;
+  const { pubkey, tags, created_at: createdAt, locked } = event;
   const contentTags = removeDuplicates(getTagsValues("t", tags)).filter(
     Boolean,
   );
 
   return (
-    <Card
-      onClick={() => {
-        console.log("CLICK IN CONTAINER");
-      }}
-      className="relative flex h-full w-full flex-col overflow-hidden @container"
-    >
+    <Card className="relative flex h-full w-full flex-col overflow-hidden @container">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-4">
-        {pubkey ? <ProfileHeader pubkey={pubkey} /> : <LoadingProfileHeader />}
+        {pubkey ? (
+          <ProfileHeader pubkey={pubkey} locked={locked} />
+        ) : (
+          <LoadingProfileHeader />
+        )}
         <div className="-mr-1 flex items-center gap-x-1.5 text-xs text-muted-foreground">
           {!!createdAt &&
             formatDate(new Date(createdAt * 1000), "MMM Do, h:mm a")}

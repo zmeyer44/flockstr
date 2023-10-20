@@ -7,19 +7,32 @@ import { type Event } from "nostr-tools";
 import { cn } from "@/lib/utils";
 import { useNDK } from "@/app/_providers/ndk";
 import { RiArrowRightLine, RiLockLine } from "react-icons/ri";
+import { HiOutlineLockOpen } from "react-icons/hi";
 import { decryptMessage } from "@/lib/nostr";
 import { NDKUser } from "@nostr-dev-kit/ndk";
-
+import { log } from "@/lib/utils";
 import { EventSchema } from "@/types";
 import KindCard from "@/components/KindCard";
 import Spinner from "../spinner";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import useCurrentUser from "@/lib/hooks/useCurrentUser";
+import { unlockEvent } from "@/lib/actions/create";
+import { type KindCardProps } from "./";
 
-export default function Kind3745(props: Event) {
+export default function Kind3745(props: KindCardProps) {
   const { pubkey, content, id } = props;
+  const { currentUser } = useCurrentUser();
   const [error, setError] = useState("");
+  const [passphrase, setPassphrase] = useState("");
   const [fetchingEvent, setFetchingEvent] = useState(false);
   const [decryptedEvent, setDecryptedEvent] = useState<Event>();
-  const { ndk } = useNDK();
+  const { ndk, fetchEvents } = useNDK();
   useEffect(() => {
     if (ndk && !fetchingEvent && !decryptedEvent) {
       void handleFetchEvent();
@@ -27,6 +40,9 @@ export default function Kind3745(props: Event) {
   }, [ndk]);
 
   async function handleFetchEvent() {
+    if (!ndk) return;
+    log("func", `handleFetchEvent(${pubkey})`);
+
     setFetchingEvent(true);
     try {
       const directMessageEvent = await ndk!.fetchEvent({
@@ -35,16 +51,19 @@ export default function Kind3745(props: Event) {
         ["#e"]: [id],
       });
       if (directMessageEvent) {
+        log("info", "direct msg decryption");
+        console.log(directMessageEvent);
         await directMessageEvent.decrypt(
           new NDKUser({ hexpubkey: pubkey }),
           ndk!.signer,
         );
-        const passphrase = directMessageEvent.content;
-        if (!passphrase) {
+        const passphrase_ = directMessageEvent.content;
+        if (!passphrase_) {
           setError("Unable to parse event");
           return;
         }
-        const decrypedData = await decryptMessage(content, passphrase);
+        setPassphrase(passphrase_);
+        const decrypedData = await decryptMessage(content, passphrase_);
         console.log("Decrypted", decrypedData);
         const hiddenEvent = EventSchema.safeParse(
           JSON.parse(decrypedData ?? ""),
@@ -57,12 +76,48 @@ export default function Kind3745(props: Event) {
       }
     } catch (err) {
       setError("Unable to parse event");
+      console.log("ERROR", err);
     } finally {
       setFetchingEvent(false);
     }
   }
+
+  async function handleUnlockEvent() {
+    await unlockEvent(ndk!, props, passphrase);
+    window.location.reload();
+  }
+
   if (decryptedEvent) {
-    return <KindCard {...decryptedEvent} />;
+    return (
+      <div className="group relative">
+        <KindCard {...decryptedEvent} locked={true} />
+        {currentUser?.pubkey === decryptedEvent.pubkey && (
+          <div
+            className={cn(
+              "absolute bottom-[5px] right-[5px] opacity-20 transition-opacity group-hover:opacity-50",
+              "hover:!opacity-100",
+            )}
+          >
+            <TooltipProvider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger>
+                  <Button
+                    onClick={handleUnlockEvent}
+                    size={"icon"}
+                    className=""
+                  >
+                    <HiOutlineLockOpen className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent align="end">
+                  <p>Unlock Content</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        )}
+      </div>
+    );
   }
   return (
     <Container event={props}>

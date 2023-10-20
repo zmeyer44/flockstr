@@ -1,14 +1,14 @@
 import Container from "./components/Container";
 import { CardTitle, CardDescription } from "@/components/ui/card";
-import { type Event } from "nostr-tools";
 import { nip19 } from "nostr-tools";
 import { toast } from "sonner";
 import { copyText } from "@/lib/utils";
 import { RenderText } from "../TextRendering";
 import { getTagsValues } from "@/lib/nostr/utils";
 import LinkCard from "@/components/LinkCard";
+import { type KindCardProps } from "./";
 
-export default function KindDefault(props: Event) {
+export default function KindDefault(props: KindCardProps) {
   const { pubkey, created_at: createdAt, tags } = props;
   const r = getTagsValues("r", tags).filter(Boolean);
 

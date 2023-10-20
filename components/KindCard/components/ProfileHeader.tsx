@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { HiCheckBadge } from "react-icons/hi2";
+import { HiCheckBadge, HiMiniKey } from "react-icons/hi2";
 import Link from "next/link";
 import useProfile from "@/lib/hooks/useProfile";
 import { nip19 } from "nostr-tools";
@@ -8,8 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type ProfileHeaderProps = {
   pubkey: string;
+  locked?: boolean;
 };
-export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
+export default function ProfileHeader({ pubkey, locked }: ProfileHeaderProps) {
   const { profile } = useProfile(pubkey);
   const npub = nip19.npubEncode(pubkey);
   return (
@@ -29,6 +30,7 @@ export default function ProfileHeader({ pubkey }: ProfileHeaderProps) {
             {!!profile?.nip05 && (
               <HiCheckBadge className="h-4 w-4 text-primary" />
             )}
+            {!!locked && <HiMiniKey className="h-4 w-4 text-primary" />}
           </div>
           <div className="flex items-center gap-1">
             {!!profile.nip05 && (

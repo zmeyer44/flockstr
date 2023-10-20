@@ -12,6 +12,7 @@ import {
   HiChatBubbleLeftEllipsis,
   HiBookmarkSquare,
   HiNewspaper,
+  HiUserGroup,
 } from "react-icons/hi2";
 import { RiSubtractFill, RiAddFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";

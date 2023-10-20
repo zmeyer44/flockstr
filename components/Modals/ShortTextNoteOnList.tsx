@@ -13,26 +13,27 @@ import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { saveEphemeralSigner } from "@/lib/actions/ephemeral";
 import useLists from "@/lib/hooks/useLists";
 import { getUrls } from "@/components/TextRendering";
-import { log } from "@/lib/utils";
+
 const ShortTextNoteSchema = z.object({
   content: z.string(),
+  list: z.string().optional(),
   isPrivate: z.boolean().optional(),
-  subscriptionTiers: z.string().array().optional(),
 });
 
 type ShortTextNoteType = z.infer<typeof ShortTextNoteSchema>;
 
 export default function ShortTextNoteModal() {
   const modal = useModal();
+  const { lists, init } = useLists();
   const [isLoading, setIsLoading] = useState(false);
-  const { currentUser, initSubscriptions, mySubscription } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const [sent, setSent] = useState(false);
   const { ndk } = useNDK();
   const { getSigner } = useSigner()!;
 
   useEffect(() => {
     if (currentUser) {
-      void initSubscriptions(currentUser.pubkey);
+      void init(currentUser.pubkey);
     }
   }, [currentUser]);
 
@@ -53,24 +54,25 @@ export default function ShortTextNoteModal() {
     }
     const urls = getUrls(data.content);
     const urlTags = urls.map((u) => ["r", u]);
-    if (data.isPrivate) {
-      if (!mySubscription) {
+    if (data.list) {
+      const list = lists.find((l) => getTagValues("d", l.tags) === data.list);
+      if (!list) {
         toast.error("No list found");
         return;
       }
-      let delegateSigner: SignerStoreItem | undefined = undefined;
+      let listSigner: SignerStoreItem | undefined = undefined;
       if (data.isPrivate) {
-        delegateSigner = await getSigner(mySubscription);
-        if (!delegateSigner?.signer) {
+        listSigner = await getSigner(list);
+        if (!listSigner?.signer) {
           toast.error("Error creating signer");
           return;
         }
-        if (!delegateSigner?.saved) {
+        if (!listSigner?.saved) {
           console.log("Saving delegate...");
-          await saveEphemeralSigner(ndk!, delegateSigner.signer, {
-            associatedEvent: mySubscription,
+          await saveEphemeralSigner(ndk!, listSigner.signer, {
+            associatedEvent: list,
             keyProfile: {
-              name: delegateSigner.title,
+              name: listSigner.title,
               picture: currentUser?.profile?.image,
               lud06: currentUser?.profile?.lud06,
               lud16: currentUser?.profile?.lud16,
@@ -78,11 +80,7 @@ export default function ShortTextNoteModal() {
           });
         }
       }
-      log(
-        "info",
-        "about to create private event with ",
-        JSON.stringify(delegateSigner),
-      );
+      console.log("about to create private event with ", listSigner);
       const result = await createEventHandler(
         ndk,
         {
@@ -91,19 +89,23 @@ export default function ShortTextNoteModal() {
           tags: [...urlTags],
         },
         data.isPrivate,
-        mySubscription,
-        delegateSigner?.signer,
+        list,
+        listSigner?.signer,
       );
       if (result) {
         toast.success("Note added!");
         modal?.hide();
       }
     } else {
-      const result = await createEventHandler(ndk, {
-        content: data.content,
-        kind: 1,
-        tags: [...urlTags],
-      });
+      const result = await createEventHandler(
+        ndk,
+        {
+          content: data.content,
+          kind: 1,
+          tags: [...urlTags],
+        },
+        data.isPrivate,
+      );
       if (result) {
         toast.success("Note added!");
         modal?.hide();
@@ -120,39 +122,33 @@ export default function ShortTextNoteModal() {
           type: "text-area",
           slug: "content",
         },
-        ...(mySubscription
-          ? ([
-              {
-                label: "Subs only",
-                type: "toggle",
-                slug: "isPrivate",
-              },
-            ] as const)
-          : []),
-
-        // {
-        //   label: "Choose Tiers",
-        //   type: "select-search",
-        //   placeholder: "Search your lists",
-        //   slug: "subscriptionTiers",
-        //   options: lists
-        //     .map((l) => {
-        //       const title =
-        //         getTagValues("title", l.tags) ??
-        //         getTagValues("name", l.tags) ??
-        //         "Untitled";
-        //       const description = getTagValues("description", l.tags);
-        //       const value = getTagValues("d", l.tags);
-        //       if (!value) return;
-        //       return {
-        //         label: title,
-        //         description,
-        //         value: value,
-        //       };
-        //     })
-        //     .filter(Boolean),
-        //   condition: "subscriptions",
-        // },
+        {
+          label: "Add to list",
+          type: "select-search",
+          placeholder: "Search your lists",
+          slug: "list",
+          options: lists
+            .map((l) => {
+              const title =
+                getTagValues("title", l.tags) ??
+                getTagValues("name", l.tags) ??
+                "Untitled";
+              const description = getTagValues("description", l.tags);
+              const value = getTagValues("d", l.tags);
+              if (!value) return;
+              return {
+                label: title,
+                description,
+                value: value,
+              };
+            })
+            .filter(Boolean),
+        },
+        {
+          label: "Private",
+          type: "toggle",
+          slug: "isPrivate",
+        },
       ]}
       formSchema={ShortTextNoteSchema}
       onSubmit={handleSubmit}

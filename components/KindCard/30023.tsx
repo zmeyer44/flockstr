@@ -2,13 +2,13 @@
 import Container from "./components/Container";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
-import { type Event } from "nostr-tools";
 import { nip19 } from "nostr-tools";
 import { removeDuplicates } from "@/lib/utils";
 import { toast } from "sonner";
 import { copyText } from "@/lib/utils";
+import { type KindCardProps } from "./";
 
-export default function Kind30023(props: Event) {
+export default function Kind30023(props: KindCardProps) {
   const { content, pubkey, tags, created_at: createdAt } = props;
   const npub = nip19.npubEncode(pubkey);
   const title = getTagValues("title", tags);

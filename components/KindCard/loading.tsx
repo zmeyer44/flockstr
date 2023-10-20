@@ -1,7 +1,6 @@
 import Container from "./components/Container";
-import { CardTitle, CardDescription } from "@/components/ui/card";
-import { type Event } from "nostr-tools";
 import { Skeleton } from "@/components/ui/skeleton";
+import { type KindCardProps } from "./";
 
 export default function KindLoading() {
   return (
