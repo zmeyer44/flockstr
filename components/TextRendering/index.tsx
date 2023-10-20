@@ -30,7 +30,7 @@ const RenderText = ({ text }: { text?: string }) => {
       if (specialValuesArray[index]?.match(urlRegex)) {
         specialElement = (
           <a
-            className="text-primary-foreground hover:underline"
+            className="text-primary hover:underline"
             href={cleanUrl(specialValuesArray[index])}
             target="_blank"
             rel="noreferrer"
@@ -43,7 +43,7 @@ const RenderText = ({ text }: { text?: string }) => {
       } else if (specialValuesArray[index]?.match(hashtagRegex)) {
         specialElement = (
           <Link href={`/?t=${specialValuesArray[index]?.substring(1)}`}>
-            <span className="break-words text-primary-foreground hover:underline">
+            <span className="break-words text-primary hover:underline">
               {specialValuesArray[index]}
             </span>
           </Link>

@@ -27,7 +27,7 @@ export default function ProfileMention({ mention }: ProfileMentionProps) {
   const profile = getProfile(mention);
   return (
     <Link href={`/${mention}`}>
-      <span className="text-primary-foreground hover:underline">{`@${
+      <span className="text-primary hover:underline">{`@${
         profile?.name ?? mention
       }`}</span>
     </Link>
