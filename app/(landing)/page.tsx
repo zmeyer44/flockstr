@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const stats = [
-  { label: "Transactions every 24 hours", value: "44 million" },
-  { label: "Assets under holding", value: "$119 trillion" },
-  { label: "New users annually", value: "46,000" },
+  { label: "Trusted users on Nostr", value: "111,597" },
+  { label: "Satoshis Zapped", value: "1.2 billion" },
+  { label: "Active relays", value: "1,915" },
 ];
 export default function LandingPage() {
   return (
@@ -132,32 +132,30 @@ export default function LandingPage() {
       </div>
       <div className="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
             Why Nostr
           </h2>
           <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
             <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
-              <p className="text-xl leading-8 text-gray-600">
-                Aliquet nec orci mattis amet quisque ullamcorper neque, nibh
-                sem. At arcu, sit dui mi, nibh dui, diam eget aliquam. Quisque
-                id at vitae feugiat egestas ac. Diam nulla orci at in viverra
-                scelerisque eget. Eleifend egestas fringilla sapien.
+              <p className="text-xl leading-8 text-zinc-600">
+                The internet is changing. We have shifted from an open frontier
+                of "The Network" to a series of walled gardens hording userdata
+                to best monatize thier engagment. Nostr breaks down these walls,
+                you data follows you wherever you decide you go.
               </p>
-              <div className="mt-10 max-w-xl text-base leading-7 text-gray-700">
+              <div className="mt-10 max-w-xl text-base leading-7 text-zinc-700">
                 <p>
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget
-                  risus enim. Mattis mauris semper sed amet vitae sed turpis id.
-                  Id dolor praesent donec est. Odio penatibus risus viverra
-                  tellus varius sit neque erat velit. Faucibus commodo massa
-                  rhoncus, volutpat. Dignissim sed eget risus enim. Mattis
-                  mauris semper sed amet vitae sed turpis id.
+                  This is often portrayed as a defense against the censorious
+                  Big Tech company. But, it means so much more. It means having
+                  the freedom to move to a different platform for reasons as
+                  simple as preferring the UI, or maybe just exploring a new
+                  feature.
                 </p>
                 <p className="mt-10">
-                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien
-                  duis odio id et. Id blandit molestie auctor fermentum
-                  dignissim. Lacus diam tincidunt ac cursus in vel. Mauris
-                  varius vulputate et ultrices hac adipiscing egestas. Iaculis
-                  convallis ac tempor et ut. Ac lorem vel integer orci.
+                  Switching from one platform to another is as effortless as
+                  comparing sports scores on different websites. The underlying
+                  data is the same; you just now have the power to decide how it
+                  is presented to you.
                 </p>
               </div>
             </div>
@@ -168,10 +166,10 @@ export default function LandingPage() {
                     key={stat.label}
                     className="flex flex-col-reverse gap-y-4"
                   >
-                    <dt className="text-base leading-7 text-gray-600">
+                    <dt className="text-base leading-7 text-zinc-600">
                       {stat.label}
                     </dt>
-                    <dd className="text-5xl font-semibold tracking-tight text-gray-900">
+                    <dd className="text-5xl font-semibold tracking-tight text-zinc-900">
                       {stat.value}
                     </dd>
                   </div>
