@@ -1,11 +1,22 @@
 import Feed from "@/containers/Feed";
 import Spinner from "@/components/spinner";
-export default function ProfileFeed({ pubkey }: { pubkey: string }) {
+
+export default function ProfileFeed({
+  pubkey,
+  alt,
+}: {
+  pubkey: string;
+  alt?: string;
+}) {
+  const authors = [pubkey];
+  if (alt) {
+    authors.push(alt);
+  }
   return (
     <div className="center w-full flex-col items-stretch space-y-6 text-primary">
       <Feed
         filter={{
-          authors: [pubkey],
+          authors: authors,
           kinds: [1],
         }}
         loader={() => (

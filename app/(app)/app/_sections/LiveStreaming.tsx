@@ -24,7 +24,6 @@ export default function LiveStreamingSection() {
   const { events } = useEvents({
     filter: {
       kinds: [30311 as NDKKind],
-      //   authors: NOTABLE_ACCOUNTS.map((a) => nip19.decode(a).data.toString()),
       limit: 5,
     },
   });

@@ -15,6 +15,7 @@ import { useModal } from "@/app/_providers/modal/provider";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { NDKUser } from "@nostr-dev-kit/ndk";
 import MySubscription from "./_components/MySubscription";
+import { getTagValues } from "@/lib/nostr/utils";
 const EditProfileModal = dynamic(
   () => import("@/components/Modals/EditProfile"),
   {
@@ -42,6 +43,7 @@ export default function ProfilePage({
   const { currentUser, mySubscription, follows } = useCurrentUser();
   const [activeTab, setActiveTab] = useState("feed");
   const { type, data } = nip19.decode(npub);
+  const delegate = getTagValues("delegate", mySubscription?.tags ?? []);
 
   if (type !== "npub") {
     throw new Error("Invalid list");
@@ -157,7 +159,11 @@ export default function ProfilePage({
             setActiveTab={(t) => setActiveTab(t.name)}
           />
         </div>
-        {activeTab === "feed" ? <ProfileFeed pubkey={pubkey} /> : ""}
+        {activeTab === "feed" ? (
+          <ProfileFeed pubkey={pubkey} alt={delegate} />
+        ) : (
+          ""
+        )}
         {activeTab === "subscriptions" ? <Subscriptions pubkey={pubkey} /> : ""}
       </div>
     </div>
