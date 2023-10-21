@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,9 +20,19 @@ import { sendZap, checkPayment } from "@/lib/actions/zap";
 import { btcToSats, formatNumber } from "@/lib/utils";
 import { BANNER } from "@/constants";
 import { follow } from "@/lib/actions/create";
+import { HiOutlineLightningBolt } from "react-icons/hi";
+import { formatDate } from "@/lib/utils/dates";
+import { useModal } from "@/app/_providers/modal/provider";
+
+const ConfirmModal = dynamic(() => import("@/components/Modals/Confirm"), {
+  ssr: false,
+});
+
 export default function SubscriptionCard({ event }: { event: NDKEvent }) {
   const { currentUser } = useCurrentUser();
   const { ndk } = useNDK();
+  const modal = useModal();
+  const [subscribing, setSubscribing] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const { tags } = event;
@@ -36,6 +47,7 @@ export default function SubscriptionCard({ event }: { event: NDKEvent }) {
 
   async function handleSubscribe() {
     log("func", "handleSubscribe");
+    setSubscribing(true);
     try {
       if (!currentUser || !ndk?.signer) return;
       if (delegate) {
@@ -53,6 +65,7 @@ export default function SubscriptionCard({ event }: { event: NDKEvent }) {
     } catch (err) {
       console.log("error sending zap", err);
     } finally {
+      setSubscribing(false);
     }
   }
 
@@ -112,12 +125,39 @@ export default function SubscriptionCard({ event }: { event: NDKEvent }) {
           ) : (
             <>
               <Button
-                loading={checkingPayment}
-                onClick={handleSubscribe}
+                loading={subscribing}
+                onClick={() =>
+                  modal?.show(
+                    <ConfirmModal
+                      title={`Subscribe to ${title}`}
+                      onConfirm={handleSubscribe}
+                      ctaBody={
+                        <>
+                          <span>Zap to Subscribe</span>
+                          <HiOutlineLightningBolt className="h-4 w-4" />
+                        </>
+                      }
+                    >
+                      <p className="text-muted-forground">
+                        {`Pay ${priceInBTC} BTC (${formatNumber(
+                          btcToSats(priceInBTC),
+                        )} sats) for year long access until ${formatDate(
+                          new Date(
+                            new Date().setFullYear(
+                              new Date().getFullYear() + 1,
+                            ),
+                          ),
+                          "MMM Do, YYYY",
+                        )}`}
+                      </p>
+                    </ConfirmModal>,
+                  )
+                }
                 className="w-full"
               >
-                Join now
+                Subscribe
               </Button>
+
               <Link href={`/sub/${event.encode()}`} className="w-full">
                 <Button variant={"secondary"} className="w-full">
                   Details

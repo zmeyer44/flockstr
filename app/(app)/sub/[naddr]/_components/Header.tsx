@@ -20,9 +20,8 @@ import { useModal } from "@/app/_providers/modal/provider";
 import { type NDKEvent } from "@nostr-dev-kit/ndk";
 import { btcToSats, formatNumber } from "@/lib/utils";
 import { formatDate } from "@/lib/utils/dates";
-const EditListModal = dynamic(() => import("@/components/Modals/EditList"), {
-  ssr: false,
-});
+import { follow } from "@/lib/actions/create";
+import { log } from "@/lib/utils";
 const CreateEventModal = dynamic(() => import("@/components/Modals/NewEvent"), {
   ssr: false,
 });
@@ -37,6 +36,7 @@ export default function Header({ event }: { event: NDKEvent }) {
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const [syncingUsers, setSyncingUsers] = useState(false);
+  const [subscribing, setSubscribing] = useState(false);
   const pubkey = event.pubkey;
   const { profile } = useProfile(pubkey);
 
@@ -53,14 +53,14 @@ export default function Header({ event }: { event: NDKEvent }) {
 
   const description = getTagValues("description", event.tags);
   const rawEvent = event.rawEvent();
-  const subscriptionsEnabled = !!getTagValues("subscriptions", rawEvent.tags);
   const priceInBTC = parseFloat(getTagValues("price", rawEvent.tags) ?? "0");
   const isMember =
     currentUser &&
     getTagsValues("p", rawEvent.tags).includes(currentUser.pubkey);
+  const delegate = getTagValues("delegate", event.tags);
 
   useEffect(() => {
-    if (!currentUser || !subscriptionsEnabled) return;
+    if (!currentUser) return;
     if (!isMember && !checkingPayment && !hasValidPayment) {
       void handleCheckPayment();
     }
@@ -100,8 +100,15 @@ export default function Header({ event }: { event: NDKEvent }) {
       setSyncingUsers(false);
     }
   }
-  async function handleSendZap() {
+  async function handleSubscribe() {
+    log("func", "handleSubscribe");
+    setSubscribing(true);
     try {
+      if (!currentUser || !ndk?.signer) return;
+      if (delegate) {
+        await follow(ndk, currentUser, delegate);
+        log("info", "followed");
+      }
       const result = await sendZap(
         ndk!,
         btcToSats(priceInBTC),
@@ -113,6 +120,7 @@ export default function Header({ event }: { event: NDKEvent }) {
     } catch (err) {
       console.log("error sending zap", err);
     } finally {
+      setSubscribing(false);
     }
   }
   if (!event) {
@@ -171,17 +179,17 @@ export default function Header({ event }: { event: NDKEvent }) {
                 </Button> */}
               </>
             )}
-            {subscriptionsEnabled &&
-              !isMember &&
+            {!isMember &&
               (hasValidPayment ? (
                 <Button variant={"outline"}>Pending Sync</Button>
               ) : (
                 <Button
+                  loading={subscribing}
                   onClick={() =>
                     modal?.show(
                       <ConfirmModal
                         title={`Subscribe to ${title}`}
-                        onConfirm={handleSendZap}
+                        onConfirm={handleSubscribe}
                         ctaBody={
                           <>
                             <span>Zap to Subscribe</span>
