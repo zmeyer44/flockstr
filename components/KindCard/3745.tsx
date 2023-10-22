@@ -9,7 +9,7 @@ import { useNDK } from "@/app/_providers/ndk";
 import { RiArrowRightLine, RiLockLine } from "react-icons/ri";
 import { HiOutlineLockOpen } from "react-icons/hi";
 import { decryptMessage } from "@/lib/nostr";
-import { NDKUser } from "@nostr-dev-kit/ndk";
+import { NDKFilter, NDKUser } from "@nostr-dev-kit/ndk";
 import { log } from "@/lib/utils";
 import { EventSchema } from "@/types";
 import KindCard from "@/components/KindCard";
@@ -24,9 +24,10 @@ import {
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { unlockEvent } from "@/lib/actions/create";
 import { type KindCardProps } from "./";
+import { getTagValues } from "@/lib/nostr/utils";
 
 export default function Kind3745(props: KindCardProps) {
-  const { pubkey, content, id } = props;
+  const { pubkey, content, id, tags } = props;
   const { currentUser } = useCurrentUser();
   const [error, setError] = useState("");
   const [passphrase, setPassphrase] = useState("");
@@ -44,11 +45,16 @@ export default function Kind3745(props: KindCardProps) {
     log("func", `handleFetchEvent()`);
     setFetchingEvent(true);
     try {
-      const directMessageEvent = await ndk.fetchEvent({
+      const delegate = getTagValues("delegate", tags);
+      const filter: NDKFilter = {
         kinds: [4],
         ["#e"]: [id],
         ["#p"]: [currentUser.pubkey],
-      });
+      };
+      if (delegate) {
+        filter.authors = [delegate];
+      }
+      const directMessageEvent = await ndk.fetchEvent(filter);
       if (directMessageEvent) {
         log("info", "direct msg decryption");
         if (!signer) return;
