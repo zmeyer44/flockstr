@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { type NDKUserProfile } from "@nostr-dev-kit/ndk";
 
 type User = {
   npub: string;
@@ -37,6 +38,15 @@ const EventSchema = z.object({
   sig: z.string(),
 });
 
+type Account = NDKUserProfile & {
+  id: string;
+  pubkey: string;
+  follows: null | string[];
+  circles: null | string[];
+  is_active: number;
+  last_login_at: number;
+};
+
 export { UserSchema, EventSchema };
 
-export type { User };
+export type { User, Account };

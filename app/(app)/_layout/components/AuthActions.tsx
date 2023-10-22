@@ -30,6 +30,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useKeyboardShortcut } from "@/lib/hooks/useKeyboardShortcut";
+
+import { db } from "@nostr-dev-kit/ndk-cache-dexie";
+import { useLiveQuery } from "dexie-react-hooks";
+
 const LoginModal = dynamic(() => import("@/components/Modals/Login"), {
   ssr: false,
 });
@@ -40,6 +44,16 @@ export default function AuthActions() {
   const { currentUser, logout, attemptLogin, initSubscriptions } =
     useCurrentUser();
   const { ndk } = useNDK();
+  const friends = useLiveQuery(
+    async () => {
+      console.log("Calling", db);
+      if (!db) return;
+      const friends = await db.users.count();
+      return friends;
+    },
+    // specify vars that affect query:
+    [],
+  );
 
   useKeyboardShortcut(["shift", "ctrl", "u"], () => {
     if (currentUser) {
@@ -64,6 +78,7 @@ export default function AuthActions() {
         <Notifications user={currentUser} />
         <Relays />
         <UserMenu user={currentUser} logout={logout} />
+        {friends}
       </>
     );
   }

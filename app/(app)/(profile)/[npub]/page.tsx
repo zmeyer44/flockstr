@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -40,15 +40,27 @@ export default function ProfilePage({
   };
 }) {
   const modal = useModal();
-  const { currentUser, mySubscription, follows } = useCurrentUser();
+  const { currentUser, mySubscription, initSubscriptions } = useCurrentUser();
   const [activeTab, setActiveTab] = useState("feed");
+  const [delegate, setDelegate] = useState<string>();
   const { type, data } = nip19.decode(npub);
-  const delegate = getTagValues("delegate", mySubscription?.tags ?? []);
+  const pubkey = data.toString();
 
+  useEffect(() => {
+    console.log("In affectr");
+    if (mySubscription) {
+      const _delegate = getTagValues("delegate", mySubscription.tags);
+      console.log("Setting");
+      setDelegate(_delegate);
+    }
+  }, [mySubscription]);
+  useEffect(() => {
+    initSubscriptions(pubkey);
+  }, []);
+  console.log("Delegate", delegate);
   if (type !== "npub") {
     throw new Error("Invalid list");
   }
-  const pubkey = data.toString();
   const { profile } = useProfile(pubkey);
 
   return (

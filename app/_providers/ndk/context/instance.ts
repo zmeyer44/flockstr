@@ -6,7 +6,10 @@ import NDK, {
   NDKNip07Signer,
   NDKNip46Signer,
   NDKPrivateKeySigner,
+  type NDKCacheAdapter,
 } from "@nostr-dev-kit/ndk";
+import NDKCacheAdapterDexie from "@nostr-dev-kit/ndk-cache-dexie";
+import { db } from "@/lib/ndk/db";
 
 export default function NDKInstance(explicitRelayUrls: string[]) {
   const loaded = useRef(false);
@@ -16,21 +19,62 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
     NDKPrivateKeySigner | NDKNip46Signer | NDKNip07Signer | undefined
   >(undefined);
 
+  // TODO: fully support NIP-11
+  async function getExplicitRelays() {
+    try {
+      // get relays
+      const relays = explicitRelayUrls;
+      const onlineRelays = new Set(relays);
+
+      for (const relay of relays) {
+        try {
+          const url = new URL(relay);
+          const res = await fetch(`https://${url.hostname}`, {
+            method: "GET",
+            headers: {
+              Accept: "application/nostr+json",
+            },
+          });
+
+          if (!res.ok) {
+            console.info(`${relay} is not working, skipping...`);
+            onlineRelays.delete(relay);
+          }
+        } catch {
+          console.warn(`${relay} is not working, skipping...`);
+          onlineRelays.delete(relay);
+        }
+      }
+
+      // return all online relays
+      return [...onlineRelays];
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   useEffect(() => {
     async function load() {
       if (ndk === undefined && loaded.current === false) {
         loaded.current = true;
-        await loadNdk(explicitRelayUrls);
+        await loadNdk();
       }
     }
     load();
   }, []);
 
   async function loadNdk(
-    explicitRelayUrls: string[],
     signer?: NDKPrivateKeySigner | NDKNip46Signer | NDKNip07Signer,
   ) {
-    const ndkInstance = new NDK({ explicitRelayUrls, signer });
+    const explicitRelayUrls = await getExplicitRelays();
+    const dexieAdapter = new NDKCacheAdapterDexie({
+      dbName: "ndkcache",
+    });
+    const ndkInstance = new NDK({
+      explicitRelayUrls,
+      signer,
+      cacheAdapter: dexieAdapter as unknown as NDKCacheAdapter,
+    });
     if (process.env.NODE_ENV === "development") {
       ndkInstance.pool.on("connect", () => console.log("✅ connected"));
       ndkInstance.pool.on("disconnect", () => console.log("❌ disconnected"));
@@ -42,6 +86,7 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
 
     try {
       await ndkInstance.connect();
+      ndkInstance.signer = signer;
       _setNDK(ndkInstance);
     } catch (error) {
       console.error("ERROR loading NDK NDKInstance", error);
@@ -51,7 +96,7 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
   async function setSigner(
     signer: NDKPrivateKeySigner | NDKNip46Signer | NDKNip07Signer,
   ) {
-    loadNdk(explicitRelayUrls, signer);
+    loadNdk(signer);
   }
 
   async function fetchEvents(filter: NDKFilter): Promise<NDKEvent[]> {

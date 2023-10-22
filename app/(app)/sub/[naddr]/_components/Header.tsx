@@ -22,6 +22,7 @@ import { btcToSats, formatNumber } from "@/lib/utils";
 import { formatDate } from "@/lib/utils/dates";
 import { follow } from "@/lib/actions/create";
 import { log } from "@/lib/utils";
+
 const CreateEventModal = dynamic(() => import("@/components/Modals/NewEvent"), {
   ssr: false,
 });

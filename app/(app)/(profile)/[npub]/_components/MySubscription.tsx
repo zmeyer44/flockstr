@@ -11,7 +11,7 @@ type MySubscription = {
 
 export default function MySubscription({ pubkey }: MySubscription) {
   const { ndk, fetchEvents } = useNDK();
-  const { currentUser, mySubscription, follows } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const [subscriptionTiers, setSubscriptionTiers] = useState<NDKEvent[]>([]);
 
   useEffect(() => {
@@ -22,13 +22,14 @@ export default function MySubscription({ pubkey }: MySubscription) {
 
   async function handleFetchSubscriptionTiers() {
     try {
-      console.log("FETCHING", pubkey);
+      if (!ndk) {
+        return "NDK MISING";
+      }
       const events = await fetchEvents({
         kinds: [30044 as NDKKind],
         authors: [pubkey],
       });
       console.log("events", events);
-
       setSubscriptionTiers(events);
     } catch (err) {
       console.log("error", err);
