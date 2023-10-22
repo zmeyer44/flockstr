@@ -80,9 +80,6 @@ export async function createEventHandler(
       rawEventString,
       passphrase,
     );
-    const signer = delegateSigner ?? ndk.signer!;
-    const user = await signer.user();
-    log("info", "Signer", user.toString());
     const newEvent = new NDKEvent(ndk, {
       content: encryptedRawEventString,
       kind: 3745,
@@ -90,10 +87,14 @@ export async function createEventHandler(
         ["kind", event.kind.toString()],
         ["client", "flockstr"],
       ],
-      pubkey: user.pubkey,
+      pubkey,
     } as NostrEvent);
-    await newEvent.sign(signer);
+    await newEvent.sign();
     await newEvent.publish();
+
+    const messenger = delegateSigner ?? ndk.signer!;
+    const user = await messenger.user();
+    log("info", "Signer", user.toString());
 
     if (list) {
       // Send DMs to subscribers
@@ -111,9 +112,9 @@ export async function createEventHandler(
         } as NostrEvent);
         await messageEvent.encrypt(
           new NDKUser({ hexpubkey: subscriber }),
-          signer,
+          messenger,
         );
-        await messageEvent.sign(signer);
+        await messageEvent.sign(messenger);
         await messageEvent.publish();
       }
     }

@@ -32,7 +32,7 @@ export default function Kind3745(props: KindCardProps) {
   const [passphrase, setPassphrase] = useState("");
   const [fetchingEvent, setFetchingEvent] = useState(false);
   const [decryptedEvent, setDecryptedEvent] = useState<Event>();
-  const { ndk, fetchEvents } = useNDK();
+  const { ndk, signer } = useNDK();
   useEffect(() => {
     if (ndk && !fetchingEvent && !decryptedEvent) {
       void handleFetchEvent();
@@ -40,22 +40,21 @@ export default function Kind3745(props: KindCardProps) {
   }, [ndk]);
 
   async function handleFetchEvent() {
-    if (!ndk) return;
-    log("func", `handleFetchEvent(${pubkey})`);
-
+    if (!ndk || !currentUser) return;
+    log("func", `handleFetchEvent()`);
     setFetchingEvent(true);
     try {
-      const directMessageEvent = await ndk!.fetchEvent({
+      const directMessageEvent = await ndk.fetchEvent({
         kinds: [4],
-        authors: [pubkey],
         ["#e"]: [id],
+        ["#p"]: [currentUser.pubkey],
       });
       if (directMessageEvent) {
         log("info", "direct msg decryption");
-        console.log(directMessageEvent);
+        if (!signer) return;
         await directMessageEvent.decrypt(
-          new NDKUser({ hexpubkey: pubkey }),
-          ndk!.signer,
+          new NDKUser({ hexpubkey: directMessageEvent.pubkey }),
+          signer,
         );
         const passphrase_ = directMessageEvent.content;
         if (!passphrase_) {
@@ -64,7 +63,6 @@ export default function Kind3745(props: KindCardProps) {
         }
         setPassphrase(passphrase_);
         const decrypedData = await decryptMessage(content, passphrase_);
-        console.log("Decrypted", decrypedData);
         const hiddenEvent = EventSchema.safeParse(
           JSON.parse(decrypedData ?? ""),
         );

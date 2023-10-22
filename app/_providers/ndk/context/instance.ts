@@ -68,7 +68,7 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
   ) {
     const explicitRelayUrls = await getExplicitRelays();
     const dexieAdapter = new NDKCacheAdapterDexie({
-      dbName: "ndkcache",
+      dbName: "flockstr-ndkcache",
     });
     const ndkInstance = new NDK({
       explicitRelayUrls,
@@ -81,6 +81,7 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
     }
 
     if (signer) {
+      console.log("SIGNER", signer);
       _setSigner(signer);
     }
 
@@ -96,6 +97,7 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
   async function setSigner(
     signer: NDKPrivateKeySigner | NDKNip46Signer | NDKNip07Signer,
   ) {
+    console.log("SetSigner caled");
     loadNdk(signer);
   }
 

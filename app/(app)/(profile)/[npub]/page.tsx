@@ -42,22 +42,12 @@ export default function ProfilePage({
   const modal = useModal();
   const { currentUser, mySubscription, initSubscriptions } = useCurrentUser();
   const [activeTab, setActiveTab] = useState("feed");
-  const [delegate, setDelegate] = useState<string>();
   const { type, data } = nip19.decode(npub);
   const pubkey = data.toString();
 
-  useEffect(() => {
-    console.log("In affectr");
-    if (mySubscription) {
-      const _delegate = getTagValues("delegate", mySubscription.tags);
-      console.log("Setting");
-      setDelegate(_delegate);
-    }
-  }, [mySubscription]);
-  useEffect(() => {
-    initSubscriptions(pubkey);
-  }, []);
-  console.log("Delegate", delegate);
+  // useEffect(() => {
+  //   initSubscriptions(pubkey);
+  // }, []);
   if (type !== "npub") {
     throw new Error("Invalid list");
   }
@@ -171,11 +161,7 @@ export default function ProfilePage({
             setActiveTab={(t) => setActiveTab(t.name)}
           />
         </div>
-        {activeTab === "feed" ? (
-          <ProfileFeed pubkey={pubkey} alt={delegate} />
-        ) : (
-          ""
-        )}
+        {activeTab === "feed" ? <ProfileFeed pubkey={pubkey} /> : ""}
         {activeTab === "subscriptions" ? <Subscriptions pubkey={pubkey} /> : ""}
       </div>
     </div>

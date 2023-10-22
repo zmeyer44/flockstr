@@ -28,6 +28,7 @@ export default function useCurrentUser() {
       const shouldReconnect = localStorage.getItem("shouldReconnect");
       if (!shouldReconnect || typeof window.nostr === "undefined") return;
       const user = await loginWithNip07();
+      console.log("Called loginWithNip07");
       if (!user) {
         throw new Error("NO auth");
       }

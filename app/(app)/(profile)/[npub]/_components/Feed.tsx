@@ -1,23 +1,14 @@
 import Feed from "@/containers/Feed";
 import Spinner from "@/components/spinner";
+import { NDKKind } from "@nostr-dev-kit/ndk";
 
-export default function ProfileFeed({
-  pubkey,
-  alt,
-}: {
-  pubkey: string;
-  alt?: string;
-}) {
-  const authors = [pubkey];
-  if (alt) {
-    authors.push(alt);
-  }
+export default function ProfileFeed({ pubkey }: { pubkey: string }) {
   return (
     <div className="center w-full flex-col items-stretch space-y-6 text-primary">
       <Feed
         filter={{
-          authors: authors,
-          kinds: [1],
+          authors: [pubkey],
+          kinds: [1, 3745 as NDKKind],
         }}
         loader={() => (
           <div className="center flex-col gap-y-4 pt-7 text-center">

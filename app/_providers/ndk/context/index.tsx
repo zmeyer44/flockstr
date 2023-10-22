@@ -13,6 +13,7 @@ import NDK, {
 import NDKInstance from "./instance";
 import { _loginWithNip07, _loginWithNip46, _loginWithSecret } from "./signers";
 import { Users } from "./Users";
+import { log } from "@/lib/utils";
 
 interface NDKContext {
   ndk: NDK | undefined;
@@ -105,6 +106,7 @@ const NDKProvider = ({
   }
 
   async function loginWithNip07() {
+    log("func", "loginWithNip07");
     const res = await _loginWithNip07();
     if (res) {
       const { signer } = res;
