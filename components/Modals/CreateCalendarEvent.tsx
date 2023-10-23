@@ -49,6 +49,11 @@ export default function CreateCalendarEventModal() {
   const [timezone, setTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
+  const [location, setLocation] = useState<{
+    address: string;
+    name: string;
+    coordinates: { lat: number; lng: number };
+  }>();
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -93,7 +98,7 @@ export default function CreateCalendarEventModal() {
               <SmallCalendarIcon date={startDate ?? new Date()} />
             </div>
             <div className="max-w-[300px] flex-1 divide-y overflow-hidden rounded-md bg-muted">
-              <div className="flex justify-between p-0.5 px-1 pl-3">
+              <div className="flex justify-between p-0.5 px-2 pl-3">
                 <div className="flex w-[70px] shrink-0 items-center">Start</div>
                 <div className="flex-1">
                   <div className="flex max-w-full bg-secondary">
@@ -132,7 +137,7 @@ export default function CreateCalendarEventModal() {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between p-0.5 px-1 pl-3">
+              <div className="flex justify-between p-0.5 px-2 pl-3">
                 <div className="flex w-[70px] shrink-0 items-center">End</div>
                 <div className="flex-1">
                   <div className="flex max-w-full bg-secondary">
@@ -172,7 +177,7 @@ export default function CreateCalendarEventModal() {
                 </div>
               </div>
 
-              <div className="flex justify-between p-0.5 px-1 pl-3">
+              <div className="flex justify-between overflow-hidden p-0.5 px-1 pl-3">
                 <div className="flex-1 text-xs text-muted-foreground">
                   <div className="flex max-w-full justify-start bg-secondary">
                     <TimezoneSelector
@@ -191,10 +196,13 @@ export default function CreateCalendarEventModal() {
               <LocationIcon />
             </div>
             <div className="max-w-[300px] flex-1 divide-y overflow-hidden rounded-md bg-muted">
-              <div className="flex justify-between p-0.5 px-1 pl-3">
+              <div className="flex justify-between p-0.5 px-1">
                 <div className="flex-1">
                   <div className="flex max-w-full bg-secondary">
-                    <LocationSearchInput />
+                    <LocationSearchInput
+                      location={location}
+                      onSelect={(l) => setLocation(l)}
+                    />
                   </div>
                 </div>
               </div>
