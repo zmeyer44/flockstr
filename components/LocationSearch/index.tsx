@@ -72,49 +72,35 @@ function CommandSearch() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-modal+ w-auto p-0" align="start">
-        <Command className="rounded-lg border shadow-md">
-          <CommandInput disabled={!ready} placeholder="Search places..." />
+        <div className="rounded-lg border shadow-md">
           <Input
-            className="border-0 px-0 shadow-none focus-visible:ring-0"
+            className="border-0 shadow-none focus-visible:ring-0"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="Search places..."
             disabled={!ready}
           />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Suggestions">
-              {data.map(
-                ({
-                  description,
-                  place_id,
-                  structured_formatting: { main_text, secondary_text },
-                }) => (
-                  <CommandItem key={place_id}>
-                    <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
-                    <span>{main_text}</span>
-                    <span>{description}</span>
-                  </CommandItem>
-                ),
-              )}
-            </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading="Vitrual">
-              <CommandItem>
-                <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </CommandItem>
-              <CommandItem>
-                <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
-                <span>Mail</span>
-              </CommandItem>
-              <CommandItem>
-                <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </CommandItem>
-            </CommandGroup>
-          </CommandList>
-        </Command>
+          <ul className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden")}>
+            {data.map(
+              ({
+                description,
+                place_id,
+                structured_formatting: { main_text, secondary_text },
+              }) => (
+                <li
+                  key={place_id}
+                  className={cn(
+                    "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                  )}
+                >
+                  <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
+                  <span>{main_text}</span>
+                  <span>{description}</span>
+                </li>
+              ),
+            )}
+          </ul>
+        </div>
       </PopoverContent>
     </Popover>
   );
