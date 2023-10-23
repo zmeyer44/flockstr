@@ -73,13 +73,13 @@ function CommandSearch() {
       </PopoverTrigger>
       <PopoverContent className="z-modal+ w-auto p-0" align="start">
         <Command className="rounded-lg border shadow-md">
-          <CommandInput
-            disabled={!ready}
-            onChangeCapture={(e) =>
-              setValue((e.target as unknown as { value: string }).value)
-            }
+          <CommandInput disabled={!ready} placeholder="Search places..." />
+          <Input
+            className="border-0 px-0 shadow-none focus-visible:ring-0"
             value={value}
+            onChange={(e) => setValue(e.target.value)}
             placeholder="Search places..."
+            disabled={!ready}
           />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
@@ -98,7 +98,7 @@ function CommandSearch() {
                 ),
               )}
             </CommandGroup>
-            {/* <CommandSeparator />
+            <CommandSeparator />
             <CommandGroup heading="Vitrual">
               <CommandItem>
                 <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
@@ -112,7 +112,7 @@ function CommandSearch() {
                 <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </CommandItem>
-            </CommandGroup> */}
+            </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
