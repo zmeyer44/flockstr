@@ -42,7 +42,18 @@ export default function LocationSearchInput() {
     return <p>hello{JSON.stringify(loadError)}</p>;
   }
   if (!isLoaded) {
-    return <p>Loading...</p>;
+    return (
+      <Button
+        variant={"ghost"}
+        disabled={true}
+        className={cn(
+          "justify-start p-0 text-left font-normal",
+          !value && "text-muted-foreground",
+        )}
+      >
+        Add a location...
+      </Button>
+    );
   }
   return <CommandSearch />;
 }
@@ -71,7 +82,10 @@ function CommandSearch() {
           Add a location...
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-modal+ w-auto p-0" align="start">
+      <PopoverContent
+        className="z-modal+ w-auto max-w-[300px] p-0"
+        align="start"
+      >
         <div className="rounded-lg border shadow-md">
           <Input
             className="border-0 shadow-none focus-visible:ring-0"
@@ -81,24 +95,30 @@ function CommandSearch() {
             disabled={!ready}
           />
           <ul className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden")}>
-            {data.map(
-              ({
+            {data.map((place) => {
+              const {
                 description,
                 place_id,
                 structured_formatting: { main_text, secondary_text },
-              }) => (
+              } = place;
+              return (
                 <li
                   key={place_id}
+                  onClick={() => console.log()}
                   className={cn(
-                    "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                    "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-muted",
                   )}
                 >
                   <HiOutlineBuildingStorefront className="mr-2 h-4 w-4" />
-                  <span>{main_text}</span>
-                  <span>{description}</span>
+                  <div className="line-clamp-1">
+                    <p>{main_text}</p>
+                    <span className="text-[10px] text-muted-foreground">
+                      {secondary_text}
+                    </span>
+                  </div>
                 </li>
-              ),
-            )}
+              );
+            })}
           </ul>
         </div>
       </PopoverContent>
