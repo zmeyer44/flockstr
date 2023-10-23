@@ -19,6 +19,7 @@ import { formatCount } from "@/lib/utils";
 import LoginModal from "./Login";
 import CreateList from "./CreateList";
 import ShortTextNoteModal from "./ShortTextNote";
+import CreateCalendarEventModal from "./CreateCalendarEvent";
 export default function NewEventModal() {
   const modal = useModal();
   return (
@@ -33,8 +34,17 @@ export default function NewEventModal() {
           <span>Short Text</span>
           <HiChatBubbleLeftEllipsis className="h-4 w-4" />
         </Button>
+        <Button
+          onClick={() => {
+            modal?.swap(<CreateCalendarEventModal />);
+          }}
+          className="w-full gap-x-1"
+        >
+          <span>Calendar Event</span>
+          <HiChatBubbleLeftEllipsis className="h-4 w-4" />
+        </Button>
         <Link href={`/article/new`}>
-          <Button className="w-full gap-x-1">
+          <Button onClick={() => modal?.hide()} className="w-full gap-x-1">
             <span>Long Form</span>
             <HiNewspaper className="h-4 w-4" />
           </Button>

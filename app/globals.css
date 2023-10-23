@@ -123,3 +123,7 @@
     @apply flex items-center justify-center;
   }
 }
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
+}
