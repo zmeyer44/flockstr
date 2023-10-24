@@ -78,15 +78,19 @@ export default function CreateCalendarEventModal() {
 
   async function handleSubmit() {
     console.log("CALLED", ndk, currentUser);
-    if (!ndk || !currentUser) return;
+    if (!ndk || !currentUser) {
+      alert("MISSING");
+      return;
+    }
+
     setIsLoading(true);
     if (!title) {
       setError("Please add a title");
       return;
     }
+
     try {
       const random = randomId();
-
       const tags: string[][] = [
         ["d", random],
         ["name", title],
@@ -95,6 +99,7 @@ export default function CreateCalendarEventModal() {
         ["end", toUnix(convertToTimezone(endDate, timezone)).toString()],
         ["start_tzid", timezone],
       ];
+
       if (location) {
         tags.push([
           "location",
@@ -110,6 +115,7 @@ export default function CreateCalendarEventModal() {
         ]);
         tags.push(["g", location.geohash]);
       }
+
       if (imageUrl) {
         tags.push(["image", imageUrl]);
       }
@@ -121,6 +127,7 @@ export default function CreateCalendarEventModal() {
         tags: tags,
         kind: 31923,
       };
+
       const event = await createEvent(ndk, preEvent);
       if (event) {
         toast.success("Event Created!");

@@ -138,9 +138,20 @@ export function convertToTimezone(inputDate: Date, targetTimezone: string) {
   }
   dayjs.extend(utc);
   dayjs.extend(timezone);
+  let hours = inputDate.getHours().toString();
+  if (hours.length === 1) {
+    hours = "0" + hours;
+  }
+  let minutes = inputDate.getMinutes().toString();
+  if (minutes.length === 1) {
+    minutes = "0" + minutes;
+  }
 
+  const dateString = `${inputDate.getFullYear()}-${
+    inputDate.getMonth() + 1
+  }-${inputDate.getDate()}T${hours}:${minutes}:00.000Z`;
   // Get plain date w/o timezones
-  const initialDate = new Date(inputDate + "Z");
+  const initialDate = new Date(dateString);
   const plainString = initialDate.toISOString().split(".")[0] as string;
   const plain = dayjs.tz(plainString, targetTimezone);
   return plain.toDate();
