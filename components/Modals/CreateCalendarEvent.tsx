@@ -169,7 +169,7 @@ export default function CreateCalendarEventModal() {
               <div className="flex justify-between p-0.5 px-2 pl-3">
                 <div className="flex w-[50px] items-center">Start</div>
                 <div className="flex-1 shrink-0">
-                  <div className="flex max-w-full break-keep bg-green-500">
+                  <div className="flex max-w-full break-keep">
                     <DatePicker
                       displayFormat="ddd, MMM D"
                       date={startDate}
@@ -188,7 +188,7 @@ export default function CreateCalendarEventModal() {
                     />
                     <TimePicker
                       className="shrink-0 break-keep"
-                      inputClassName="pl-0 pr-1"
+                      inputClassName="pl-0 pr-1 break-keep min-w-fit"
                       value={startTime}
                       onChange={(newTime) =>
                         setStartDate(
@@ -227,8 +227,8 @@ export default function CreateCalendarEventModal() {
                       hideIcon={true}
                     />
                     <TimePicker
-                      className="shrink-0"
-                      inputClassName="max-w-fit pl-0 pr-1"
+                      className="shrink-0 break-keep"
+                      inputClassName="pl-0 pr-1 break-keep min-w-fit"
                       value={endTime}
                       onChange={(newTime) =>
                         setEndDate(
