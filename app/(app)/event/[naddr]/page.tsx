@@ -4,9 +4,14 @@ import Image from "next/image";
 import { nip19 } from "nostr-tools";
 import useEvents from "@/lib/hooks/useEvents";
 import Spinner from "@/components/spinner";
-import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
+import {
+  getTagAllValues,
+  getTagValues,
+  getTagsValues,
+} from "@/lib/nostr/utils";
 import Feed from "@/containers/Feed";
 import Header from "./_components/Header";
+import LocationPreview from "@/components/LocationPreview";
 
 export default function EventPage({
   params: { naddr },
@@ -38,12 +43,21 @@ export default function EventPage({
     );
   }
   const noteIds = getTagsValues("e", event.tags).filter(Boolean);
+  const location = getTagAllValues("location", event.tags)[0]
+    ? getTagAllValues("location", event.tags)
+    : getTagAllValues("address", event.tags);
 
   return (
     <div className="relative mx-auto max-w-5xl space-y-4 p-2 sm:p-4">
       <Header event={event} />
       <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
         <div className="space-y-3 overflow-hidden rounded-[0.5rem] p-0">
+          {location && (
+            <LocationPreview
+              coordinates={{ lat: 42, lng: 34 }}
+              address={location[0] as string}
+            />
+          )}
           <Feed
             filter={{
               ids: noteIds,
