@@ -167,7 +167,7 @@ export default function CreateCalendarEventModal() {
             <div className="shrink-0">
               <SmallCalendarIcon date={startDate ?? new Date()} />
             </div>
-            <div className="max-w-[300px] flex-1 divide-y overflow-hidden rounded-md bg-muted">
+            <div className="flex-1 divide-y overflow-hidden rounded-md bg-muted sm:max-w-[300px]">
               <div className="flex justify-between p-0.5 px-2 pl-3">
                 <div className="flex w-[50px] shrink-0 items-center">Start</div>
                 <div className="flex-1">
@@ -229,7 +229,7 @@ export default function CreateCalendarEventModal() {
                       hideIcon={true}
                     />
                     <TimePicker
-                      //   className="shrink-0"
+                      className="shrink-0"
                       inputClassName="max-w-fit pl-0 pr-1"
                       value={endTime}
                       onChange={(newTime) =>

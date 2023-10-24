@@ -67,7 +67,10 @@ export default function RootLayout({
         <meta name="msapplication-config" content="/icons/browserconfig.xml" />
         <meta name="msapplication-TileColor" content="#e65e1f" />
         <meta name="msapplication-tap-highlight" content="no" />
-
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
         <link
           rel="apple-touch-startup-image"
           href="splashscreens/apple-splash-2048-2732.jpg"
