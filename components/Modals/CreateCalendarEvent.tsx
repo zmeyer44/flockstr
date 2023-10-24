@@ -127,7 +127,6 @@ export default function CreateCalendarEventModal() {
         tags: tags,
         kind: 31923,
       };
-      if (confirm("end")) return;
       const event = await createEvent(ndk, preEvent);
       if (event) {
         toast.success("Event Created!");
