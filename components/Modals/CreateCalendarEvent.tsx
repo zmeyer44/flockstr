@@ -189,7 +189,8 @@ export default function CreateCalendarEventModal() {
                       hideIcon={true}
                     />
                     <TimePicker
-                      className="max-w-fit pl-0 pr-1"
+                      className="shrink-0"
+                      inputClassName="max-w-fit pl-0 pr-1"
                       value={startTime}
                       onChange={(newTime) =>
                         setStartDate(
@@ -228,7 +229,8 @@ export default function CreateCalendarEventModal() {
                       hideIcon={true}
                     />
                     <TimePicker
-                      className="max-w-fit pl-0 pr-1"
+                      //   className="shrink-0"
+                      inputClassName="max-w-fit pl-0 pr-1"
                       value={endTime}
                       onChange={(newTime) =>
                         setEndDate(

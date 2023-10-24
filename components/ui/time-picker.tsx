@@ -78,12 +78,14 @@ type TimePickerProps = {
   hideIcon?: boolean;
   displayFormat?: string;
   className?: string;
+  inputClassName?: string;
 };
 export function TimePicker({
   value,
   onChange,
   hideIcon = false,
   className,
+  inputClassName,
 }: TimePickerProps) {
   return (
     <Popover>
@@ -93,6 +95,7 @@ export function TimePicker({
           className={cn(
             "justify-start p-0 text-left font-normal",
             !value && "text-muted-foreground",
+            className,
           )}
         >
           {!hideIcon && <CalendarIcon className="mr-2 h-4 w-4" />}
@@ -106,7 +109,7 @@ export function TimePicker({
             }}
             className={cn(
               "border-0 shadow-none outline-none ring-0 focus-visible:ring-0",
-              className,
+              inputClassName,
             )}
           />
         </Button>
