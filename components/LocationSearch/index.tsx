@@ -24,17 +24,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { useLoadScript } from "@react-google-maps/api";
 import Spinner from "../spinner";
+import Geohash from "latlon-geohash";
 
 type LocationSearchInputProps = {
   onSelect: (location: {
     name: string;
     address: string;
     coordinates: { lat: number; lng: number };
+    geohash: string;
   }) => void;
   location?: {
     name: string;
     address: string;
     coordinates: { lat: number; lng: number };
+    geohash: string;
   };
 };
 export default function LocationSearchInput({
@@ -73,11 +76,13 @@ type CommandSearchProps = {
     name: string;
     address: string;
     coordinates: { lat: number; lng: number };
+    geohash: string;
   }) => void;
   location?: {
     name: string;
     address: string;
     coordinates: { lat: number; lng: number };
+    geohash: string;
   };
 };
 function CommandSearch({ location, onSelect }: CommandSearchProps) {
@@ -99,11 +104,13 @@ function CommandSearch({ location, onSelect }: CommandSearchProps) {
     });
     if (!result[0]) return;
     const coordinates = getLatLng(result[0]);
+    const geohash = Geohash.encode(coordinates.lat, coordinates.lng, 6);
     setOpen(false);
     return onSelect({
       name,
       coordinates,
       address: result[0].formatted_address,
+      geohash,
     });
   }
   return (

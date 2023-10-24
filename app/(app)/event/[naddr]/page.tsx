@@ -46,28 +46,31 @@ export default function EventPage({
   const location = getTagAllValues("location", event.tags)[0]
     ? getTagAllValues("location", event.tags)
     : getTagAllValues("address", event.tags);
+  const geohash = getTagValues("g", event.tags);
 
   return (
     <div className="relative mx-auto max-w-5xl space-y-4 p-2 sm:p-4">
       <Header event={event} />
       <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
-        <div className="space-y-3 overflow-hidden rounded-[0.5rem] p-0">
-          {location && (
+        <div className="flex flex-col gap-3 @xl:flex-row-reverse">
+          {!!location && !!geohash && (
             <LocationPreview
-              coordinates={{ lat: 42, lng: 34 }}
+              geohash={geohash}
               address={location[0] as string}
             />
           )}
-          <Feed
-            filter={{
-              ids: noteIds,
-            }}
-            empty={() => (
-              <div className="text-center text-muted-foreground">
-                <p>No notes yet</p>
-              </div>
-            )}
-          />
+          <div className="flex-1 space-y-3 overflow-hidden rounded-[0.5rem] p-0">
+            <Feed
+              filter={{
+                ids: noteIds,
+              }}
+              empty={() => (
+                <div className="pt-5 text-center text-muted-foreground">
+                  <p>No Announcements yet</p>
+                </div>
+              )}
+            />
+          </div>
         </div>
       </div>
     </div>

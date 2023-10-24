@@ -70,6 +70,7 @@ export default function CreateCalendarEventModal() {
     address: string;
     name: string;
     coordinates: { lat: number; lng: number };
+    geohash: string;
   }>();
   const { ndk } = useNDK();
   const { currentUser } = useCurrentUser();
@@ -107,6 +108,7 @@ export default function CreateCalendarEventModal() {
           location.name,
           location.address,
         ]);
+        tags.push(["g", location.geohash]);
       }
       if (imageUrl) {
         tags.push(["image", imageUrl]);

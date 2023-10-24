@@ -11,22 +11,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import Geohash from "latlon-geohash";
+import { HiMapPin } from "react-icons/hi2";
 
 type LocationPreviewProps = {
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
+  geohash: string;
   address: string;
   className?: string;
 };
 export default function LocationPreview({
-  coordinates,
+  geohash,
   address,
   className,
 }: LocationPreviewProps) {
   const libraries = useMemo(() => ["places"], []);
-  const mapCenter = useMemo(() => coordinates, []);
+  const { lat, lon } = Geohash.decode(geohash);
+  const mapCenter = useMemo(() => ({ lat, lng: lon }), []);
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -43,24 +43,40 @@ export default function LocationPreview({
   });
 
   if (!isLoaded) {
-    return <p>Loading...</p>;
+    return (
+      <Card className={cn(className)}>
+        <CardHeader className="flex flex-row items-center gap-3 space-y-0 p-3">
+          <HiMapPin className="h-5 w-5" />
+          <CardTitle>Location</CardTitle>
+        </CardHeader>
+        <CardContent className="h-[150px] p-0">
+          <div className="h-full w-full bg-muted"></div>
+        </CardContent>
+        <CardFooter className="p-3 text-sm text-muted-foreground">
+          {address}
+        </CardFooter>
+      </Card>
+    );
   }
   return (
     <Card className={cn(className)}>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center gap-3 space-y-0 p-3">
+        <HiMapPin className="h-5 w-5" />
         <CardTitle>Location</CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="h-[150px] p-0">
         <GoogleMap
           options={mapOptions}
           zoom={14}
           center={mapCenter}
           mapTypeId={google.maps.MapTypeId.ROADMAP}
-          mapContainerStyle={{ width: "200px", height: "200px" }}
+          mapContainerStyle={{ width: "100%", height: "100%" }}
           onLoad={() => console.log("Map Component Loaded...")}
         />
-        <CardFooter>{address}</CardFooter>
       </CardContent>
+      <CardFooter className="p-3 text-sm text-muted-foreground">
+        {address}
+      </CardFooter>
     </Card>
   );
 }
