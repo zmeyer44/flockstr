@@ -7,11 +7,14 @@ import { nip19 } from "nostr-tools";
 // import { useKeys } from "@/app/_providers/keysProvider";
 import { useNDK } from "@/app/_providers/ndk";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function LoginModal() {
-  const { loginWithNip07 } = useNDK();
+  const { loginWithNip07, loginWithSecret } = useNDK();
   const { loginWithPubkey, currentUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [nsec, setNsec] = useState("");
   const modal = useModal();
 
   useEffect(() => {
@@ -79,6 +82,26 @@ export default function LoginModal() {
     setIsLoading(false);
     modal?.hide();
   }
+  async function handleLoginNsec() {
+    setIsLoading(true);
+    console.log("loging in ");
+    if (typeof window.nostr !== "undefined") {
+      const user = await loginWithSecret(nsec);
+      if (!user) {
+        throw new Error("NO auth");
+      }
+      console.log("LOGIN", user);
+      await loginWithPubkey(nip19.decode(user.npub).data.toString());
+      localStorage.setItem("shouldReconnect", "true");
+    }
+
+    if (typeof window.webln !== "undefined") {
+      await window.webln.enable();
+    }
+    console.log("connected ");
+    setIsLoading(false);
+    modal?.hide();
+  }
 
   return (
     <Template title="Login" className="md:max-w-[400px]">
@@ -86,6 +109,22 @@ export default function LoginModal() {
         <Button onClick={() => void handleLogin()} loading={isLoading}>
           Connect with extension
         </Button>
+        <div className="space-y-3">
+          <Label>nsec</Label>
+          <Input
+            value={nsec}
+            onChange={(e) => setNsec(e.target.value)}
+            placeholder="nsec..."
+          />
+          <Button
+            variant={"outline"}
+            onClick={() => void handleLoginNsec()}
+            loading={isLoading}
+            className="w-fill"
+          >
+            Connect with Nsec
+          </Button>
+        </div>
       </div>
     </Template>
   );

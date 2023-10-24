@@ -8,7 +8,9 @@ import { nip19 } from "nostr-tools";
 import useLists from "./useLists";
 import useSubscriptions from "./useSubscriptions";
 import { db } from "@nostr-dev-kit/ndk-cache-dexie";
-import { unixTimeNowInSeconds } from "../nostr/dates";
+import { webln } from "@getalby/sdk";
+const loadNWCUrl = "";
+const nwc = new webln.NWC({ nostrWalletConnectUrl: loadNWCUrl });
 
 export default function useCurrentUser() {
   const {
@@ -19,7 +21,8 @@ export default function useCurrentUser() {
     setFollows,
     addFollow,
   } = currentUserStore();
-  const { loginWithNip07, getProfile, ndk, fetchEvents } = useNDK();
+  const { loginWithNip07, loginWithNip46, getProfile, ndk, fetchEvents } =
+    useNDK();
   const { init } = useLists();
   const { init: initSubscriptions, mySubscription } = useSubscriptions();
 
