@@ -9,7 +9,12 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ["t2.gstatic.com", "www.google.com", "whop.com"],
+    domains: [
+      "t2.gstatic.com",
+      "www.google.com",
+      "whop.com",
+      "flockstr.s3.amazonaws.com",
+    ],
   },
 };
 

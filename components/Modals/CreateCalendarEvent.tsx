@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { HiX } from "react-icons/hi";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -18,20 +19,27 @@ import { Label } from "@/components/ui/label";
 import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
 import LocationIcon from "@/components/EventIcons/LocationIcon";
 import LocationSearchInput from "@/components/LocationSearch";
+import Spinner from "../spinner";
 
 import useAutosizeTextArea from "@/lib/hooks/useAutoSizeTextArea";
 import { useModal } from "@/app/_providers/modal/provider";
 import { useRouter } from "next/navigation";
 import { createEvent } from "@/lib/actions/create";
 import { useNDK } from "@/app/_providers/ndk";
-import { type NostrEvent } from "@nostr-dev-kit/ndk";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
+import useImageUpload from "@/lib/hooks/useImageUpload";
 
 export default function CreateCalendarEventModal() {
   const modal = useModal();
   const now = new Date(new Date().setHours(12, 0, 0, 0));
   const [isLoading, setIsLoading] = useState(false);
-
+  const {
+    ImageUploadButton,
+    clear,
+    imagePreview,
+    imageUrl,
+    status: imageStatus,
+  } = useImageUpload("event");
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -99,6 +107,9 @@ export default function CreateCalendarEventModal() {
           location.name,
           location.address,
         ]);
+      }
+      if (imageUrl) {
+        tags.push(["image", imageUrl]);
       }
       console.log("Adding ", tags);
       const preEvent = {
@@ -265,7 +276,7 @@ export default function CreateCalendarEventModal() {
             <div className="shrink-0">
               <LocationIcon />
             </div>
-            <div className="max-w-[300px] flex-1 divide-y overflow-hidden rounded-md bg-muted">
+            <div className="flex-1 divide-y overflow-hidden rounded-md bg-muted sm:max-w-[300px]">
               <div className="flex justify-between p-0.5 px-1">
                 <div className="flex-1">
                   <div className="flex max-w-full bg-secondary">
@@ -287,10 +298,57 @@ export default function CreateCalendarEventModal() {
               placeholder="Some into about this event..."
             />
           </div>
+          <div className="flex justify-end">
+            {imagePreview ? (
+              <div className="relative overflow-hidden rounded-xl">
+                <div className="">
+                  <Image
+                    alt="Image"
+                    height="288"
+                    width="288"
+                    src={imagePreview}
+                    className={cn(
+                      "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
+                      imageStatus === "uploading" && "grayscale",
+                      imageStatus === "error" && "blur-xl",
+                    )}
+                  />
+                </div>
+                {imageStatus === "uploading" && (
+                  <button className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 text-background hover:bg-opacity-100">
+                    <Spinner />
+                  </button>
+                )}
+                {imageStatus === "success" && (
+                  <button
+                    onClick={clear}
+                    className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 hover:bg-opacity-100"
+                  >
+                    <HiX
+                      className="block h-4 w-4 text-background"
+                      aria-hidden="true"
+                    />
+                  </button>
+                )}
+              </div>
+            ) : (
+              <ImageUploadButton>
+                <Button
+                  className=""
+                  variant={"outline"}
+                  loading={imageStatus === "uploading"}
+                >
+                  {imageUrl ? "Uploaded!" : "Upload Image"}
+                </Button>
+              </ImageUploadButton>
+            )}
+          </div>
+
           <div className="flex">
             <Button
               onClick={handleSubmit}
               loading={isLoading}
+              disabled={imageStatus === "uploading"}
               className="w-full"
             >
               Submit
