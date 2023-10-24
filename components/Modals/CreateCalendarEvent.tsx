@@ -45,9 +45,7 @@ export default function CreateCalendarEventModal() {
       ? "0" + startDate?.getMinutes().toLocaleString()
       : startDate?.getMinutes()
   }`;
-  const [endDate, setEndDate] = useState<Date>(
-    new Date(new Date().setHours(13)),
-  );
+  const [endDate, setEndDate] = useState<Date>(addMinutesToDate(now, 60));
   const endTime = `${
     endDate?.getHours().toLocaleString().length === 1
       ? "0" + endDate?.getHours().toLocaleString()
@@ -169,9 +167,9 @@ export default function CreateCalendarEventModal() {
             </div>
             <div className="flex-1 divide-y overflow-hidden rounded-md bg-muted sm:max-w-[300px]">
               <div className="flex justify-between p-0.5 px-2 pl-3">
-                <div className="flex w-[50px] shrink-0 items-center">Start</div>
-                <div className="flex-1">
-                  <div className="flex max-w-full bg-secondary">
+                <div className="flex w-[50px] items-center">Start</div>
+                <div className="flex-1 shrink-0 bg-red-300">
+                  <div className="flex max-w-full bg-green-500">
                     <DatePicker
                       displayFormat="ddd, MMM D"
                       date={startDate}
@@ -209,8 +207,8 @@ export default function CreateCalendarEventModal() {
                 </div>
               </div>
               <div className="flex justify-between p-0.5 px-2 pl-3">
-                <div className="flex w-[50px] shrink-0 items-center">End</div>
-                <div className="flex-1">
+                <div className="w-[50px flex items-center">End</div>
+                <div className="flex-1 shrink-0">
                   <div className="flex max-w-full bg-secondary">
                     <DatePicker
                       displayFormat="ddd, MMM D"
