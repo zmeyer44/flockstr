@@ -84,7 +84,7 @@ export default function LoginModal() {
   }
   async function handleLoginNsec() {
     setIsLoading(true);
-    console.log("loging in ");
+    console.log("loging in");
     if (typeof window.nostr !== "undefined") {
       const user = await loginWithSecret(nsec);
       if (!user) {
@@ -93,6 +93,8 @@ export default function LoginModal() {
       console.log("LOGIN", user);
       await loginWithPubkey(nip19.decode(user.npub).data.toString());
       localStorage.setItem("shouldReconnect", "true");
+    } else {
+      alert("MIssing window");
     }
 
     if (typeof window.webln !== "undefined") {
