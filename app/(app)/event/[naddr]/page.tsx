@@ -65,7 +65,7 @@ export default function EventPage({
                 ids: noteIds,
               }}
               empty={() => (
-                <div className="pt-5 text-center text-muted-foreground">
+                <div className="py-5 text-center text-muted-foreground">
                   <p>No Announcements yet</p>
                 </div>
               )}

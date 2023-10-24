@@ -72,14 +72,13 @@ export default function Header({ event }: { event: NDKEvent }) {
   };
   const location = getLocation();
   const rawEvent = event.rawEvent();
-  const subscriptionsEnabled = !!getTagValues("subscriptions", rawEvent.tags);
   const priceInBTC = parseFloat(getTagValues("price", rawEvent.tags) ?? "0");
   const isMember =
     currentUser &&
     getTagsValues("p", rawEvent.tags).includes(currentUser.pubkey);
 
   useEffect(() => {
-    if (!currentUser || !subscriptionsEnabled) return;
+    if (!currentUser || !false) return;
     if (!isMember && !checkingPayment && !hasValidPayment) {
       void handleCheckPayment();
     }
@@ -155,8 +154,8 @@ export default function Header({ event }: { event: NDKEvent }) {
               <ProfileInfo pubkey={pubkey} />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            {!!currentUser && currentUser.pubkey === pubkey && (
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            {/* {!!currentUser && currentUser.pubkey === pubkey && (
               <>
                 <Button onClick={() => modal?.show(<CreateListEvent />)}>
                   Invite Users
@@ -170,9 +169,37 @@ export default function Header({ event }: { event: NDKEvent }) {
                   Edit
                 </Button>
               </>
-            )}
-            {subscriptionsEnabled &&
-              !isMember &&
+            )} */}
+            <Button
+            // onClick={() =>
+            //   modal?.show(
+            //     <ConfirmModal
+            //       title={`Subscribe to ${title}`}
+            //       onConfirm={handleSendZap}
+            //       ctaBody={
+            //         <>
+            //           <span>Zap to Subscribe</span>
+            //           <HiOutlineLightningBolt className="h-4 w-4" />
+            //         </>
+            //       }
+            //     >
+            //       <p className="text-muted-forground">
+            //         {`Pay ${priceInBTC} BTC (${formatNumber(
+            //           btcToSats(priceInBTC),
+            //         )} sats) for year long access until ${formatDate(
+            //           new Date(
+            //             new Date().setFullYear(new Date().getFullYear() + 1),
+            //           ),
+            //           "MMM Do, YYYY",
+            //         )}`}
+            //       </p>
+            //     </ConfirmModal>,
+            //   )
+            // }
+            >
+              RSVP
+            </Button>
+            {/* {!isMember &&
               (hasValidPayment ? (
                 <Button variant={"outline"}>Pending Sync</Button>
               ) : (
@@ -207,7 +234,7 @@ export default function Header({ event }: { event: NDKEvent }) {
                 >
                   RSVP
                 </Button>
-              ))}
+              ))} */}
           </div>
         </div>
         <div className="flex flex-col gap-x-6 gap-y-3 pt-1 @md:pt-2 @xl:flex-row">

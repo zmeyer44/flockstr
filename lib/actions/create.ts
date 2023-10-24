@@ -27,7 +27,6 @@ export async function createEvent(
 ) {
   log("func", "createEvent");
   try {
-    alert("at pub");
     const pubkey = ndk.activeUser?.pubkey;
     if (!pubkey) {
       throw new Error("No public key provided!");
