@@ -12,7 +12,7 @@ import {
   HiChatBubbleLeftEllipsis,
   HiBookmarkSquare,
   HiNewspaper,
-  HiUserGroup,
+  HiCalendarDays,
 } from "react-icons/hi2";
 import { RiSubtractFill, RiAddFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";
@@ -41,7 +41,7 @@ export default function NewEventModal() {
           className="w-full gap-x-1"
         >
           <span>Calendar Event</span>
-          <HiChatBubbleLeftEllipsis className="h-4 w-4" />
+          <HiCalendarDays className="h-4 w-4" />
         </Button>
         <Link href={`/article/new`}>
           <Button onClick={() => modal?.hide()} className="w-full gap-x-1">

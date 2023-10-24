@@ -27,8 +27,8 @@ export async function createEvent(
 ) {
   log("func", "createEvent");
   try {
-    const pubkey = await window.nostr?.getPublicKey();
-    if (!pubkey || !window.nostr) {
+    const pubkey = ndk.activeUser?.pubkey;
+    if (!pubkey) {
       throw new Error("No public key provided!");
     }
     const eventToPublish = new NDKEvent(ndk, {
@@ -57,8 +57,8 @@ export async function createEventHandler(
   delegateSigner?: NDKPrivateKeySigner,
 ) {
   log("func", "createEventHandler");
-  const pubkey = await window.nostr?.getPublicKey();
-  if (!pubkey || !window.nostr) {
+  const pubkey = ndk.activeUser?.pubkey;
+  if (!pubkey) {
     throw new Error("No public key provided!");
   }
   const eventToPublish = new NDKEvent(ndk, {
@@ -333,7 +333,6 @@ export async function createCalendarEvent(
   } as NostrEvent);
 
   await eventToPublish.sign();
-
   let publishedEvent: NDKEvent | null = null;
   // Check if is private event
   if (isPrivate) {
