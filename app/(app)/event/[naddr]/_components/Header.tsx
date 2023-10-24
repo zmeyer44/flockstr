@@ -27,7 +27,7 @@ import { formatDate } from "@/lib/utils/dates";
 import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
 import LocationIcon from "@/components/EventIcons/LocationIcon";
 
-const EditListModal = dynamic(() => import("@/components/Modals/EditList"), {
+const EditEventModal = dynamic(() => import("@/components/Modals/EditEvent"), {
   ssr: false,
 });
 const CreateListEvent = dynamic(
@@ -164,7 +164,7 @@ export default function Header({ event }: { event: NDKEvent }) {
                 <Button
                   variant="ghost"
                   onClick={() =>
-                    modal?.show(<EditListModal listEvent={rawEvent} />)
+                    modal?.show(<EditEventModal listEvent={rawEvent} />)
                   }
                 >
                   Edit
