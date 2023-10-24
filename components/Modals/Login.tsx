@@ -110,17 +110,18 @@ export default function LoginModal() {
           Connect with extension
         </Button>
         <div className="space-y-3">
-          <Label>nsec</Label>
+          <Label>Nsec</Label>
           <Input
             value={nsec}
             onChange={(e) => setNsec(e.target.value)}
             placeholder="nsec..."
+            className="text-[16px]"
           />
           <Button
             variant={"outline"}
             onClick={() => void handleLoginNsec()}
             loading={isLoading}
-            className="w-fill"
+            className="w-full"
           >
             Connect with Nsec
           </Button>

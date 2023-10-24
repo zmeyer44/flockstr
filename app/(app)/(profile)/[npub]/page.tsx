@@ -161,8 +161,14 @@ export default function ProfilePage({
             setActiveTab={(t) => setActiveTab(t.name)}
           />
         </div>
-        {activeTab === "feed" ? <ProfileFeed pubkey={pubkey} /> : ""}
-        {activeTab === "subscriptions" ? <Subscriptions pubkey={pubkey} /> : ""}
+        <div className="px-4">
+          {activeTab === "feed" ? <ProfileFeed pubkey={pubkey} /> : ""}
+          {activeTab === "subscriptions" ? (
+            <Subscriptions pubkey={pubkey} />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
