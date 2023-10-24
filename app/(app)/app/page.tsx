@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import ExploreCreators from "./_sections/ExploreCreators";
+import UpcomingEvents from "./_sections/UpcomingEvents";
 import LongFormContentSection from "./_sections/LongFormContent";
 import BecomeACreator from "./_sections/BecomeACreator";
 
@@ -23,6 +24,7 @@ export default function Page() {
   return (
     <div className="relative space-y-6 px-5 pt-5 sm:pt-7">
       <ExploreCreators />
+      <UpcomingEvents />
       <LongFormContentSection />
       <BecomeACreator />
       <LiveStreamingSection />

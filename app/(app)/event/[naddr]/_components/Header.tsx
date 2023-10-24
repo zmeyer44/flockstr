@@ -46,14 +46,10 @@ export default function Header({ event }: { event: NDKEvent }) {
   const { ndk } = useNDK();
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
-  const [syncingUsers, setSyncingUsers] = useState(false);
   const { pubkey, tags } = event;
   const { profile } = useProfile(pubkey);
-  console.log("EVENT", tags);
 
-  const noteIds = getTagsValues("e", tags).filter(Boolean);
   const title = getTagValues("name", tags) ?? "Untitled";
-  console.log("tite", tags);
   const image =
     getTagValues("image", tags) ??
     getTagValues("picture", tags) ??
@@ -110,19 +106,7 @@ export default function Header({ event }: { event: NDKEvent }) {
       setCheckingPayment(false);
     }
   }
-  async function handleSyncUsers() {
-    if (!event || !ndk) return;
-    setSyncingUsers(true);
-    try {
-      console.log("handleSyncUsers");
-      await updateListUsersFromZaps(ndk, event.tagId(), rawEvent);
-      toast.success("Users Synced!");
-    } catch (err) {
-      console.log("error syncing users", err);
-    } finally {
-      setSyncingUsers(false);
-    }
-  }
+
   async function handleSendZap() {
     try {
       const result = await sendZap(
@@ -163,7 +147,7 @@ export default function Header({ event }: { event: NDKEvent }) {
       </div>
       <div className="space-y-1 p-3 @sm:px-3.5 @sm:pb-2 @sm:pt-5">
         <div className="flex items-start justify-between gap-x-1.5 @lg:gap-x-2.5">
-          <div className="space-y-1 @sm:space-y-2">
+          <div className="shrink-0 space-y-1 @sm:space-y-2">
             <h2 className="font-condensed text-2xl font-semibold sm:text-3xl lg:text-4xl">
               {title}
             </h2>
@@ -175,14 +159,7 @@ export default function Header({ event }: { event: NDKEvent }) {
             {!!currentUser && currentUser.pubkey === pubkey && (
               <>
                 <Button onClick={() => modal?.show(<CreateListEvent />)}>
-                  Add Event
-                </Button>
-                <Button
-                  variant={"outline"}
-                  loading={syncingUsers}
-                  onClick={() => void handleSyncUsers()}
-                >
-                  Sync users
+                  Invite Users
                 </Button>
                 <Button
                   variant="ghost"
@@ -233,30 +210,30 @@ export default function Header({ event }: { event: NDKEvent }) {
               ))}
           </div>
         </div>
-        <div className="flex pt-1 @md:pt-2">
+        <div className="flex flex-col gap-x-6 gap-y-3 pt-1 @md:pt-2 @xl:flex-row">
           <div className="flex-1">
             {!!description && (
-              <p className="line-clamp-3 text-sm text-muted-foreground md:text-sm">
+              <p className="line-clamp-3 text-sm text-muted-foreground @md:text-sm">
                 {description}
               </p>
             )}
           </div>
-          <div className="flex flex-1 justify-end">
+          <div className="flex flex-1 @xl:justify-end">
             <div className="flex flex-col gap-3 pr-3">
               {!!startDate && (
                 <div className="flex flex-1 items-center gap-3">
                   <SmallCalendarIcon date={startDate} />
                   <div className="">
-                    <p className="text-bold text-base">
+                    <p className="text-bold text-sm @xl:text-base">
                       {formatDate(startDate, "dddd, MMMM Do")}
                     </p>
                     {!!endDate ? (
-                      <p className="text-sm text-muted-foreground">{`${formatDate(
+                      <p className="text-xs text-muted-foreground @xl:text-sm">{`${formatDate(
                         startDate,
                         "h:mm a",
                       )} to ${formatDate(endDate, "h:mm a")}`}</p>
                     ) : (
-                      <p className="text-xs text-muted-foreground">{`${formatDate(
+                      <p className="text-xs text-muted-foreground @xl:text-sm">{`${formatDate(
                         startDate,
                         "h:mm a",
                       )}`}</p>
@@ -270,8 +247,10 @@ export default function Header({ event }: { event: NDKEvent }) {
                   <div className="">
                     {location.length > 2 ? (
                       <>
-                        <p className="text-bold text-base">{location[1]}</p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-bold text-sm @xl:text-base">
+                          {location[1]}
+                        </p>
+                        <p className="text-xs text-muted-foreground @xl:text-sm">
                           {location[2]}
                         </p>
                       </>
