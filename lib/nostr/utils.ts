@@ -51,8 +51,7 @@ export const getTagValues = (name: string, tags: string[][]) => {
 export const getTagAllValues = (name: string, tags: string[][]) => {
   const [itemTag] = tags.filter((tag: string[]) => tag[0] === name);
   const itemValues = itemTag || [, undefined];
-  itemValues.shift();
-  return itemValues;
+  return itemValues.map((i, idx) => (idx ? i : undefined)).filter(Boolean);
 };
 export const getTagsValues = (name: string, tags: string[][]) => {
   const itemTags = tags.filter((tag: string[]) => tag[0] === name);

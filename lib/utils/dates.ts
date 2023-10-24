@@ -80,6 +80,11 @@ export function formatDate(timestamp: Date, format?: string) {
   dayjs.extend(timezone);
   return dayjs(timestamp).format(format ?? "MMMM Do, YYYY");
 }
+export function formatDateUnix(timestamp: number, format?: string) {
+  dayjs.extend(advancedFormat);
+  dayjs.extend(timezone);
+  return dayjs(timestamp * 1000).format(format ?? "MMMM Do, YYYY");
+}
 export function convertToTimezoneDate(inputDate: Date, _timezone: string) {
   dayjs.extend(utc);
   dayjs.extend(timezone);

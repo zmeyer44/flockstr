@@ -119,10 +119,12 @@ function CommandSearch({ location, onSelect }: CommandSearchProps) {
         >
           {location ? (
             <div className="flex max-w-full items-baseline gap-x-2">
-              {location.name}
-              <span className="truncate text-xs text-muted-foreground">
-                {location.address}
-              </span>
+              <p className="line-clamp-1">
+                {location.name}
+                <span className="ml-1 text-xs text-muted-foreground">
+                  {location.address}
+                </span>
+              </p>
             </div>
           ) : (
             "Add a location..."

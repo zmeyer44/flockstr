@@ -1,29 +1,40 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Template from "./Template";
-import { Textarea } from "@/components/ui/textarea";
-import useAutosizeTextArea from "@/lib/hooks/useAutoSizeTextArea";
-import { Button } from "@/components/ui/button";
 import { HiX } from "react-icons/hi";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import {
-  addMinutesToDate,
-  convertToTimezoneDate,
-  convertToTimezone,
-} from "@/lib/utils/dates";
+import { randomId } from "@/lib/nostr";
+import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
+import { addMinutesToDate, toUnix, convertToTimezone } from "@/lib/utils/dates";
+
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { TimePicker } from "@/components/ui/time-picker";
-import { TimezoneSelector } from "../ui/timezone";
-import SmallCalendarIcon from "../EventIcons/DateIcon";
-import LocationIcon from "../EventIcons/LocationIcon";
-import LocationSearchInput from "../LocationSearch";
+import { TimezoneSelector } from "@/components/ui/timezone";
+import { Label } from "@/components/ui/label";
+
+import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
+import LocationIcon from "@/components/EventIcons/LocationIcon";
+import LocationSearchInput from "@/components/LocationSearch";
+
+import useAutosizeTextArea from "@/lib/hooks/useAutoSizeTextArea";
 import { useModal } from "@/app/_providers/modal/provider";
+import { useRouter } from "next/navigation";
+import { createEvent } from "@/lib/actions/create";
+import { useNDK } from "@/app/_providers/ndk";
+import { type NostrEvent } from "@nostr-dev-kit/ndk";
+import useCurrentUser from "@/lib/hooks/useCurrentUser";
 
 export default function CreateCalendarEventModal() {
   const modal = useModal();
   const now = new Date(new Date().setHours(12, 0, 0, 0));
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [error, setError] = useState("");
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date>(now);
   const startTime = `${
     startDate?.getHours().toLocaleString().length === 1
@@ -34,7 +45,7 @@ export default function CreateCalendarEventModal() {
       ? "0" + startDate?.getMinutes().toLocaleString()
       : startDate?.getMinutes()
   }`;
-  const [endDate, setEndDate] = useState<Date | undefined>(
+  const [endDate, setEndDate] = useState<Date>(
     new Date(new Date().setHours(13)),
   );
   const endTime = `${
@@ -54,6 +65,65 @@ export default function CreateCalendarEventModal() {
     name: string;
     coordinates: { lat: number; lng: number };
   }>();
+  const { ndk } = useNDK();
+  const { currentUser } = useCurrentUser();
+  const router = useRouter();
+
+  async function handleSubmit() {
+    console.log("CALLED", ndk, currentUser);
+    if (!ndk || !currentUser) return;
+    setIsLoading(true);
+    if (!title) {
+      setError("Please add a title");
+      return;
+    }
+    try {
+      const random = randomId();
+
+      const tags: string[][] = [
+        ["d", random],
+        ["name", title],
+        ["description", description],
+        ["start", toUnix(convertToTimezone(startDate, timezone)).toString()],
+        ["end", toUnix(convertToTimezone(endDate, timezone)).toString()],
+        ["start_tzid", timezone],
+      ];
+      if (location) {
+        tags.push([
+          "location",
+          `${location.name}, ${location.address}`,
+          location.name,
+          location.address,
+        ]);
+        tags.push([
+          "address",
+          `${location.name}, ${location.address}`,
+          location.name,
+          location.address,
+        ]);
+      }
+      console.log("Adding ", tags);
+      const preEvent = {
+        content: description,
+        pubkey: currentUser.pubkey,
+        created_at: unixTimeNowInSeconds(),
+        tags: tags,
+        kind: 31923,
+      };
+      const event = await createEvent(ndk, preEvent);
+      if (event) {
+        toast.success("Event Created!");
+        modal?.hide();
+        router.push(`/event/${event.encode()}`);
+      } else {
+        toast.error("An error occured");
+      }
+    } catch (err) {
+      console.log("err", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -99,7 +169,7 @@ export default function CreateCalendarEventModal() {
             </div>
             <div className="max-w-[300px] flex-1 divide-y overflow-hidden rounded-md bg-muted">
               <div className="flex justify-between p-0.5 px-2 pl-3">
-                <div className="flex w-[70px] shrink-0 items-center">Start</div>
+                <div className="flex w-[50px] shrink-0 items-center">Start</div>
                 <div className="flex-1">
                   <div className="flex max-w-full bg-secondary">
                     <DatePicker
@@ -138,7 +208,7 @@ export default function CreateCalendarEventModal() {
                 </div>
               </div>
               <div className="flex justify-between p-0.5 px-2 pl-3">
-                <div className="flex w-[70px] shrink-0 items-center">End</div>
+                <div className="flex w-[50px] shrink-0 items-center">End</div>
                 <div className="flex-1">
                   <div className="flex max-w-full bg-secondary">
                     <DatePicker
@@ -207,6 +277,24 @@ export default function CreateCalendarEventModal() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="w-full">
+            <Label className="text-muted-foreground">Event details</Label>
+            <Textarea
+              className="mt-1"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Some into about this event..."
+            />
+          </div>
+          <div className="flex">
+            <Button
+              onClick={handleSubmit}
+              loading={isLoading}
+              className="w-full"
+            >
+              Submit
+            </Button>
           </div>
         </div>
       </div>
