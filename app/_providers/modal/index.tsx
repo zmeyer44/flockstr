@@ -81,12 +81,14 @@ export default function Modal({
                     }
                   }}
                 >
-                  <div className="center grow overflow-hidden">{children}</div>
+                  <div className="center max-h-[90vh] grow overflow-hidden">
+                    {children}
+                  </div>
                 </motion.div>
               </FocusTrap>
               <motion.div
                 key="desktop-backdrop"
-                className="z-overlay fixed inset-0 bg-background/40 backdrop-blur"
+                className="fixed inset-0 z-overlay bg-background/40 backdrop-blur"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
