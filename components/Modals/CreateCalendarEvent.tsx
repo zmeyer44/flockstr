@@ -176,7 +176,7 @@ export default function CreateCalendarEventModal() {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Event Name"
           className={cn(
-            "resize-none break-words border-0 bg-transparent p-0 !text-3xl font-bold text-foreground shadow-none outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80 focus-visible:ring-0",
+            "invisible-input !text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80",
             title === "" && "max-h-[60px]",
           )}
         />

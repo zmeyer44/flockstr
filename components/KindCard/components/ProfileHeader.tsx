@@ -24,7 +24,7 @@ export default function ProfileHeader({ pubkey, locked }: ProfileHeaderProps) {
       {profile?.displayName || profile?.name ? (
         <div className="flex flex-col gap-0">
           <div className="flex items-center  gap-1">
-            <span className="text-sm font-medium text-foreground group-hover:underline">
+            <span className="line-clamp-1 text-sm font-medium text-foreground group-hover:underline">
               {getNameToShow({ npub, profile })}
             </span>
             {!!profile?.nip05 && (
@@ -34,7 +34,7 @@ export default function ProfileHeader({ pubkey, locked }: ProfileHeaderProps) {
           </div>
           <div className="flex items-center gap-1">
             {!!profile.nip05 && (
-              <span className="text-[11px] text-muted-foreground">
+              <span className="line-clamp-1 text-[11px] text-muted-foreground">
                 {profile.nip05}
               </span>
             )}
@@ -42,7 +42,7 @@ export default function ProfileHeader({ pubkey, locked }: ProfileHeaderProps) {
         </div>
       ) : (
         <div className="flex items-center  gap-1">
-          <span className="text-sm uppercase text-foreground group-hover:underline">
+          <span className="line-clamp-1 text-sm uppercase text-foreground group-hover:underline">
             {getNameToShow({ npub, profile })}
           </span>
           {!!profile?.nip05 && (

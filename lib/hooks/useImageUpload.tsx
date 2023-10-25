@@ -1,7 +1,11 @@
 "use client";
 import { useState, ReactNode, useRef } from "react";
+import Image from "next/image";
 import { z } from "zod";
 import { createZodFetcher } from "zod-fetch";
+import { cn } from "@/lib/utils";
+import Spinner from "@/components/spinner";
+import { HiX } from "react-icons/hi";
 
 const fetchWithZod = createZodFetcher();
 
@@ -92,6 +96,40 @@ const useImageUpload = (folderName?: string) => {
     );
   };
 
+  const ImagePreview = ({ className }: { className?: string }) => {
+    if (!imagePreview) return null;
+    return (
+      <div className={cn("relative overflow-hidden rounded-xl", className)}>
+        <div className="">
+          <Image
+            alt="Image"
+            height="288"
+            width="288"
+            src={imagePreview}
+            className={cn(
+              "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
+              status === "uploading" && "grayscale",
+              status === "error" && "blur-xl",
+            )}
+          />
+        </div>
+        {status === "uploading" && (
+          <button className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 text-background hover:bg-opacity-100">
+            <Spinner />
+          </button>
+        )}
+        {status === "success" && (
+          <button
+            onClick={clear}
+            className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 hover:bg-opacity-100"
+          >
+            <HiX className="block h-4 w-4 text-background" aria-hidden="true" />
+          </button>
+        )}
+      </div>
+    );
+  };
+
   const clear = () => {
     setStatus("empty");
     setImageUrl(null);
@@ -103,6 +141,7 @@ const useImageUpload = (folderName?: string) => {
     status,
     imageUrl,
     ImageUploadButton,
+    ImagePreview,
     clear,
   };
 };

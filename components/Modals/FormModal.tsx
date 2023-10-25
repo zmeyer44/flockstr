@@ -131,7 +131,7 @@ export default function FormModal<TSchema extends FieldValues>({
   });
   const { watch, setValue } = form;
   return (
-    <Template title={title} className="md:max-w-[400px]">
+    <Template title={title} className="md:max-w-[450px]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {fields.map(

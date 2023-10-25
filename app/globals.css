@@ -122,6 +122,9 @@
   .center {
     @apply flex items-center justify-center;
   }
+  .invisible-input {
+    @apply resize-none break-words !rounded-none !border-0 !bg-transparent !p-0 text-foreground !shadow-none !outline-none placeholder:text-muted/20 focus-visible:!ring-0;
+  }
 }
 input[type="time"]::-webkit-calendar-picker-indicator {
   background: none;

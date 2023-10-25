@@ -17,6 +17,7 @@ import LocationPreview from "@/components/LocationPreview";
 import HostsContainer from "./_components/HostsContainer";
 import LocationContainer from "./_components/LocationContainer";
 import AnnouncementsContainer from "./_components/AnnouncementsContainer";
+import DiscussionContainer from "./_components/DiscussionContainer";
 import AttendeesContainer from "./_components/AttendeesContainer";
 
 export default function EventPage({
@@ -50,7 +51,7 @@ export default function EventPage({
   }
   const { tags } = event;
   const eventReference = event.encode();
-  const noteIds = getTagsValues("e", tags).filter(Boolean);
+
   const location = getTagAllValues("location", tags)[0]
     ? getTagAllValues("location", tags)
     : getTagAllValues("address", tags);
@@ -77,8 +78,12 @@ export default function EventPage({
           <HostsContainer hosts={hosts} />
           <AttendeesContainer attendees={attendees} />
         </div>
-        <div className="max-w-2xl grow">
-          <AnnouncementsContainer eventReference={eventReference} />
+        <div className="max-w-2xl grow space-y-4">
+          <AnnouncementsContainer
+            eventReference={eventReference}
+            hosts={hosts}
+          />
+          <DiscussionContainer eventReference={eventReference} />
         </div>
       </div>
     </div>
