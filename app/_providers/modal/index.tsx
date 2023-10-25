@@ -81,9 +81,7 @@ export default function Modal({
                     }
                   }}
                 >
-                  <div className="center max-h-[90vh] grow overflow-hidden">
-                    {children}
-                  </div>
+                  <div className="center grow overflow-hidden">{children}</div>
                 </motion.div>
               </FocusTrap>
               <motion.div

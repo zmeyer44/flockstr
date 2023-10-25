@@ -64,13 +64,13 @@ export default function Leaflet({
           <div className="-mr-1 h-1 w-6 rounded-full bg-muted transition-all group-active:rotate-12" />
           <div className="h-1 w-6 rounded-full bg-muted transition-all group-active:-rotate-12" />
         </div>
-        <div className="bottom-tabs scrollbar-muted-foreground max-h-[calc(95vh_-_28px)] w-full overflow-y-auto scrollbar-track-background">
+        <div className="bottom-tabs scrollbar-muted-foreground max-h-[calc(95vh_-_28px)] w-full overflow-y-auto pb-5 scrollbar-track-background">
           {children}
         </div>
       </motion.div>
       <motion.div
         key="leaflet-backdrop"
-        className="z-overlay fixed inset-0 bg-background/40 backdrop-blur"
+        className="fixed inset-0 z-overlay bg-background/40 backdrop-blur"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
