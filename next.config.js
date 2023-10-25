@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/.well-known/nostr.json",
-        destination: "/api/well-known",
+        destination: "/api/well-known/nostr",
       },
     ];
   },
