@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export default function BottomNav() {
   const navigationItems = [
     {
-      href: "",
+      href: "/app",
       name: "home",
       icon: RiHome6Fill,
       current: true,
