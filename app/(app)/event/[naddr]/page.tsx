@@ -1,17 +1,23 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { nip19 } from "nostr-tools";
 import useEvents from "@/lib/hooks/useEvents";
 import Spinner from "@/components/spinner";
 import {
   getTagAllValues,
   getTagValues,
+  getTagsAllValues,
   getTagsValues,
 } from "@/lib/nostr/utils";
-import Feed from "@/containers/Feed";
+
 import Header from "./_components/Header";
 import LocationPreview from "@/components/LocationPreview";
+import HostsContainer from "./_components/HostsContainer";
+import LocationContainer from "./_components/LocationContainer";
+import AnnouncementsContainer from "./_components/AnnouncementsContainer";
+import AttendeesContainer from "./_components/AttendeesContainer";
 
 export default function EventPage({
   params: { naddr },
@@ -42,35 +48,37 @@ export default function EventPage({
       </div>
     );
   }
-  const noteIds = getTagsValues("e", event.tags).filter(Boolean);
-  const location = getTagAllValues("location", event.tags)[0]
-    ? getTagAllValues("location", event.tags)
-    : getTagAllValues("address", event.tags);
-  const geohash = getTagValues("g", event.tags);
+  const { tags } = event;
+  const eventReference = event.encode();
+  const noteIds = getTagsValues("e", tags).filter(Boolean);
+  const location = getTagAllValues("location", tags)[0]
+    ? getTagAllValues("location", tags)
+    : getTagAllValues("address", tags);
+  const geohash = getTagValues("g", tags);
+  const hosts = getTagsAllValues("p", tags)
+    .filter(([pubkey, relay, role]) => role === "host")
+    .map(([pubkey]) => pubkey)
+    .filter(Boolean);
+  const attendees = getTagsAllValues("p", tags)
+    .map(([pubkey]) => pubkey)
+    .filter(Boolean);
 
   return (
-    <div className="relative mx-auto max-w-5xl space-y-4 p-2 sm:p-4">
+    <div className="relative mx-auto max-w-5xl space-y-4 p-2 @container sm:p-4">
       <Header event={event} />
-      <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
-        <div className="flex flex-col gap-3 @xl:flex-row-reverse">
+      <div className="flex flex-col gap-4 @2xl:flex-row-reverse">
+        <div className="flex min-w-[250px] flex-1 flex-col gap-4">
           {!!location && !!geohash && (
-            <LocationPreview
-              geohash={geohash}
+            <LocationContainer
               address={location[0] as string}
+              geohash={geohash}
             />
           )}
-          <div className="flex-1 space-y-3 overflow-hidden rounded-[0.5rem] p-0">
-            <Feed
-              filter={{
-                ids: noteIds,
-              }}
-              empty={() => (
-                <div className="py-5 text-center text-muted-foreground">
-                  <p>No Announcements yet</p>
-                </div>
-              )}
-            />
-          </div>
+          <HostsContainer hosts={hosts} />
+          <AttendeesContainer attendees={attendees} />
+        </div>
+        <div className="max-w-2xl grow">
+          <AnnouncementsContainer eventReference={eventReference} />
         </div>
       </div>
     </div>

@@ -98,6 +98,7 @@ export default function CreateCalendarEventModal() {
         ["start", toUnix(convertToTimezone(startDate, timezone)).toString()],
         ["end", toUnix(convertToTimezone(endDate, timezone)).toString()],
         ["start_tzid", timezone],
+        ["p", currentUser.pubkey, "", "host"],
       ];
 
       if (location) {

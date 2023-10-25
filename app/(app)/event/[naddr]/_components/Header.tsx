@@ -27,7 +27,7 @@ import { formatDate } from "@/lib/utils/dates";
 import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
 import LocationIcon from "@/components/EventIcons/LocationIcon";
 
-const EditEventModal = dynamic(() => import("@/components/Modals/EditEvent"), {
+const RSVPButton = dynamic(() => import("./RSVPButton"), {
   ssr: false,
 });
 const CreateListEvent = dynamic(
@@ -48,7 +48,7 @@ export default function Header({ event }: { event: NDKEvent }) {
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const { pubkey, tags } = event;
   const { profile } = useProfile(pubkey);
-
+  const eventReference = event.encode();
   const title = getTagValues("name", tags) ?? "Untitled";
   const image =
     getTagValues("image", tags) ??
@@ -170,35 +170,7 @@ export default function Header({ event }: { event: NDKEvent }) {
                 </Button>
               </>
             )} */}
-            <Button
-            // onClick={() =>
-            //   modal?.show(
-            //     <ConfirmModal
-            //       title={`Subscribe to ${title}`}
-            //       onConfirm={handleSendZap}
-            //       ctaBody={
-            //         <>
-            //           <span>Zap to Subscribe</span>
-            //           <HiOutlineLightningBolt className="h-4 w-4" />
-            //         </>
-            //       }
-            //     >
-            //       <p className="text-muted-forground">
-            //         {`Pay ${priceInBTC} BTC (${formatNumber(
-            //           btcToSats(priceInBTC),
-            //         )} sats) for year long access until ${formatDate(
-            //           new Date(
-            //             new Date().setFullYear(new Date().getFullYear() + 1),
-            //           ),
-            //           "MMM Do, YYYY",
-            //         )}`}
-            //       </p>
-            //     </ConfirmModal>,
-            //   )
-            // }
-            >
-              RSVP
-            </Button>
+            <RSVPButton eventReference={eventReference} />
             {/* {!isMember &&
               (hasValidPayment ? (
                 <Button variant={"outline"}>Pending Sync</Button>
@@ -240,7 +212,7 @@ export default function Header({ event }: { event: NDKEvent }) {
         <div className="flex flex-col gap-x-6 gap-y-3 pt-1 @md:pt-2 @xl:flex-row">
           <div className="flex-1">
             {!!description && (
-              <p className="line-clamp-3 text-sm text-muted-foreground @md:text-sm">
+              <p className="text-sm text-muted-foreground @md:text-sm">
                 {description}
               </p>
             )}
