@@ -60,20 +60,32 @@ export function relativeTime(timestamp: Date) {
   dayjs.updateLocale("en", {
     relativeTime: {
       future: "in %s",
-      past: "%s ago",
-      s: "%s seconds",
-      m: "1 min",
-      mm: "%d mins",
-      h: "1 hour",
+      past: "now",
+      s: "now",
+      m: "a minute",
+      mm: "%d minutes",
+      h: "an hour",
       hh: "%d hours",
-      d: "1 day",
+      d: "a day",
       dd: "%d days",
-      y: "1 year",
+      M: "a month",
+      MM: "%d months",
+      y: "a year",
       yy: "%d years",
     },
   });
   dayjs.extend(relative, config);
   return dayjs(timestamp).fromNow();
+}
+export function daysOffset(targetDate: Date) {
+  const currentDate = new Date();
+
+  // Calculate the time difference in milliseconds
+  const timeDifference = targetDate.getTime() - currentDate.getTime();
+  // Convert the time difference to days
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  return daysDifference;
 }
 export function formatDate(timestamp: Date, format?: string) {
   dayjs.extend(advancedFormat);
@@ -92,6 +104,9 @@ export function convertToTimezoneDate(inputDate: Date, _timezone: string) {
   return dayjs(inputDate).tz(_timezone).toDate();
 }
 
+export function fromUnix(unix: number) {
+  return new Date(unix * 1000);
+}
 export function addMinutesToDate(inputDate: Date, minutesToAdd: number) {
   if (!(inputDate instanceof Date)) {
     throw new Error("Invalid date input");
@@ -111,21 +126,6 @@ export function addMinutesToDate(inputDate: Date, minutesToAdd: number) {
 
 export function toUnix(inputDate: Date) {
   return dayjs(inputDate).unix();
-}
-function timezoneDiff(ianatz: string) {
-  const date = new Date();
-  // suppose the date is 12:00 UTC
-  var invdate = new Date(
-    date.toLocaleString("en-US", {
-      timeZone: ianatz,
-    }),
-  );
-
-  // then invdate will be 07:00 in Toronto
-  // and the diff is 5 hours
-  var diff = date.getTime() - invdate.getTime();
-
-  return diff;
 }
 
 export function convertToTimezone(inputDate: Date, targetTimezone: string) {

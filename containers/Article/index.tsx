@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { RiCloseFill } from "react-icons/ri";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { useRouter } from "next/navigation";
-import { formatDate } from "@/lib/utils/dates";
+import { formatDate, fromUnix } from "@/lib/utils/dates";
 import Actions from "./Actions";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
@@ -67,7 +67,7 @@ export default function ArticlePage({ event }: ArticleProps) {
       </div>
       <div className="h-[20px] w-full"></div>
       <div className="vmax-h-[calc(100vh_-_100px)] overflow-y-auto">
-        <article className="prose dark:prose-invert prose-zinc relative mx-auto max-w-3xl pt-7">
+        <article className="prose prose-zinc relative mx-auto max-w-3xl pt-7 dark:prose-invert">
           <div className="">
             <div className="flex items-center justify-between gap-1 lg:mb-2">
               {tags.map((t) => (
@@ -79,7 +79,7 @@ export default function ArticlePage({ event }: ArticleProps) {
               <div className="center text-xs text-muted-foreground/50">
                 {!!createdAt && (
                   <span className="mr-2.5">
-                    {formatDate(new Date(createdAt * 1000), "MMMM Do, YYYY")}
+                    {formatDate(fromUnix(createdAt), "MMMM Do, YYYY")}
                   </span>
                 )}
                 <span className="h-3 w-[1px] rounded-full bg-muted-foreground/50"></span>

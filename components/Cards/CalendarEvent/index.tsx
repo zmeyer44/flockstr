@@ -129,7 +129,7 @@ export default function CalendarEventCard({
     </div>
   );
 }
-export function CardLoading({ className }: { className: string }) {
+export function CardLoading({ className }: { className?: string }) {
   return (
     <div
       className={cn(

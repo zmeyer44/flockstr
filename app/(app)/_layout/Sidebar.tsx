@@ -22,6 +22,7 @@ import {
 import dynamic from "next/dynamic";
 import { useModal } from "@/app/_providers/modal/provider";
 import { IconType } from "react-icons";
+import { usePathname } from "next/navigation";
 
 const ZapPickerModal = dynamic(() => import("@/components/Modals/ZapPicker"), {
   ssr: false,
@@ -42,7 +43,6 @@ type NavigationElement = {
   name: string;
   label: string;
   icon: IconType;
-  current: boolean;
   active: boolean;
 } & (NavigationLink | NavigationButton);
 const flockstrEvent = {
@@ -61,6 +61,7 @@ const flockstrEvent = {
 
 export default function Sidebar() {
   const modal = useModal();
+  const pathname = usePathname();
 
   const navigation: NavigationElement[] = [
     {
@@ -69,16 +70,14 @@ export default function Sidebar() {
       label: "Home",
       icon: RiHome6Fill,
       type: "link",
-      current: true,
       active: true,
     },
     {
-      href: "",
+      href: "/explore",
       name: "explore",
       label: "Explore",
       icon: RiCompassLine,
       type: "link",
-      current: false,
       active: false,
     },
     {
@@ -87,7 +86,6 @@ export default function Sidebar() {
       label: "Messages",
       icon: RiQuestionAnswerLine,
       type: "link",
-      current: false,
       active: false,
     },
     {
@@ -96,13 +94,12 @@ export default function Sidebar() {
       label: "Zap Flockstr",
       icon: HiOutlineLightningBolt,
       type: "button",
-      current: false,
       active: true,
     },
   ];
   return (
     <nav className="z-header- hidden h-[calc(100svh_-_var(--header-height))] w-[var(--sidebar-closed-width)] flex-col sm:flex">
-      <div className="fixed bottom-0 flex h-[calc(100svh_-_var(--header-height))] w-[var(--sidebar-closed-width)] flex-col border-r xl:w-[var(--sidebar-open-width)]">
+      <div className="fixed bottom-0 flex h-[calc(100svh_-_var(--header-height))] w-[var(--sidebar-closed-width)]  flex-col border-r xl:w-[var(--sidebar-open-width)]">
         <div className="flex flex-1 flex-col">
           <div className="flex flex-col items-stretch gap-y-2 p-4">
             {navigation.map((item) => {
@@ -114,7 +111,7 @@ export default function Sidebar() {
                       href={item.href}
                       className={cn(
                         "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                        item.current
+                        pathname === item.href
                           ? "text-foreground"
                           : "text-muted-foreground hover:text-foreground",
                       )}
@@ -136,7 +133,7 @@ export default function Sidebar() {
                           <div
                             className={cn(
                               "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                              item.current
+                              false
                                 ? "text-foreground"
                                 : "text-muted-foreground hover:text-foreground",
                             )}
@@ -165,7 +162,7 @@ export default function Sidebar() {
                       onClick={item.onClick}
                       className={cn(
                         "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                        item.current
+                        false
                           ? "text-foreground"
                           : "text-muted-foreground hover:text-foreground",
                       )}
@@ -187,7 +184,7 @@ export default function Sidebar() {
                           <div
                             className={cn(
                               "center group relative min-h-[48px] min-w-[48px] rounded-lg hover:bg-muted xl:justify-start xl:gap-x-4 xl:p-2.5",
-                              item.current
+                              false
                                 ? "text-foreground"
                                 : "text-muted-foreground hover:text-foreground",
                             )}
