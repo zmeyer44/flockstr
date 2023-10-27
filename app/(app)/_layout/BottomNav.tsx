@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import {
-  RiHome6Fill,
+  RiCalendarEventFill,
   RiCompass3Fill,
   RiQuestionAnswerFill,
 } from "react-icons/ri";
@@ -12,14 +12,14 @@ export default function BottomNav() {
   const pathname = usePathname();
   const navigationItems = [
     {
-      href: "/app",
-      name: "home",
-      icon: RiHome6Fill,
-    },
-    {
       href: "/explore",
       name: "explore",
       icon: RiCompass3Fill,
+    },
+    {
+      href: "/events",
+      name: "events",
+      icon: RiCalendarEventFill,
     },
     {
       href: "",

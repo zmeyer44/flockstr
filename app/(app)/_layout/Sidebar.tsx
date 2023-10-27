@@ -8,6 +8,7 @@ import {
   RiQuestionAnswerLine,
   RiAddFill,
   RiSettings4Fill,
+  RiCalendarEventFill,
   RiSettings4Line,
 } from "react-icons/ri";
 import { HiOutlineLightningBolt } from "react-icons/hi";
@@ -65,18 +66,18 @@ export default function Sidebar() {
 
   const navigation: NavigationElement[] = [
     {
-      href: "/app",
-      name: "home",
-      label: "Home",
-      icon: RiHome6Fill,
-      type: "link",
-      active: true,
-    },
-    {
       href: "/explore",
       name: "explore",
       label: "Explore",
       icon: RiCompassLine,
+      type: "link",
+      active: true,
+    },
+    {
+      href: "/events",
+      name: "events",
+      label: "Events",
+      icon: RiCalendarEventFill,
       type: "link",
       active: true,
     },

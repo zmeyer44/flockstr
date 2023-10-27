@@ -17,31 +17,31 @@ export default function ModalLayout(props: {
     const kind = data.kind;
     if (kind === 30023) {
       return (
-        <div className="z-overlay fixed inset-y-[10px] left-[10px] right-[10px] overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
+        <div className="fixed inset-y-[10px] left-[10px] right-[10px] z-overlay overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
           {props[30023]}
         </div>
       );
     } else if (kind === 30311) {
       return (
-        <div className="z-overlay fixed inset-y-[10px] left-[10px] right-[10px] overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
+        <div className="fixed inset-y-[10px] left-[10px] right-[10px] z-overlay overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
           {props[30311]}
         </div>
       );
     }
   } else if (type === "note") {
     return (
-      <div className="z-overlay fixed inset-y-[10px] left-[10px] right-[10px] overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
+      <div className="fixed inset-y-[10px] left-[10px] right-[10px] z-overlay overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
         {props[1]}
       </div>
     );
   } else if (type === "nevent") {
     return (
-      <div className="z-overlay fixed inset-y-[10px] left-[10px] right-[10px] overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
+      <div className="fixed inset-y-[10px] left-[10px] right-[10px] z-overlay overflow-hidden overflow-y-auto rounded-lg border bg-background px-4 sm:left-[calc(10px_+_var(--sidebar-closed-width))] xl:left-[calc(10px_+_var(--sidebar-open-width))]">
         {props.event}
       </div>
     );
   } else if (type === "npub") {
     return redirect(`/${key}`);
   }
-  return redirect(`/app`);
+  return redirect(`/explore`);
 }

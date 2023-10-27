@@ -64,7 +64,7 @@ export default function LandingPage() {
                   your following, no-longer dependent on an external company.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">
-                  <Link href="/app">
+                  <Link href="/explore">
                     <Button size={"lg"} className="rounded-sm">
                       Start Exploring
                     </Button>

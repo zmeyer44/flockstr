@@ -37,7 +37,7 @@ export default function Layout(props: {
             if (sessionStorage.getItem("RichHistory")) {
               void router.back();
             } else {
-              void router.push("/app");
+              void router.push("/explore");
             }
           }}
           size="icon"

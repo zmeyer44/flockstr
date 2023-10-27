@@ -55,7 +55,7 @@ export default function ArticlePage({ event }: ArticleProps) {
             if (sessionStorage.getItem("RichHistory")) {
               void router.back();
             } else {
-              void router.push("/app");
+              void router.push("/explore");
             }
           }}
           size="icon"

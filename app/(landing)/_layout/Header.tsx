@@ -7,10 +7,10 @@ import Logo from "@/assets/Logo";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigation = [
-    { name: "home", label: "Home", href: "/" },
-    { name: "explore", label: "Explore", href: "/app" },
-    { name: "about", label: "About", href: "/app" },
-    { name: "contact", label: "Contact", href: "/app" },
+    { name: "explore", label: "Explore", href: "/explore" },
+    { name: "home", label: "Events", href: "/events" },
+    { name: "about", label: "About", href: "/explore" },
+    { name: "contact", label: "Contact", href: "/explore" },
   ];
   return (
     <header
@@ -20,7 +20,7 @@ export default function Header() {
       )}
     >
       <div className="center hidden min-h-[var(--header-height)] lg:flex">
-        <ul className="font-condensed flex w-full max-w-2xl items-center justify-between text-base font-semibold text-zinc-800 hover:text-zinc-600">
+        <ul className="flex w-full max-w-2xl items-center justify-between font-condensed text-base font-semibold text-zinc-800 hover:text-zinc-600">
           {navigation.slice(0, 2).map((item) => (
             <li key={item.name} className="">
               <Link href={item.href} className="flex p-1">

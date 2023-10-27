@@ -17,7 +17,7 @@ export default function LandingPage() {
               again.
             </p>
             <div className="center lg:justify-start">
-              <Link href="/app">
+              <Link href="/explore">
                 <Button size={"lg"}>Get Started</Button>
               </Link>
             </div>
@@ -27,7 +27,7 @@ export default function LandingPage() {
             <span className="text-sm uppercase tracking-wider text-zinc-400">
               About nostr
             </span>
-            <div className="font-condensed space-y-4 font-medium">
+            <div className="space-y-4 font-condensed font-medium">
               <p className="text-sm text-zinc-300">
                 Nostr is a simple, open protocol for decentralizing how
                 infomration is stored and retreived on the web.
@@ -141,7 +141,7 @@ export default function LandingPage() {
                     Let's take a look.
                   </h2>
                   <div className="mt-6 text-base">
-                    <Link href="/app" className="font-semibold text-white">
+                    <Link href="/explore" className="font-semibold text-white">
                       Explore Now
                       <span aria-hidden="true"> &rarr;</span>
                     </Link>

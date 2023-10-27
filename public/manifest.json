@@ -3,7 +3,7 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/app",
+  "start_url": "/explore",
   "name": "Flockstr",
   "short_name": "Flockstr",
   "icons": [
