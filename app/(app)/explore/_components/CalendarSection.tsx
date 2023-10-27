@@ -1,13 +1,19 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
-import { CardLoading } from "@/components/Cards/CalendarEvent";
-import { formatDate, fromUnix, relativeTime } from "@/lib/utils/dates";
+import {
+  formatDate,
+  fromUnix,
+  relativeTime,
+  addMinutesToDate,
+} from "@/lib/utils/dates";
 
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
-import { DUMMY_1 } from "@/constants";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagValues } from "@/lib/nostr/utils";
-import LargeFeedCard from "@/components/Cards/CalendarEvent/LargeFeedCard";
+import LargeFeedCard, {
+  LoadingCard,
+} from "@/components/Cards/CalendarEvent/LargeFeedCard";
+
 import { cn } from "@/lib/utils";
 type CalendarSectionProps = {
   events: NDKEvent[];
@@ -39,6 +45,32 @@ export default function CalendarSection({ events }: CalendarSectionProps) {
         {events.map((e) => (
           <LargeFeedCard key={e.id} event={e} />
         ))}
+      </div>
+    </div>
+  );
+}
+export function CalendarSectionLoading() {
+  const startDate = addMinutesToDate(new Date(), 60);
+
+  return (
+    <div className="relative flex w-full items-start gap-x-3 @container">
+      {/* Date Indicator */}
+      <div className="sticky top-[calc(var(--header-height)_+_28px)] hidden w-[230px] shrink-0 md:block">
+        <CalendarIcon date={startDate} />
+      </div>
+      {/* Date Indicator Mobile */}
+      <div className="absolute inset-y-0 right-0 z-50 md:hidden">
+        <div className="sticky top-[calc(var(--header-height)_+_14px)] shrink-0">
+          <CalendarIconOpacity date={startDate} />
+        </div>
+      </div>
+
+      {/* Events */}
+      <div className="flex-1 space-y-4 max-md:pt-[60px]">
+        <LoadingCard />
+        <LoadingCard />
+        <LoadingCard />
+        <LoadingCard />
       </div>
     </div>
   );

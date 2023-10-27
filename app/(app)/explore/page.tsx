@@ -1,17 +1,29 @@
 "use client";
 import { NDKEvent, type NDKKind } from "@nostr-dev-kit/ndk";
-import CalendarSection from "./_components/CalendarSection";
+import CalendarSection, {
+  CalendarSectionLoading,
+} from "./_components/CalendarSection";
 import useEvents from "@/lib/hooks/useEvents";
 import { getTagValues } from "@/lib/nostr/utils";
 import { fromUnix, daysOffset } from "@/lib/utils/dates";
 export default function Page() {
-  const { events } = useEvents({
+  const { events, isLoading } = useEvents({
     filter: {
       kinds: [31923 as NDKKind],
       limit: 100,
     },
   });
   const eventsByDay = groupEventsByDay(events);
+
+  if (isLoading && !eventsByDay.length) {
+    return (
+      <div className="relative flex-col px-5 pt-5 sm:pt-7">
+        <div className="mx-auto max-w-[900px] space-y-4">
+          <CalendarSectionLoading />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex-col px-5 pt-5 sm:pt-7">
