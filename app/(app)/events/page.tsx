@@ -26,7 +26,12 @@ export default function Page() {
   }
 
   return (
-    <div className="relative flex-col px-5 pt-5 sm:pt-7">
+    <div className="relative flex-col space-y-6 px-5 pt-5 sm:pt-7">
+      <div className="flex items-center justify-between px-0 sm:px-5">
+        <h2 className="font-condensed text-2xl font-bold sm:text-3xl">
+          Upcoming Events
+        </h2>
+      </div>
       <div className="mx-auto max-w-[900px] space-y-4">
         {eventsByDay.map((e) => (
           <CalendarSection events={e} />
@@ -51,8 +56,7 @@ function groupEventsByDay(events: NDKEvent[]) {
     }
   }
   const groupedArray = Object.entries(eventDays)
-    .sort(([aKey], [bKey, test]) => {
-      console.log("test", test);
+    .sort(([aKey], [bKey]) => {
       const aDay = parseInt(aKey);
 
       const bDay = parseInt(bKey);
@@ -64,7 +68,5 @@ function groupEventsByDay(events: NDKEvent[]) {
       return 0;
     })
     .map(([_, events]) => events);
-  console.log("object", eventDays);
-  console.log("returing", groupedArray);
   return groupedArray;
 }

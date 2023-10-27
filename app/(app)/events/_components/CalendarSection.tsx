@@ -124,7 +124,7 @@ function CalendarIconOpacity({ date }: { date: Date }) {
     };
   }, []);
   return (
-    <div className={cn(top && "opacity-50")}>
+    <div className={cn(top && "opacity-80")}>
       <CalendarIcon date={date} />
       <div ref={ref}></div>
     </div>

@@ -15,6 +15,7 @@ import AvatarStack from "@/components/ProfileContainers/AvatarStack";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagValues, getTagAllValues } from "@/lib/nostr/utils";
 import { HiOutlineMapPin, HiOutlineUserCircle } from "react-icons/hi2";
+import { RxClock, RxCalendar } from "react-icons/rx";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
@@ -25,7 +26,15 @@ type LargeFeedCardProps = {
 export default function LargeFeedCard({ event }: LargeFeedCardProps) {
   const { tags, pubkey, content } = event;
   const image = getTagValues("image", tags);
+  const location =
+    getTagValues("location", tags) ?? getTagValues("address", tags);
   const users = getTagAllValues("p", tags);
+  const startDate = getTagValues("start", tags)
+    ? new Date(parseInt(getTagValues("start", tags) as string) * 1000)
+    : null;
+  const endDate = getTagValues("end", tags)
+    ? new Date(parseInt(getTagValues("end", tags) as string) * 1000)
+    : null;
 
   return (
     <Card className="relative flex justify-between gap-x-4 rounded-[1rem] bg-muted p-[0.5rem]">
@@ -45,8 +54,8 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
         </div>
         <div className="flex items-center gap-x-4 pl-2">
           {!!users.length && (
-            <div className="flex shrink-0 items-center gap-x-2">
-              <HiOutlineUserCircle className="h-5 w-5 text-primary" />
+            <div className="flex shrink-0 items-center gap-x-1.5">
+              <HiOutlineUserCircle className="h-4 w-4 text-primary" />
               <AvatarStack
                 pubkeys={users.slice(0, 4)}
                 className="z-0 h-6 w-6 text-[9px]"
@@ -54,13 +63,28 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
               />
             </div>
           )}
-          <div className="flex items-center gap-x-2">
-            <HiOutlineMapPin className="h-5 w-5 shrink-0 text-primary" />
-            <p className="line-clamp-1 text-xs text-muted-foreground">
-              124 Main street, first ave, NY NY, 118034. Across the street from
-              too long
-            </p>
-          </div>
+          {!!startDate && (
+            <div className="center shrink-0 gap-x-1.5">
+              <RxClock className="h-4 w-4 text-primary" />
+              <p className="line-clamp-1 text-xs text-muted-foreground">
+                <span>{formatDate(startDate, "h:mm a")}</span>
+                {!!endDate && (
+                  <>
+                    {" "}
+                    <span>-</span> <span>{formatDate(endDate, "h:mm a")}</span>
+                  </>
+                )}
+              </p>
+            </div>
+          )}
+          {!!location && (
+            <div className="flex items-center gap-x-1.5">
+              <HiOutlineMapPin className="h-4 w-4 shrink-0 text-primary" />
+              <p className="line-clamp-1 text-xs text-muted-foreground">
+                {location}
+              </p>
+            </div>
+          )}
         </div>
         <div className="flex w-full flex-col justify-end self-start pl-2 pt-2">
           <div className="flex w-3/4 items-center justify-stretch gap-3">
