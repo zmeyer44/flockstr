@@ -78,7 +78,7 @@ export default function Sidebar() {
       label: "Explore",
       icon: RiCompassLine,
       type: "link",
-      active: false,
+      active: true,
     },
     {
       href: "",

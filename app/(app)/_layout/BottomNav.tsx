@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   RiHome6Fill,
@@ -5,26 +6,25 @@ import {
   RiQuestionAnswerFill,
 } from "react-icons/ri";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export default function BottomNav() {
+  const pathname = usePathname();
   const navigationItems = [
     {
       href: "/app",
       name: "home",
       icon: RiHome6Fill,
-      current: true,
     },
     {
-      href: "",
+      href: "/explore",
       name: "explore",
       icon: RiCompass3Fill,
-      current: false,
     },
     {
       href: "",
       name: "messages",
       icon: RiQuestionAnswerFill,
-      current: false,
     },
   ];
   return (
@@ -38,7 +38,7 @@ export default function BottomNav() {
           >
             <item.icon
               className={cn(
-                item.current
+                pathname === item.href
                   ? "text-foreground"
                   : "text-muted-foreground group-hover:text-foreground",
                 "h-6 w-6 shrink-0",
