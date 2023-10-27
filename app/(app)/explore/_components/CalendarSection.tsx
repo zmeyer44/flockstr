@@ -50,14 +50,14 @@ function CalendarIcon({ date }: { date: Date }) {
         "flex overflow-hidden rounded-md border bg-background shadow",
       )}
     >
-      <div className="w-fit shrink-0 bg-primary p-1.5 px-3 text-primary-foreground @xl:p-2 @xl:px-3.5">
+      <div className="center w-fit shrink-0 bg-primary p-1.5 px-3 text-primary-foreground @xl:p-2 @xl:px-3.5">
         {/* <span className="text-2xl font-bold">24</span> */}
         <span className="font-semibold">{formatDate(date, "ddd")}</span>
       </div>
-      <div className="center flex whitespace-nowrap px-3 text-sm font-medium text-muted-foreground @lg:text-base @xl:px-3.5">
+      <div className="center flex whitespace-nowrap px-3 text-sm font-medium text-muted-foreground @lg:text-base @xl:p-1 @xl:px-3.5">
         <div className="">
           {formatDate(date, "MMMM Do")}
-          <span className="-mt-2 block text-[10px] font-normal">
+          <span className="-mt-2 hidden text-[10px] font-normal @xl:block">
             {relativeTime(date)}
           </span>
         </div>
@@ -76,7 +76,7 @@ function CalendarIconOpacity({ date }: { date: Date }) {
         // Get the position of the div relative to the viewport
         const divRect = ref.current.getBoundingClientRect();
         // Change the opacity when the div reaches the top of the screen
-        if (divRect.top <= 110) {
+        if (divRect.top <= 145) {
           setTop(true);
         } else {
           setTop(false);
@@ -92,8 +92,9 @@ function CalendarIconOpacity({ date }: { date: Date }) {
     };
   }, []);
   return (
-    <div ref={ref} className={cn(top && "opacity-50")}>
+    <div className={cn(top && "opacity-50")}>
       <CalendarIcon date={date} />
+      <div ref={ref}></div>
     </div>
   );
 }

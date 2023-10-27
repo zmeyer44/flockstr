@@ -41,22 +41,7 @@ export function relativeTimeUnix(timestamp: number) {
   return dayjs(timestamp * 1000).fromNow();
 }
 export function relativeTime(timestamp: Date) {
-  const config = {
-    thresholds: [
-      { l: "s", r: 1 },
-      { l: "m", r: 1 },
-      { l: "mm", r: 59, d: "minute" },
-      { l: "h", r: 1 },
-      { l: "hh", r: 23, d: "hour" },
-      { l: "d", r: 1 },
-      { l: "dd", r: 364, d: "day" },
-      { l: "y", r: 1 },
-      { l: "yy", d: "year" },
-    ],
-    rounding: Math.floor,
-  };
   dayjs.extend(updateLocale);
-
   dayjs.updateLocale("en", {
     relativeTime: {
       future: "in %s",
@@ -74,7 +59,7 @@ export function relativeTime(timestamp: Date) {
       yy: "%d years",
     },
   });
-  dayjs.extend(relative, config);
+  dayjs.extend(relative);
   return dayjs(timestamp).fromNow();
 }
 export function daysOffset(targetDate: Date) {
