@@ -1,5 +1,5 @@
 import { formatDate, fromUnix } from "@/lib/utils/dates";
-import { BANNER } from "@/constants";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -13,7 +13,11 @@ import {
 import SmallProfileLine from "@/components/ProfileContainers/SmallProfileLine";
 import AvatarStack from "@/components/ProfileContainers/AvatarStack";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
-import { getTagValues, getTagAllValues } from "@/lib/nostr/utils";
+import {
+  getTagValues,
+  getTagAllValues,
+  getTagsValues,
+} from "@/lib/nostr/utils";
 import { HiOutlineMapPin, HiOutlineUserCircle } from "react-icons/hi2";
 import { RxClock, RxCalendar } from "react-icons/rx";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,7 +32,8 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
   const image = getTagValues("image", tags);
   const location =
     getTagValues("location", tags) ?? getTagValues("address", tags);
-  const users = getTagAllValues("p", tags);
+  const users = getTagsValues("p", tags).filter(Boolean);
+  console.log("Users", users);
   const startDate = getTagValues("start", tags)
     ? new Date(parseInt(getTagValues("start", tags) as string) * 1000)
     : null;
@@ -58,7 +63,7 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
               <HiOutlineUserCircle className="h-4 w-4 text-primary" />
               <AvatarStack
                 pubkeys={users.slice(0, 4)}
-                className="z-0 h-6 w-6 text-[9px]"
+                className="z-0 h-5 w-5 text-[9px]"
                 remaining={users.length - 4 > 2 ? users.length - 4 : 0}
               />
             </div>
@@ -89,9 +94,11 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
         <div className="flex w-full flex-col justify-end self-start pl-2 pt-2">
           <div className="flex w-3/4 items-center justify-stretch gap-3">
             <Button className="flex-1">RSVP</Button>
-            <Button variant={"outline"} className="flex-1">
-              Share
-            </Button>
+            <Link href={`/event/${event.encode()}`}>
+              <Button variant={"outline"} className="flex-1">
+                Details
+              </Button>
+            </Link>
           </div>
         </div>
       </CardHeader>

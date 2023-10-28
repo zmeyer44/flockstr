@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import ExploreCreators from "./_sections/ExploreCreators";
+import ExploreCalendars from "./_sections/ExploreCalendars";
 import UpcomingEvents from "./_sections/UpcomingEvents";
 import LongFormContentSection from "./_sections/LongFormContent";
 import CreateEvents from "./_sections/CreateEvents";
@@ -23,9 +24,9 @@ const NewEventButton = dynamic(() => import("./_components/NewEventButton"), {
 export default function Page() {
   return (
     <div className="relative space-y-6 px-5 pt-5 sm:pt-7">
-      <ExploreCreators />
+      <ExploreCalendars />
       <UpcomingEvents />
-      <LongFormContentSection />
+      {/* <LongFormContentSection /> */}
       <CreateEvents />
       <LiveStreamingSection />
       <FeaturedListsSection />

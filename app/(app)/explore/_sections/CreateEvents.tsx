@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/app/_providers/modal/provider";
-import CreateSubscriptionTier from "@/components/Modals/CreateSubscriptionTier";
+import CreateCalendarEvent from "@/components/Modals/CreateCalendarEvent";
 
 export default function BecomeACreator() {
   const modal = useModal();
@@ -26,8 +26,8 @@ export default function BecomeACreator() {
             Start organizing your events an calendar on directly on Nostr.
             Seamlessly collect payments and engage with your community.
           </div>
-          <Button onClick={() => modal?.show(<CreateSubscriptionTier />)}>
-            Become a Creator
+          <Button onClick={() => modal?.show(<CreateCalendarEvent />)}>
+            Create an Event
           </Button>
         </div>
       </div>

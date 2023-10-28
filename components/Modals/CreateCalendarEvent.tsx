@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { HiX } from "react-icons/hi";
+import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { randomId } from "@/lib/nostr";
@@ -15,6 +16,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { TimePicker } from "@/components/ui/time-picker";
 import { TimezoneSelector } from "@/components/ui/timezone";
 import { Label } from "@/components/ui/label";
+import Picker from "@/components/FormComponents/Picker";
 
 import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
 import LocationIcon from "@/components/EventIcons/LocationIcon";
@@ -24,10 +26,12 @@ import Spinner from "../spinner";
 import useAutosizeTextArea from "@/lib/hooks/useAutoSizeTextArea";
 import { useModal } from "@/app/_providers/modal/provider";
 import { useRouter } from "next/navigation";
-import { createEvent } from "@/lib/actions/create";
+import { createEvent, updateList } from "@/lib/actions/create";
 import { useNDK } from "@/app/_providers/ndk";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import useImageUpload from "@/lib/hooks/useImageUpload";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { getTagValues } from "@/lib/nostr/utils";
 
 export default function CreateCalendarEventModal() {
   const modal = useModal();
@@ -66,6 +70,7 @@ export default function CreateCalendarEventModal() {
   const [timezone, setTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
+  const [calendar, setCalendar] = useState<string>();
   const [location, setLocation] = useState<{
     address: string;
     name: string;
@@ -73,11 +78,10 @@ export default function CreateCalendarEventModal() {
     geohash: string;
   }>();
   const { ndk } = useNDK();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, calendars } = useCurrentUser();
   const router = useRouter();
 
   async function handleSubmit() {
-    console.log("CALLED", ndk, currentUser);
     if (!ndk || !currentUser) {
       alert("MISSING");
       return;
@@ -130,9 +134,21 @@ export default function CreateCalendarEventModal() {
       };
       const event = await createEvent(ndk, preEvent);
       if (event) {
+        const encodedEvent = event.encode();
+        if (calendar) {
+          console.log("calendar", calendar);
+          const selectedCalendar = Array.from(calendars)
+            .find((option) => option.encode() === calendar)
+            ?.rawEvent();
+          if (selectedCalendar) {
+            console.log("selectedCalendar", selectedCalendar);
+
+            await updateList(ndk, selectedCalendar, [["a", encodedEvent]]);
+          }
+        }
         toast.success("Event Created!");
         modal?.hide();
-        router.push(`/event/${event.encode()}`);
+        router.push(`/event/${encodedEvent}`);
       } else {
         toast.error("An error occured");
       }
@@ -279,6 +295,79 @@ export default function CreateCalendarEventModal() {
                   </div>
                 </div>
               </div>
+              <div className="flex justify-between overflow-hidden p-0.5 px-1 pl-3">
+                <div className="flex-1 text-xs text-muted-foreground">
+                  <div className="flex max-w-full justify-start bg-secondary">
+                    <Picker
+                      options={Array.from(calendars).map(
+                        (o) =>
+                          ({
+                            ...o,
+                            label: getTagValues("name", o.tags) as string,
+                            value: o.encode(),
+                          }) as NDKEvent & {
+                            label: string;
+                            value: string;
+                          },
+                      )}
+                      noun="Calendar"
+                      placeholder="Add to a Calendar"
+                      pre={
+                        <HiOutlineCalendarDays className="h-4 w-4 shrink-0" />
+                      }
+                      className="px-0 pr-1 font-normal"
+                      value={calendar}
+                      onChange={(calendar) => setCalendar(calendar.encode())}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Image Upload */}
+            <div className="hidden shrink justify-end sm:flex">
+              {imagePreview ? (
+                <div className="relative overflow-hidden rounded-xl">
+                  <div className="">
+                    <Image
+                      alt="Image"
+                      height="288"
+                      width="288"
+                      src={imagePreview}
+                      className={cn(
+                        "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
+                        imageStatus === "uploading" && "grayscale",
+                        imageStatus === "error" && "blur-xl",
+                      )}
+                    />
+                  </div>
+                  {imageStatus === "uploading" && (
+                    <button className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 text-background hover:bg-opacity-100">
+                      <Spinner />
+                    </button>
+                  )}
+                  {imageStatus === "success" && (
+                    <button
+                      onClick={clear}
+                      className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 hover:bg-opacity-100"
+                    >
+                      <HiX
+                        className="block h-4 w-4 text-background"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <ImageUploadButton>
+                  <Button
+                    className=""
+                    variant={"outline"}
+                    loading={imageStatus === "uploading"}
+                  >
+                    {imageUrl ? "Uploaded!" : "Upload Image"}
+                  </Button>
+                </ImageUploadButton>
+              )}
             </div>
           </div>
           <div className="flex w-full items-start gap-x-3">
@@ -307,7 +396,7 @@ export default function CreateCalendarEventModal() {
               placeholder="Some into about this event..."
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end sm:hidden">
             {imagePreview ? (
               <div className="relative overflow-hidden rounded-xl">
                 <div className="">

@@ -19,9 +19,13 @@ export default function AvatarStack({
 }: AvatarStackProps) {
   return (
     <div className="isolate flex -space-x-2 overflow-hidden py-[2px]">
-      {pubkeys.map((p, idx) => (
-        <User key={p} pubkey={p} className={cn(zIndexes[idx], className)} />
-      ))}
+      {pubkeys.map((p, idx) => {
+        if (p) {
+          return (
+            <User key={p} pubkey={p} className={cn(zIndexes[idx], className)} />
+          );
+        }
+      })}
       {!!remaining && (
         <Avatar
           className={cn(

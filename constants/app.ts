@@ -7,6 +7,15 @@ export const EXPLORE_CREATORS = [
   "npub1dc9p7jzjhj86g2uqgltq4qvnpkyfqn9r72kdlddcgyat3j05gnjsgjc8rz",
   "npub1qny3tkh0acurzla8x3zy4nhrjz5zd8l9sy9jys09umwng00manysew95gx",
 ];
+export const EXPLORE_CALENDARS = [
+  "npub1xtscya34g58tk0z605fvr788k263gsu6cy9x0mhnm87echrgufzsevkk5s",
+  "npub1l2vyh47mk2p0qlsku7hg0vn29faehy9hy34ygaclpn66ukqp3afqutajft",
+  "npub1u6qhg5ucu3xza4nlz94q90y720tr6l09avnq8y3yfp5qrv9v8sus3tnd7t",
+  "npub1sg6plzptd64u62a878hep2kev88swjh3tw00gjsfl8f237lmu63q0uf63m",
+  "npub19mduaf5569jx9xz555jcx3v06mvktvtpu0zgk47n4lcpjsz43zzqhj6vzk",
+  "npub1dc9p7jzjhj86g2uqgltq4qvnpkyfqn9r72kdlddcgyat3j05gnjsgjc8rz",
+  "npub1qny3tkh0acurzla8x3zy4nhrjz5zd8l9sy9jys09umwng00manysew95gx",
+];
 export const NOTABLE_ACCOUNTS = [
   "npub1xtscya34g58tk0z605fvr788k263gsu6cy9x0mhnm87echrgufzsevkk5s",
   "npub1l2vyh47mk2p0qlsku7hg0vn29faehy9hy34ygaclpn66ukqp3afqutajft",

@@ -7,7 +7,7 @@ import { useNDK } from "@/app/_providers/ndk";
 import { nip19 } from "nostr-tools";
 import useLists from "./useLists";
 import useSubscriptions from "./useSubscriptions";
-import { db } from "@nostr-dev-kit/ndk-cache-dexie";
+import { type NDKKind } from "@nostr-dev-kit/ndk";
 import { webln } from "@getalby/sdk";
 const loadNWCUrl = "";
 const nwc = new webln.NWC({ nostrWalletConnectUrl: loadNWCUrl });
@@ -20,6 +20,8 @@ export default function useCurrentUser() {
     follows,
     setFollows,
     addFollow,
+    calendars,
+    setCalendars,
   } = currentUserStore();
   const { loginWithNip07, loginWithNip46, getProfile, ndk, fetchEvents } =
     useNDK();
@@ -86,13 +88,23 @@ export default function useCurrentUser() {
 
   useEffect(() => {
     if (!currentUser) return;
-    console.log("fetching follows");
+    console.log("fetching follows & calendar");
     (async () => {
       const following = await currentUser.follows();
       console.log("Follows", following);
       setFollows(following);
+      await fetchCalendars();
     })();
   }, [currentUser]);
+
+  async function fetchCalendars() {
+    if (!ndk || !currentUser) return;
+    const calendars = await ndk.fetchEvents({
+      authors: [currentUser.pubkey],
+      kinds: [31924 as NDKKind],
+    });
+    setCalendars(new Set(calendars));
+  }
 
   return {
     currentUser,
@@ -107,5 +119,7 @@ export default function useCurrentUser() {
     mySubscription,
     addFollow,
     setFollows,
+    calendars,
+    fetchCalendars,
   };
 }

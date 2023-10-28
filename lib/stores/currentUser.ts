@@ -1,11 +1,13 @@
 import { create } from "zustand";
-import { type NDKUser } from "@nostr-dev-kit/ndk";
+import { NDKEvent, type NDKUser } from "@nostr-dev-kit/ndk";
 
 type Settings = {};
 
 interface CurrentUserState {
   currentUser: NDKUser | null;
   follows: Set<NDKUser>;
+  calendars: Set<NDKEvent>;
+  setCalendars: (calendars: Set<NDKEvent>) => void;
   settings: Settings;
   setCurrentUser: (user: NDKUser | null) => void;
   updateCurrentUser: (user: Partial<NDKUser>) => void;
@@ -16,6 +18,7 @@ interface CurrentUserState {
 const currentUserStore = create<CurrentUserState>()((set) => ({
   currentUser: null,
   follows: new Set(),
+  calendars: new Set(),
   settings: {},
   setCurrentUser: (user) => set((state) => ({ ...state, currentUser: user })),
   updateCurrentUser: (user) =>
@@ -24,6 +27,8 @@ const currentUserStore = create<CurrentUserState>()((set) => ({
       currentUser: { ...state.currentUser, ...user } as NDKUser,
     })),
   setFollows: (follows) => set((state) => ({ ...state, follows: follows })),
+  setCalendars: (calendars) =>
+    set((state) => ({ ...state, calendars: calendars })),
   addFollow: (follow) =>
     set((state) => ({ ...state, follows: new Set(state.follows).add(follow) })),
 }));

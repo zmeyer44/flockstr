@@ -4,9 +4,10 @@ import { cn } from "@/lib/utils";
 import Spinner from "@/components/spinner";
 import { Event } from "nostr-tools";
 import useEvents from "@/lib/hooks/useEvents";
-import { type NDKFilter } from "@nostr-dev-kit/ndk";
+import { NDKEvent, type NDKFilter } from "@nostr-dev-kit/ndk";
 type FeedProps = {
   filter?: NDKFilter;
+  secondaryFilter?: (event: NDKEvent) => Boolean;
   className?: string;
   loader?: () => JSX.Element;
   empty?: () => JSX.Element;
@@ -14,7 +15,7 @@ type FeedProps = {
 
 export default function Feed({
   filter,
-  className,
+  secondaryFilter,
   loader: Loader,
   empty: Empty,
 }: FeedProps) {
@@ -29,6 +30,16 @@ export default function Feed({
   }
   if (Empty && events.length === 0) {
     return <Empty />;
+  }
+  if (secondaryFilter) {
+    return (
+      <>
+        {events.filter(secondaryFilter).map((e) => {
+          const event = e.rawEvent() as Event;
+          return <KindCard key={e.id} {...event} />;
+        })}
+      </>
+    );
   }
   return (
     <>

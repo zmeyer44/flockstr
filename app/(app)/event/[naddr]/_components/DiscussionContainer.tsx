@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Feed from "@/containers/Feed";
 import CreateKind1Modal from "@/components/Modals/Kind1";
 import { useModal } from "@/app/_providers/modal/provider";
+import { getTagValues } from "@/lib/nostr/utils";
 
 type DiscussionContainerProps = {
   eventReference: string;
@@ -32,6 +33,7 @@ export default function DiscussionContainer({
       </div>
       <div className="w-full space-y-3">
         <Feed
+          secondaryFilter={(e) => getTagValues("l", e.tags) !== "announcement"}
           filter={{
             kinds: [1],
             ["#a"]: [eventReference],

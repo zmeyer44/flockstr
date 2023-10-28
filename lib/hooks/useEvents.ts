@@ -95,3 +95,73 @@ export default function useEvents({
     },
   };
 }
+export function useEvent({
+  filter,
+  enabled = true,
+  eventFilter = () => true,
+}: UseEventsProps) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [sub, setSub] = useState<NDKSubscription | undefined>(undefined);
+  const [event, setEvent] = useState<NDKEvent>();
+  const [eventId, setEventId] = useState<string>();
+  let onEventCallback: null | OnEventFunc = null;
+  let onSubscribeCallback: null | OnSubscribeFunc = null;
+  let onDoneCallback: null | OnDoneFunc = null;
+  const { ndk } = useNDK();
+
+  useEffect(() => {
+    if (!enabled || !ndk) return;
+    void init();
+    return () => {
+      console.log("STOPPING", sub);
+      if (sub) {
+        sub.stop();
+      }
+    };
+  }, [enabled, ndk]);
+
+  async function init() {
+    setIsLoading(true);
+    try {
+      const sub = ndk!.subscribe(
+        { limit: 1, ...filter },
+        { closeOnEose: false },
+      );
+      setSub(sub);
+      onSubscribeCallback?.(sub);
+      sub.on("event", (e, r) => {
+        if (eventId === e.id) {
+          return;
+        }
+        if (eventFilter(e)) {
+          setEvent(e);
+          setEventId(e.id);
+        }
+      });
+    } catch (err) {
+      log("error", `❌ nostr (${err})`);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return {
+    isLoading,
+    event,
+    onEvent: (_onEventCallback: OnEventFunc) => {
+      if (_onEventCallback) {
+        onEventCallback = _onEventCallback;
+      }
+    },
+    onDone: (_onDoneCallback: OnDoneFunc) => {
+      if (_onDoneCallback) {
+        onDoneCallback = _onDoneCallback;
+      }
+    },
+    onSubscribe: (_onSubscribeCallback: OnSubscribeFunc) => {
+      if (_onSubscribeCallback) {
+        onSubscribeCallback = _onSubscribeCallback;
+      }
+    },
+  };
+}
