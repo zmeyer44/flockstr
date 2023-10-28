@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import ExploreCreators from "./_sections/ExploreCreators";
 import UpcomingEvents from "./_sections/UpcomingEvents";
 import LongFormContentSection from "./_sections/LongFormContent";
-import BecomeACreator from "./_sections/BecomeACreator";
+import CreateEvents from "./_sections/CreateEvents";
 
 const LiveStreamingSection = dynamic(
   () => import("./_sections/LiveStreaming"),
@@ -26,10 +26,10 @@ export default function Page() {
       <ExploreCreators />
       <UpcomingEvents />
       <LongFormContentSection />
-      <BecomeACreator />
+      <CreateEvents />
       <LiveStreamingSection />
       <FeaturedListsSection />
-      <div className="z-overlay- fixed bottom-[calc(var(--bottom-nav-height)_+_20px)] right-[20px] sm:hidden">
+      <div className="fixed bottom-[calc(var(--bottom-nav-height)_+_20px)] right-[20px] z-overlay- sm:hidden">
         <NewEventButton />
       </div>
     </div>

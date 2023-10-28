@@ -20,11 +20,11 @@ export default function BecomeACreator() {
         />
         <div className="max-sm:px-5 md:self-start lg:max-w-lg lg:self-center">
           <h2 className="font-condensed text-2xl font-bold text-foreground sm:text-3xl">
-            Start earning on Nostr
+            Create Events on Nostr
           </h2>
           <div className="mb-6 mt-2 text-muted-foreground">
-            Create a subscrition tier so you can start offering your users
-            access to private content!
+            Start organizing your events an calendar on directly on Nostr.
+            Seamlessly collect payments and engage with your community.
           </div>
           <Button onClick={() => modal?.show(<CreateSubscriptionTier />)}>
             Become a Creator
