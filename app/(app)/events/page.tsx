@@ -32,7 +32,7 @@ export default function Page() {
           Upcoming Events
         </h2>
       </div>
-      <div className="mx-auto max-w-[900px] space-y-4">
+      <div className="mx-auto max-w-[900px] space-y-6">
         {eventsByDay.map((e) => (
           <CalendarSection events={e} />
         ))}
