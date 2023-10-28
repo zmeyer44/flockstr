@@ -20,6 +20,7 @@ import LoginModal from "./Login";
 import CreateList from "./CreateList";
 import ShortTextNoteModal from "./ShortTextNote";
 import CreateCalendarEventModal from "./CreateCalendarEvent";
+import CreateCalendarModal from "./CreateCalendar";
 export default function NewEventModal() {
   const modal = useModal();
   return (
@@ -41,15 +42,19 @@ export default function NewEventModal() {
           className="w-full gap-x-1"
         >
           <span>Calendar Event</span>
+          <HiNewspaper className="h-4 w-4" />
+        </Button>
+        <Button
+          onClick={() => {
+            modal?.swap(<CreateCalendarModal />);
+          }}
+          className="w-full gap-x-1"
+        >
+          <span>Create Calendar</span>
           <HiCalendarDays className="h-4 w-4" />
         </Button>
-        <Link href={`/article/new`}>
-          <Button onClick={() => modal?.hide()} className="w-full gap-x-1">
-            <span>Long Form</span>
-            <HiNewspaper className="h-4 w-4" />
-          </Button>
-        </Link>
-        <Button
+
+        {/* <Button
           onClick={() => {
             modal?.swap(<CreateList />);
           }}
@@ -57,7 +62,7 @@ export default function NewEventModal() {
         >
           <span>Content List</span>
           <HiBookmarkSquare className="h-4 w-4" />
-        </Button>
+        </Button> */}
       </div>
     </Template>
   );
