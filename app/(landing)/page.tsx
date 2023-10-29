@@ -56,12 +56,13 @@ export default function LandingPage() {
             <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
               <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
                 <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl">
-                  Own your Events. Only on Nostr.
+                  Own your Events.
+                  <br /> Only on Nostr.
                 </h1>
                 <p className="relative mt-6 text-lg leading-8 text-zinc-600 sm:max-w-md lg:max-w-none">
-                  We're bringing the creator economy onto Nostr. The days of
+                  We're bringing events and meet ups onto Nostr. The days of
                   walled gardens are coming to an end. It's time to truly own
-                  your following, no-longer dependent on an external company.
+                  your events, no-longer dependent on an external company.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">
                   <Link href="/explore">
