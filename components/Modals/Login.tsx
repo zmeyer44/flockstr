@@ -19,6 +19,7 @@ export default function LoginModal() {
 
   useEffect(() => {
     const shouldReconnect = localStorage.getItem("shouldReconnect");
+    const savedNsec = localStorage.getItem("nsec");
 
     const getConnected = async (shouldReconnect: string) => {
       let enabled: boolean | void = false;
@@ -52,8 +53,9 @@ export default function LoginModal() {
       }
       return enabled;
     };
-
-    if (shouldReconnect === "true") {
+    if (savedNsec) {
+      handleLoginNsec(savedNsec);
+    } else if (shouldReconnect === "true") {
       getConnected(shouldReconnect);
     }
   }, []);
@@ -70,7 +72,6 @@ export default function LoginModal() {
       if (!user) {
         throw new Error("NO auth");
       }
-      console.log("LOGIN", user);
       await loginWithPubkey(nip19.decode(user.npub).data.toString());
       localStorage.setItem("shouldReconnect", "true");
     }
@@ -82,17 +83,17 @@ export default function LoginModal() {
     setIsLoading(false);
     modal?.hide();
   }
-  async function handleLoginNsec() {
+  async function handleLoginNsec(nsec_?: string) {
     setIsLoading(true);
     console.log("loging in");
 
-    const user = await loginWithSecret(nsec);
+    const user = await loginWithSecret(nsec_ ?? nsec);
     if (!user) {
       throw new Error("NO auth");
     }
     console.log("LOGIN", user);
     await loginWithPubkey(nip19.decode(user.npub).data.toString());
-    localStorage.setItem("shouldReconnect", "true");
+    localStorage.setItem("nsec", nsec);
 
     if (typeof window.webln !== "undefined") {
       await window.webln.enable();
