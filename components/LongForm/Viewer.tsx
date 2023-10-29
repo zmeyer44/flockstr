@@ -21,7 +21,6 @@ const Viewer = ({ initialMarkdown }: EditorProps) => {
   });
 
   useEffect(() => {
-    console.log("ERFE", editor);
     if (editor) {
       if (!initialContent && initialMarkdown) {
         console.log("initial md", initialMarkdown);

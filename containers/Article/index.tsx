@@ -69,7 +69,7 @@ export default function ArticlePage({ event }: ArticleProps) {
       <div className="vmax-h-[calc(100vh_-_100px)] overflow-y-auto">
         <article className="prose prose-zinc relative mx-auto max-w-3xl pt-7 dark:prose-invert">
           <div className="">
-            <div className="flex items-center justify-between gap-1 lg:mb-2">
+            <div className="mb-1.5 flex items-center justify-between gap-1 lg:mb-2">
               {tags.map((t) => (
                 <Button variant={"link"} className="px-0">
                   {t}
@@ -85,7 +85,7 @@ export default function ArticlePage({ event }: ArticleProps) {
                 <span className="h-3 w-[1px] rounded-full bg-muted-foreground/50"></span>
               </div>
             </div>
-            <h1 className="">{title}</h1>
+            <h1 className="mb-4 text-5xl font-bold">{title}</h1>
             <div className="mb-5 flex items-center justify-end">
               <Actions />
             </div>

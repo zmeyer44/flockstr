@@ -7,11 +7,14 @@ import { RiCloseFill } from "react-icons/ri";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/dates";
-import Actions from "./Actions";
+import { toast } from "sonner";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
 import Editor from "@/components/LongForm/Editor";
 import { Toolbar } from "@/components/LongForm/ToolBar";
+import { createEvent } from "@/lib/actions/create";
+import { useNDK } from "@/app/_providers/ndk";
+import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 type ArticleProps = {
   event?: NDKEvent;
 };
@@ -19,6 +22,7 @@ type ArticleProps = {
 export default function EditorPage({ event }: ArticleProps) {
   const router = useRouter();
   const [content, setContent] = useState("");
+  const { ndk } = useNDK();
   async function handleSubmit({
     title,
     summary,
@@ -28,6 +32,24 @@ export default function EditorPage({ event }: ArticleProps) {
     summary: string;
     image?: string;
   }) {
+    if (!ndk) return;
+    const tags = [
+      ["title", title],
+      ["summary", summary],
+      ["published_at", unixTimeNowInSeconds().toString()],
+    ];
+    if (image) {
+      tags.push(["image", image]);
+    }
+    const event = await createEvent(ndk, {
+      content: content,
+      kind: 30023,
+      tags: tags,
+    });
+    if (event) {
+      toast.success("Event Created!");
+      router.push(`/article/${event.encode()}`);
+    }
     console.log("Writing", title, summary, image, content);
   }
 

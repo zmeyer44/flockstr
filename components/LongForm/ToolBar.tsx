@@ -8,6 +8,7 @@ import { Textarea } from "../ui/textarea";
 import useAutosizeTextArea from "@/lib/hooks/useAutoSizeTextArea";
 import { HiOutlinePhoto } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
+import useImageUpload from "@/lib/hooks/useImageUpload";
 
 interface ToolbarProps {
   initialData?: {
@@ -40,6 +41,8 @@ export const Toolbar = ({ initialData, preview, onSubmit }: ToolbarProps) => {
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [value, setValue] = useState(initialData?.title);
 
+  const { ImageUploadButton, imageUrl, ImagePreview, status } =
+    useImageUpload("event");
   const update = () => {
     console.log("Update");
   };
@@ -68,7 +71,7 @@ export const Toolbar = ({ initialData, preview, onSubmit }: ToolbarProps) => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      await onSubmit({ title, summary, image });
+      await onSubmit({ title, summary, image: imageUrl ?? "" });
       setLoading(false);
     } catch (err) {
       console.log("Error", err);
@@ -87,17 +90,24 @@ export const Toolbar = ({ initialData, preview, onSubmit }: ToolbarProps) => {
       <div className="flex items-center gap-x-1 py-4">
         <div className="opacity-0 group-hover:opacity-100">
           {!initialData?.image && !preview && (
-            <Button
-              className="text-xs text-muted-foreground"
-              variant="outline"
-              size="sm"
-            >
-              <HiOutlinePhoto className="mr-2 h-4 w-4" />
-              Add cover
-            </Button>
+            <ImageUploadButton>
+              <Button
+                className="text-xs text-muted-foreground"
+                variant="outline"
+                size="sm"
+              >
+                <HiOutlinePhoto className="mr-2 h-4 w-4" />
+                Add cover
+              </Button>
+            </ImageUploadButton>
           )}
         </div>
-        <Button loading={loading} onClick={handleSubmit} className="ml-auto">
+        <Button
+          disabled={status === "uploading"}
+          loading={loading}
+          onClick={handleSubmit}
+          className="ml-auto"
+        >
           Publish
         </Button>
       </div>
@@ -144,6 +154,7 @@ export const Toolbar = ({ initialData, preview, onSubmit }: ToolbarProps) => {
           {summary || "Write a short summary of your content..."}
         </div>
       )}
+      <ImagePreview />
     </div>
   );
 };
