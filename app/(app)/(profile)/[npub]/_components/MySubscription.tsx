@@ -36,6 +36,7 @@ export default function MySubscription({ pubkey }: MySubscription) {
     }
   }
   if (!subscriptionTiers.length) return null;
+  return null;
   return (
     <>
       {subscriptionTiers.map((e) => {

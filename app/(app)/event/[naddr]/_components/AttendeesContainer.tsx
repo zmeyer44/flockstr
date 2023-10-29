@@ -1,4 +1,5 @@
 import { HiOutlineUserGroup } from "react-icons/hi2";
+import AvatarStack from "@/components/ProfileContainers/AvatarStack";
 
 import UserRow from "./UserRow";
 type AttendeesContainerProps = {
@@ -13,11 +14,7 @@ export default function AttendeesContainer({
         <HiOutlineUserGroup className="h-5 w-5" />
         <h3 className="text-lg font-semibold">Attendees</h3>
       </div>
-      <ul className="max-h-[200px] overflow-hidden">
-        {attendees.map((pubkey) => (
-          <UserRow key={pubkey} pubkey={pubkey} />
-        ))}
-      </ul>
+      <AvatarStack pubkeys={attendees} />
     </div>
   );
 }
