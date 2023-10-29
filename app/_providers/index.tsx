@@ -6,6 +6,7 @@ import useRouteChange from "@/lib/hooks/useRouteChange";
 import { NDKProvider } from "./ndk";
 import SignerProvider from "./signer";
 import { RELAYS } from "@/constants";
+import { GoogleAnalyticsInit } from "@/lib/analytics";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const handleRouteChange = (url: string) => {
@@ -24,6 +25,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <ModalProvider>{children}</ModalProvider>
         </SignerProvider>
       </NDKProvider>
+      <GoogleAnalyticsInit />
     </>
   );
 }
