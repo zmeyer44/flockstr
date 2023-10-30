@@ -56,7 +56,7 @@ export default function UpcomingEventsSection() {
       <SectionContent className="relative">
         <ScrollArea>
           <div className="flex space-x-2 pb-4 max-sm:px-5">
-            {processedEvents?.length > 3 ? (
+            {processedEvents?.length ? (
               processedEvents.slice(0, 6).map((e, idx) => {
                 return (
                   <Link key={e.id} href={`/event/${e.encode()}`}>

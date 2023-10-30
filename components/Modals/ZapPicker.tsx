@@ -1,11 +1,10 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import Template from "./Template";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/app/_providers/modal/provider";
 import { toast } from "sonner";
 import { useNDK } from "@/app/_providers/ndk";
-import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { HiOutlineLightningBolt } from "react-icons/hi";
 import { RiSubtractFill, RiAddFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";
