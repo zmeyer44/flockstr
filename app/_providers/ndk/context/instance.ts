@@ -9,7 +9,6 @@ import NDK, {
   type NDKCacheAdapter,
 } from "@nostr-dev-kit/ndk";
 import NDKCacheAdapterDexie from "@nostr-dev-kit/ndk-cache-dexie";
-import { db } from "@/lib/ndk/db";
 
 export default function NDKInstance(explicitRelayUrls: string[]) {
   const loaded = useRef(false);
@@ -81,7 +80,6 @@ export default function NDKInstance(explicitRelayUrls: string[]) {
     }
 
     if (signer) {
-      console.log("SIGNER", signer);
       _setSigner(signer);
     }
 

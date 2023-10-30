@@ -209,9 +209,7 @@ async function generateEvent(
   } catch (e) {
     console.log("at catch", e);
     const signer = delegateSigner ?? ndk.signer!;
-    console.log("Signer", signer);
     const user = await signer.user();
-    console.log("User", user);
     const newEvent = new NDKEvent(ndk, {
       content: _value || "",
       kind: 1,

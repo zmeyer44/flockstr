@@ -9,23 +9,29 @@ import { useNDK } from "@/app/_providers/ndk";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import AddPassphrase from "./AddPassphrase";
+import { decryptMessage } from "@/lib/nostr";
+import { toast } from "sonner";
 
 export default function LoginModal() {
   const { loginWithNip07, loginWithSecret } = useNDK();
   const { loginWithPubkey, currentUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [showExtensionLogin, setShowExtensionLogin] = useState(true);
   const [nsec, setNsec] = useState("");
+  const [passphrase, setPassphrase] = useState("");
+  const [encryptedNsec, setEncryptedNsec] = useState("");
   const modal = useModal();
 
   useEffect(() => {
     const shouldReconnect = localStorage.getItem("shouldReconnect");
-    const savedNsec = localStorage.getItem("nsec");
+    const encryptedNsec_ = localStorage.getItem("encrypted-nsec");
 
     const getConnected = async (shouldReconnect: string) => {
       let enabled: boolean | void = false;
 
       if (typeof window.nostr === "undefined") {
-        return;
+        return setShowExtensionLogin(false);
       }
 
       if (shouldReconnect === "true") {
@@ -53,12 +59,13 @@ export default function LoginModal() {
       }
       return enabled;
     };
-    if (savedNsec) {
-      handleLoginNsec(savedNsec);
+    if (encryptedNsec_) {
+      setEncryptedNsec(encryptedNsec_);
     } else if (shouldReconnect === "true") {
       getConnected(shouldReconnect);
     }
   }, []);
+
   useEffect(() => {
     if (currentUser) {
       modal?.hide();
@@ -83,6 +90,27 @@ export default function LoginModal() {
     setIsLoading(false);
     modal?.hide();
   }
+  async function handleLoginPassphrase() {
+    if (!encryptedNsec || passphrase) return;
+    setIsLoading(true);
+
+    const decryptedNsec = decryptMessage(encryptedNsec, passphrase);
+    if (!decryptedNsec) {
+      setIsLoading(false);
+      toast.error("An error has occured");
+      return;
+    }
+    const user = await loginWithSecret(decryptedNsec);
+    if (!user) {
+      throw new Error("NO auth");
+    }
+    await loginWithPubkey(nip19.decode(user.npub).data.toString());
+    if (typeof window.webln !== "undefined") {
+      await window.webln.enable();
+    }
+    setIsLoading(false);
+    modal?.hide();
+  }
   async function handleLoginNsec(nsec_?: string) {
     setIsLoading(true);
     console.log("loging in");
@@ -93,22 +121,40 @@ export default function LoginModal() {
     }
     console.log("LOGIN", user);
     await loginWithPubkey(nip19.decode(user.npub).data.toString());
-    localStorage.setItem("nsec", nsec);
-
     if (typeof window.webln !== "undefined") {
       await window.webln.enable();
     }
-    console.log("connected ");
     setIsLoading(false);
-    modal?.hide();
+    modal?.swap(<AddPassphrase nsec={nsec} />);
   }
 
   return (
     <Template title="Login" className="md:max-w-[400px]">
       <div className="flex flex-col gap-y-5">
-        <Button onClick={() => void handleLogin()} loading={isLoading}>
-          Connect with extension
-        </Button>
+        {showExtensionLogin && (
+          <Button onClick={() => void handleLogin()} loading={isLoading}>
+            Connect with extension
+          </Button>
+        )}
+        {!!encryptedNsec && (
+          <div className="space-y-3">
+            <Label>Passphrase</Label>
+            <Input
+              value={nsec}
+              onChange={(e) => setPassphrase(e.target.value)}
+              placeholder="passphrase..."
+              className="text-[16px]"
+            />
+            <Button
+              variant={"outline"}
+              onClick={() => void handleLoginPassphrase()}
+              loading={isLoading}
+              className="w-full"
+            >
+              Login with Passphrase
+            </Button>
+          </div>
+        )}
         <div className="space-y-3">
           <Label>Nsec</Label>
           <Input
