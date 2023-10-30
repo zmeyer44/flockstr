@@ -10,59 +10,40 @@ import { useNDK } from "@/app/_providers/ndk";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import {
   HiChatBubbleLeftEllipsis,
-  HiBookmarkSquare,
+  HiSquaresPlus,
   HiNewspaper,
   HiCalendarDays,
 } from "react-icons/hi2";
-import { RiSubtractFill, RiAddFill } from "react-icons/ri";
+import { RiCalendarEventFill } from "react-icons/ri";
 import { formatCount } from "@/lib/utils";
 import LoginModal from "./Login";
 import CreateList from "./CreateList";
 import ShortTextNoteModal from "./ShortTextNote";
 import CreateCalendarEventModal from "./CreateCalendarEvent";
 import CreateCalendarModal from "./CreateCalendar";
+import TileIconButton from "../Buttons/TileIconButton";
+
 export default function NewEventModal() {
   const modal = useModal();
   return (
-    <Template title="New Event" className="md:max-w-[400px]">
-      <div className="flex flex-col gap-y-5">
-        <Button
-          onClick={() => {
-            modal?.swap(<ShortTextNoteModal />);
-          }}
-          className="w-full gap-x-1"
-        >
-          <span>Short Text</span>
-          <HiChatBubbleLeftEllipsis className="h-4 w-4" />
-        </Button>
-        <Button
+    <Template title="Time to publish..." className="md:max-w-[400px]">
+      <div className="center gap-3 ">
+        <TileIconButton
+          className="flex-1"
+          label="Add Event"
+          icon={(props) => <HiSquaresPlus {...props} />}
           onClick={() => {
             modal?.swap(<CreateCalendarEventModal />);
           }}
-          className="w-full gap-x-1"
-        >
-          <span>Calendar Event</span>
-          <HiNewspaper className="h-4 w-4" />
-        </Button>
-        <Button
+        />
+        <TileIconButton
+          className="flex-1"
+          label="Create Calendar"
+          icon={(props) => <RiCalendarEventFill {...props} />}
           onClick={() => {
             modal?.swap(<CreateCalendarModal />);
           }}
-          className="w-full gap-x-1"
-        >
-          <span>Create Calendar</span>
-          <HiCalendarDays className="h-4 w-4" />
-        </Button>
-
-        {/* <Button
-          onClick={() => {
-            modal?.swap(<CreateList />);
-          }}
-          className="w-full gap-x-1"
-        >
-          <span>Content List</span>
-          <HiBookmarkSquare className="h-4 w-4" />
-        </Button> */}
+        />
       </div>
     </Template>
   );
