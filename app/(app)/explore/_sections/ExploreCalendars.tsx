@@ -11,7 +11,7 @@ import { getTagValues } from "@/lib/nostr/utils";
 import { NDKEvent, NDKKind, NDKUserProfile } from "@nostr-dev-kit/ndk";
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 
-import CalendarCard from "../_components/CalendarCard";
+import CalendarCard, { LoadingCalendarCard } from "../_components/CalendarCard";
 export default function ExploreCalendars() {
   return (
     <section className="relative -mx-5 space-y-4 overflow-x-hidden sm:space-y-6">
@@ -35,14 +35,30 @@ function HorizontalCarousel() {
       limit: 5,
     },
   });
+
+  if (events.length) {
+    return (
+      <div className="scrollbar-thumb-rounded-full mr-auto flex min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto pl-5 pr-[50vw] scrollbar-thin sm:pr-[200px]">
+        {events.map((calendar, index) => (
+          <div
+            key={index}
+            className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}
+          >
+            <Calendar encodedEvent={calendar.encode()} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="scrollbar-thumb-rounded-full mr-auto flex min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto pl-5 pr-[50vw] scrollbar-thin sm:pr-[200px]">
-      {events.map((calendar, index) => (
+      {Array.from(Array(5)).map((_, index) => (
         <div
           key={index}
           className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}
         >
-          <Calendar encodedEvent={calendar.encode()} />
+          <LoadingCalendarCard />
         </div>
       ))}
     </div>

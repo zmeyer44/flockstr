@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { BANNER } from "@/constants/app";
 import { getNameToShow } from "@/lib/utils";
@@ -18,6 +19,8 @@ import useProfile from "@/lib/hooks/useProfile";
 import useEvents from "@/lib/hooks/useEvents";
 import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
 import { useNDK } from "@/app/_providers/ndk";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type CalendarCardProps = {
   calendar: NDKEvent;
@@ -142,5 +145,45 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
         </div>
       </div>
     </Card>
+  );
+}
+export function LoadingCalendarCard() {
+  const textColor = "bg-zinc-200";
+  return (
+    <Skeleton className="pointer-events-none relative h-[350px] w-[250px] min-w-[250px] overflow-hidden bg-muted">
+      <div className="absolute inset-0  backdrop-blur-lg transition-all">
+        <div className="group relative flex h-full w-full flex-col items-center justify-end transition-all">
+          <CardHeader className="absolute inset-x-0 top-[59%] transform pt-4 text-center transition-all duration-300 group-hover:top-[8px] group-hover:ml-[75px] group-hover:text-left">
+            <Skeleton className={cn("mx-auto h-[20px] w-2/3", textColor)} />
+            <div className="center flex-col gap-y-2 pt-3">
+              <div className="center w-full gap-1">
+                <Skeleton className={cn("h-3 w-1/2", textColor)} />
+                <Skeleton className={cn("h-3 w-1/3", textColor)} />
+              </div>
+              <div className="center w-full gap-1">
+                <Skeleton className={cn("h-3 w-1/5", textColor)} />
+                <Skeleton className={cn("h-3 w-2/5", textColor)} />
+              </div>
+              <Skeleton className={cn("h-3 w-1/2", textColor)} />
+            </div>
+          </CardHeader>
+          <div className="absolute left-1/2 top-1/2 aspect-square h-[100px] -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg bg-muted object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:w-[70px]">
+            <Skeleton className={cn("aspect-square h-[100px]", textColor)} />
+          </div>
+          <Card className="absolute top-full min-h-full w-5/6 overflow-hidden transition-all duration-300 group-hover:top-1/3">
+            <CardHeader className="border-b p-4 pb-3">
+              <CardTitle>Upcoming Events:</CardTitle>
+            </CardHeader>
+            <CardContent className="overflow-hidden px-0">
+              <ul className="w-full">
+                <li className="w-full overflow-hidden">
+                  <Skeleton className="h-3 w-2/3" />
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </Skeleton>
   );
 }
