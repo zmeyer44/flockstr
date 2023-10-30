@@ -18,6 +18,7 @@ export default function LoginModal() {
   const { loginWithPubkey, currentUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
   const [showExtensionLogin, setShowExtensionLogin] = useState(true);
+  const [showPassphraseLogin, setShowPassphraseLogin] = useState(false);
   const [nsec, setNsec] = useState("");
   const [passphrase, setPassphrase] = useState("");
   const [encryptedNsec, setEncryptedNsec] = useState("");
@@ -61,6 +62,7 @@ export default function LoginModal() {
     };
     if (encryptedNsec_) {
       setEncryptedNsec(encryptedNsec_);
+      setShowPassphraseLogin(true);
     } else if (shouldReconnect === "true") {
       getConnected(shouldReconnect);
     }
@@ -91,7 +93,7 @@ export default function LoginModal() {
     modal?.hide();
   }
   async function handleLoginPassphrase() {
-    if (!encryptedNsec || passphrase) return;
+    if (!encryptedNsec || !passphrase) return;
     setIsLoading(true);
 
     const decryptedNsec = decryptMessage(encryptedNsec, passphrase);
@@ -136,13 +138,14 @@ export default function LoginModal() {
             Connect with extension
           </Button>
         )}
-        {!!encryptedNsec && (
+        {showPassphraseLogin ? (
           <div className="space-y-3">
             <Label>Passphrase</Label>
             <Input
-              value={nsec}
+              value={passphrase}
               onChange={(e) => setPassphrase(e.target.value)}
               placeholder="passphrase..."
+              type="password"
               className="text-[16px]"
             />
             <Button
@@ -153,25 +156,48 @@ export default function LoginModal() {
             >
               Login with Passphrase
             </Button>
+            <div className="center">
+              <Button
+                variant={"link"}
+                size={"sm"}
+                className="h-0 pt-1"
+                onClick={() => setShowPassphraseLogin(false)}
+              >
+                Or, use Nsec
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <Label>Nsec</Label>
+            <Input
+              value={nsec}
+              onChange={(e) => setNsec(e.target.value)}
+              placeholder="nsec..."
+              className="text-[16px]"
+            />
+            <Button
+              variant={"outline"}
+              onClick={() => void handleLoginNsec()}
+              loading={isLoading}
+              className="w-full"
+            >
+              Connect with Nsec
+            </Button>
+            {!!encryptedNsec && (
+              <div className="center">
+                <Button
+                  variant={"link"}
+                  size={"sm"}
+                  className="h-0 pt-1"
+                  onClick={() => setShowPassphraseLogin(true)}
+                >
+                  Or, use Passphrase
+                </Button>
+              </div>
+            )}
           </div>
         )}
-        <div className="space-y-3">
-          <Label>Nsec</Label>
-          <Input
-            value={nsec}
-            onChange={(e) => setNsec(e.target.value)}
-            placeholder="nsec..."
-            className="text-[16px]"
-          />
-          <Button
-            variant={"outline"}
-            onClick={() => void handleLoginNsec()}
-            loading={isLoading}
-            className="w-full"
-          >
-            Connect with Nsec
-          </Button>
-        </div>
       </div>
     </Template>
   );
