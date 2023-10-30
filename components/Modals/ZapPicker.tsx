@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { type NostrEvent } from "@nostr-dev-kit/ndk";
 import { sendZap } from "@/lib/actions/zap";
+import useAuthGuard from "./hooks/useAuthGuard";
 
 const intervals = [
   10, 25, 50, 75, 100, 150, 200, 250, 350, 500, 750, 1000, 1250, 1500, 2_000,
@@ -22,11 +23,11 @@ const intervals = [
 ];
 
 type ZapPickerProps = {
+  title?: string;
   event: NostrEvent;
 };
-export default function ZapPicker({ event }: ZapPickerProps) {
-  const { loginWithNip07 } = useNDK();
-  const { loginWithPubkey, currentUser } = useCurrentUser();
+export default function ZapPicker({ event, title }: ZapPickerProps) {
+  useAuthGuard();
   const [isLoading, setIsLoading] = useState(false);
   const [note, setNote] = useState("");
   const modal = useModal();
@@ -59,7 +60,7 @@ export default function ZapPicker({ event }: ZapPickerProps) {
   }
 
   return (
-    <Template title="Send Zap!" className="md:max-w-[400px]">
+    <Template title={title ?? "Send Zap!"} className="md:max-w-[400px]">
       <div className="flex flex-col gap-y-5">
         <div className="pb-2">
           <div className="flex items-center justify-center space-x-2">

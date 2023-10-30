@@ -90,7 +90,13 @@ export default function Sidebar() {
       active: false,
     },
     {
-      onClick: () => modal?.show(<ZapPickerModal event={flockstrEvent} />),
+      onClick: () =>
+        modal?.show(
+          <ZapPickerModal
+            title="Help Support Flockstr!"
+            event={flockstrEvent}
+          />,
+        ),
       name: "zap",
       label: "Zap Flockstr",
       icon: HiOutlineLightningBolt,
