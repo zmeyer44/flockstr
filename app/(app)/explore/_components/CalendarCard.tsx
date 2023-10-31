@@ -17,7 +17,7 @@ import { getNameToShow } from "@/lib/utils";
 import { nip19 } from "nostr-tools";
 import useProfile from "@/lib/hooks/useProfile";
 import useEvents from "@/lib/hooks/useEvents";
-import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
+import { getTagsValues, getTagValues } from "@/lib/nostr/utils";
 import { useNDK } from "@/app/_providers/ndk";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -40,8 +40,9 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
   const banner =
     getTagValues("banner", tags) ?? profile?.image ?? profile?.banner ?? BANNER;
   const description = content ?? getTagValues("about", tags);
-  const calendarEvents = getTagAllValues("a", tags);
+  const calendarEvents = getTagsValues("a", tags);
   const calendarEventIdentifiers = calendarEvents
+    .filter(Boolean)
     .map((e) => nip19.decode(e))
     .filter(({ type }) => type === "naddr")
     .map((e) => e.data as nip19.AddressPointer);
