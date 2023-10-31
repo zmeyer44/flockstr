@@ -37,6 +37,15 @@ export function getNameToShow(user: {
     user.profile?.displayName ?? user.profile?.name ?? truncateText(user.npub)
   );
 }
+export function getLettersPlain(text?: string) {
+  if (!text) return "";
+  const splitString = text
+    .split(" ")
+    .map((s) => s[0])
+    .filter(Boolean)
+    .join(" ");
+  return splitString;
+}
 export function getTwoLetters(user: {
   npub: string;
   profile?: {

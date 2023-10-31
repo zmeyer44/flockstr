@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
-import { getTagAllValues } from "@/lib/nostr/utils";
+import { getTagsValues } from "@/lib/nostr/utils";
 import { groupEventsByDay } from ".";
 import { useNDK } from "@/app/_providers/ndk";
 import { nip19 } from "nostr-tools";
@@ -18,11 +18,13 @@ export default function EventsFromCalendar({
   loader: Loader,
   empty: Empty,
 }: EventsFromCalendar) {
-  const calendarEvents = getTagAllValues("a", calendar.tags);
+  const calendarEvents = getTagsValues("a", calendar.tags);
   const { ndk } = useNDK();
   const [events, setEvents] = useState<NDKEvent[]>([]);
   const [isFetching, setIsFetching] = useState(false);
+
   const calendarEventIdentifiers = calendarEvents
+    .filter(Boolean)
     .map((e) => nip19.decode(e))
     .filter(({ type }) => type === "naddr")
     .map((e) => e.data as nip19.AddressPointer);
@@ -33,6 +35,7 @@ export default function EventsFromCalendar({
     const events: NDKEvent[] = [];
     const promiseArray = [];
     for (const info of data) {
+      console.log("INFO", info);
       const calendarEventPromise = ndk
         .fetchEvent({
           authors: [info.pubkey],

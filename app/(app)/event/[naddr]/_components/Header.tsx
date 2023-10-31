@@ -12,6 +12,7 @@ import {
   getTagsValues,
 } from "@/lib/nostr/utils";
 import ProfileInfo from "./ProfileInfo";
+import CalendarInfo from "./CalendarInfo";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { useNDK } from "@/app/_providers/ndk";
 import { toast } from "sonner";
@@ -30,13 +31,8 @@ import LocationIcon from "@/components/EventIcons/LocationIcon";
 const RSVPButton = dynamic(() => import("./RSVPButton"), {
   ssr: false,
 });
-const CreateListEvent = dynamic(
-  () => import("@/components/Modals/ShortTextNoteOnList"),
-  {
-    ssr: false,
-  },
-);
-const ConfirmModal = dynamic(() => import("@/components/Modals/Confirm"), {
+
+const EditEventButton = dynamic(() => import("./EditEventButton"), {
   ssr: false,
 });
 
@@ -151,26 +147,14 @@ export default function Header({ event }: { event: NDKEvent }) {
               {title}
             </h2>
             <div className="flex items-center">
-              <ProfileInfo pubkey={pubkey} />
+              <CalendarInfo eventReference={eventReference} />
             </div>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-3">
-            {/* {!!currentUser && currentUser.pubkey === pubkey && (
-              <>
-                <Button onClick={() => modal?.show(<CreateListEvent />)}>
-                  Invite Users
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() =>
-                    modal?.show(<EditEventModal listEvent={rawEvent} />)
-                  }
-                >
-                  Edit
-                </Button>
-              </>
-            )} */}
-            <RSVPButton eventReference={eventReference} />
+            {!!currentUser && currentUser.pubkey === pubkey && (
+              <EditEventButton event={event.rawEvent()} />
+            )}
+            {!isMember && <RSVPButton eventReference={eventReference} />}
             {/* {!isMember &&
               (hasValidPayment ? (
                 <Button variant={"outline"}>Pending Sync</Button>

@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, getLettersPlain, getTwoLetters } from "@/lib/utils";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { BANNER } from "@/constants/app";
 import { getNameToShow } from "@/lib/utils";
@@ -21,6 +21,7 @@ import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
 import { useNDK } from "@/app/_providers/ndk";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type CalendarCardProps = {
   calendar: NDKEvent;
@@ -35,6 +36,9 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
   const [upcomingEvents, setUpcomingEvents] = useState<NDKEvent[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const name = getTagValues("name", tags);
+  const image = getTagValues("image", tags);
+  const banner =
+    getTagValues("banner", tags) ?? profile?.image ?? profile?.banner ?? BANNER;
   const description = content ?? getTagValues("about", tags);
   const calendarEvents = getTagAllValues("a", tags);
   const calendarEventIdentifiers = calendarEvents
@@ -78,7 +82,7 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
     <Card className="relative h-[350px] w-[250px] min-w-[250] overflow-hidden">
       <Image
         alt="background"
-        src={profile?.banner ?? BANNER}
+        src={banner}
         className="absolute inset-0 object-cover"
         fill
         unoptimized
@@ -95,18 +99,20 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
               {description}
             </CardDescription>
           </CardHeader>
-          <Image
+          <Avatar className="absolute left-1/2 top-1/2 !aspect-square h-[100px] w-[100px] -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg bg-muted object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:h-[70px] group-hover:w-[70px]">
+            <AvatarImage src={image ?? BANNER} height={100} width={100} />
+            <AvatarFallback>
+              {getLettersPlain(name ?? profile?.displayName ?? profile?.name)}
+            </AvatarFallback>
+          </Avatar>
+          {/* <Image
             alt="user"
-            src={
-              profile?.image ??
-              profile?.picture ??
-              `https://bitcoinfaces.xyz/api/get-image?name=${npub}&onchain=false`
-            }
+            src={image ?? BANNER}
             className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg bg-muted object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:w-[70px]"
             height={100}
             width={100}
             unoptimized
-          />
+          /> */}
           <Card className="absolute top-full min-h-full w-5/6 overflow-hidden transition-all duration-300 group-hover:top-1/3">
             <CardHeader className="border-b p-4 pb-3">
               <CardTitle>Upcoming Events:</CardTitle>

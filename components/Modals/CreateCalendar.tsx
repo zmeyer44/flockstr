@@ -11,14 +11,8 @@ import { addMinutesToDate, toUnix, convertToTimezone } from "@/lib/utils/dates";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { DatePicker } from "@/components/ui/date-picker";
-import { TimePicker } from "@/components/ui/time-picker";
-import { TimezoneSelector } from "@/components/ui/timezone";
 import { Label } from "@/components/ui/label";
 
-import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
-import LocationIcon from "@/components/EventIcons/LocationIcon";
-import LocationSearchInput from "@/components/LocationSearch";
 import Spinner from "../spinner";
 
 import useAutosizeTextArea from "@/lib/hooks/useAutoSizeTextArea";
@@ -39,6 +33,13 @@ export default function CreateCalendarEventModal() {
     imagePreview,
     imageUrl,
     status: imageStatus,
+  } = useImageUpload("event");
+  const {
+    ImageUploadButton: BannerImageUploadButton,
+    clear: clearBanner,
+    imagePreview: bannerImagePreview,
+    imageUrl: bannerImageUrl,
+    status: bannerImageStatus,
   } = useImageUpload("event");
   const [error, setError] = useState("");
   const [name, setName] = useState("");
@@ -72,6 +73,9 @@ export default function CreateCalendarEventModal() {
 
       if (imageUrl) {
         tags.push(["image", imageUrl]);
+      }
+      if (bannerImageUrl) {
+        tags.push(["banner", bannerImageUrl]);
       }
       const preEvent = {
         content: description,
@@ -134,7 +138,7 @@ export default function CreateCalendarEventModal() {
               placeholder="Some into about this calendar..."
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
             {imagePreview ? (
               <div className="relative overflow-hidden rounded-xl">
                 <div className="">
@@ -178,13 +182,58 @@ export default function CreateCalendarEventModal() {
                 </Button>
               </ImageUploadButton>
             )}
+            {bannerImagePreview ? (
+              <div className="relative overflow-hidden rounded-xl">
+                <div className="">
+                  <Image
+                    alt="Image"
+                    height="288"
+                    width="288"
+                    src={bannerImagePreview}
+                    className={cn(
+                      "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
+                      bannerImageStatus === "uploading" && "grayscale",
+                      bannerImageStatus === "error" && "blur-xl",
+                    )}
+                  />
+                </div>
+                {bannerImageStatus === "uploading" && (
+                  <button className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 text-background hover:bg-opacity-100">
+                    <Spinner />
+                  </button>
+                )}
+                {bannerImageStatus === "success" && (
+                  <button
+                    onClick={clearBanner}
+                    className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 hover:bg-opacity-100"
+                  >
+                    <HiX
+                      className="block h-4 w-4 text-background"
+                      aria-hidden="true"
+                    />
+                  </button>
+                )}
+              </div>
+            ) : (
+              <ImageUploadButton>
+                <Button
+                  className=""
+                  variant={"outline"}
+                  loading={bannerImageStatus === "uploading"}
+                >
+                  {bannerImageUrl ? "Uploaded!" : "Upload Banner Image"}
+                </Button>
+              </ImageUploadButton>
+            )}
           </div>
 
           <div className="flex">
             <Button
               onClick={handleSubmit}
               loading={isLoading}
-              disabled={imageStatus === "uploading"}
+              disabled={
+                imageStatus === "uploading" || bannerImageStatus === "uploading"
+              }
               className="w-full"
             >
               Create

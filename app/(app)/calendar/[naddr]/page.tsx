@@ -46,7 +46,6 @@ export default function EventPage({
   }
   const { tags } = event;
   const eventReference = event.encode();
-
   return (
     <div className="relative mx-auto max-w-5xl space-y-4 p-2 @container sm:p-4">
       <Header event={event} />

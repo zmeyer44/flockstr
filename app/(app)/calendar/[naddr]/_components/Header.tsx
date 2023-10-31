@@ -135,7 +135,7 @@ export default function Header({ event }: { event: NDKEvent }) {
             {!!currentUser && currentUser.pubkey === pubkey && (
               <>
                 <CreateEventButton eventReference={eventReference} />
-                <EditCalendarButton eventReference={eventReference} />
+                <EditCalendarButton event={event.rawEvent()} />
               </>
             )}
           </div>

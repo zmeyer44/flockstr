@@ -1,9 +1,10 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HiOutlineChevronDown } from "react-icons/hi2";
+import { HiOutlineChevronDown, HiXMark } from "react-icons/hi2";
+import Image from "next/image";
 import {
   FieldErrors,
   useForm,
@@ -47,6 +48,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import Spinner from "../spinner";
+import useImageUpload from "@/lib/hooks/useImageUpload";
 
 type FieldOptions =
   | "toggle"
@@ -54,6 +57,7 @@ type FieldOptions =
   | "input"
   | "number"
   | "text-area"
+  | "upload"
   | "custom";
 
 type DefaultFieldType<TSchema> = {
@@ -276,6 +280,13 @@ export default function FormModal<TSchema extends FieldValues>({
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
+                      ) : type === "upload" ? (
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
                       ) : type === "number" ? (
                         <FormControl>
                           <Input
@@ -314,5 +325,72 @@ export default function FormModal<TSchema extends FieldValues>({
         </form>
       </Form>
     </Template>
+  );
+}
+
+function ImageUpload({
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange: (imageUrl: string) => void;
+}) {
+  const { status, imageUrl, clear, ImageUploadButton } =
+    useImageUpload("event");
+  const handleClear = () => {
+    clear();
+    onChange("");
+  };
+  useEffect(() => {
+    if (imageUrl && value !== imageUrl) {
+      onChange(imageUrl);
+    }
+  }, [imageUrl]);
+  return (
+    <div className="">
+      {value || imageUrl ? (
+        <div className="relative overflow-hidden rounded-xl">
+          <div className="">
+            <Image
+              alt="Image"
+              height="288"
+              width="288"
+              src={(value || imageUrl) as string}
+              className={cn(
+                "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
+                status === "uploading" && "grayscale",
+                status === "error" && "blur-xl",
+              )}
+            />
+          </div>
+          {status === "uploading" && (
+            <button className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 text-background hover:bg-opacity-100">
+              <Spinner />
+            </button>
+          )}
+          {(status === "success" || value) && (
+            <button
+              onClick={handleClear}
+              className="center absolute left-1 top-1 rounded-full bg-foreground bg-opacity-70 p-1 hover:bg-opacity-100"
+            >
+              <HiXMark
+                className="block h-4 w-4 text-background"
+                aria-hidden="true"
+              />
+            </button>
+          )}
+        </div>
+      ) : (
+        <ImageUploadButton>
+          <Button
+            className=""
+            variant={"outline"}
+            loading={status === "uploading"}
+          >
+            {imageUrl ? "Uploaded!" : "Upload"}
+          </Button>
+        </ImageUploadButton>
+      )}
+    </div>
   );
 }

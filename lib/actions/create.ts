@@ -244,6 +244,7 @@ export async function createEventOnList(
   return true;
 }
 
+const multipleTag = ["a", "p", "e"];
 export async function updateList(
   ndk: NDK,
   list: NostrEvent,
@@ -254,7 +255,13 @@ export async function updateList(
     const index = tags.findIndex(([tK]) => tK === key);
     if (index !== -1) {
       // Replace old
-      tags[index] = [key, value];
+      if (multipleTag.includes(key)) {
+        if (value !== tags[index]?.[1]) {
+          tags.push([key, value]);
+        }
+      } else {
+        tags[index] = [key, value];
+      }
     } else {
       tags.push([key, value]);
     }

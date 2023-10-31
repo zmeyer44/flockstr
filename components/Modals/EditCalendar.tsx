@@ -10,17 +10,19 @@ import { useNDK } from "@/app/_providers/ndk";
 import { NostrEvent } from "@nostr-dev-kit/ndk";
 import { getTagValues } from "@/lib/nostr/utils";
 
-const EditListSchema = z.object({
+const EditCalendarSchema = z.object({
   name: z.string(),
   about: z.string().optional(),
   image: z.string().optional(),
+  banner: z.string().optional(),
 });
 
-type EditListType = z.infer<typeof EditListSchema>;
+type EditListType = z.infer<typeof EditCalendarSchema>;
 
 type EditListModalProps = {
   listEvent: NostrEvent;
 };
+
 export default function EditListModal({ listEvent }: EditListModalProps) {
   const modal = useModal();
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +41,7 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
     if (events.length) {
       console.log("Done!");
       setIsLoading(false);
-      toast.success("Event Updated!");
+      toast.success("Calendar Updated!");
       modal?.hide();
     }
   }, [events]);
@@ -55,18 +57,17 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
     );
   }
   const defaultValues: Partial<EditListType> = {
-    name:
-      getTagValues("title", listEvent.tags) ??
-      getTagValues("name", listEvent.tags),
+    name: getTagValues("name", listEvent.tags),
     image:
       getTagValues("image", listEvent.tags) ??
       getTagValues("picture", listEvent.tags),
+    banner: getTagValues("banner", listEvent.tags),
     about: listEvent.content,
   };
 
   return (
     <FormModal
-      title="Edit Event"
+      title="Edit Calendar"
       fields={[
         {
           label: "Name",
@@ -83,9 +84,14 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
           type: "upload",
           slug: "image",
         },
+        {
+          label: "Banner Image",
+          type: "upload",
+          slug: "banner",
+        },
       ]}
       defaultValues={defaultValues ?? {}}
-      formSchema={EditListSchema}
+      formSchema={EditCalendarSchema}
       onSubmit={handleSubmit}
       isSubmitting={isLoading}
       cta={{
