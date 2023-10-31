@@ -84,7 +84,10 @@ export default function CreateCalendarEventModal() {
   useEffect(() => {
     if (error["title"]) {
       if (title) {
-        setError((prev) => ({ ...prev, title: undefined }));
+        setError((prev) => ({
+          ...prev,
+          title: undefined,
+        }));
       }
     }
   }, [title, error]);
@@ -97,7 +100,7 @@ export default function CreateCalendarEventModal() {
 
     if (!title) {
       setError({
-        title: "Please add a title",
+        title: "Please add an event name",
       });
       return;
     }
@@ -451,6 +454,9 @@ export default function CreateCalendarEventModal() {
             )}
           </div>
 
+          {!!error["title"] && (
+            <p className="text-sm text-destructive">{error["title"]}</p>
+          )}
           <div className="flex">
             <Button
               onClick={handleSubmit}
