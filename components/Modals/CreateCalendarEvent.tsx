@@ -44,7 +44,7 @@ export default function CreateCalendarEventModal() {
     imageUrl,
     status: imageStatus,
   } = useImageUpload("event");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<Record<string, string | undefined>>({});
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date>(now);
@@ -81,17 +81,27 @@ export default function CreateCalendarEventModal() {
   const { currentUser, calendars } = useCurrentUser();
   const router = useRouter();
 
+  useEffect(() => {
+    if (error["title"]) {
+      if (title) {
+        setError((prev) => ({ ...prev, title: undefined }));
+      }
+    }
+  }, [title, error]);
+
   async function handleSubmit() {
     if (!ndk || !currentUser) {
       alert("MISSING");
       return;
     }
 
-    setIsLoading(true);
     if (!title) {
-      setError("Please add a title");
+      setError({
+        title: "Please add a title",
+      });
       return;
     }
+    setIsLoading(true);
 
     try {
       const random = randomId();
@@ -169,8 +179,6 @@ export default function CreateCalendarEventModal() {
   const titleRef = useRef<HTMLTextAreaElement>(null);
   useAutosizeTextArea(titleRef.current, title);
 
-  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
-
   return (
     <div
       className={cn(
@@ -193,6 +201,8 @@ export default function CreateCalendarEventModal() {
           className={cn(
             "invisible-input !text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80",
             title === "" && "max-h-[60px]",
+            error["title"] &&
+              "border-b border-red-600 placeholder:text-red-600/50",
           )}
         />
         <div className="space-y-4">
