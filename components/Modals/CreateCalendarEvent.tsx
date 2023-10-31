@@ -124,7 +124,6 @@ export default function CreateCalendarEventModal() {
       if (imageUrl) {
         tags.push(["image", imageUrl]);
       }
-      console.log("Adding ", tags);
       const preEvent = {
         content: description,
         pubkey: currentUser.pubkey,
@@ -153,7 +152,7 @@ export default function CreateCalendarEventModal() {
         toast.error("An error occured");
       }
     } catch (err) {
-      console.log("err", err);
+      console.log("error creating event", err);
     } finally {
       setIsLoading(false);
     }

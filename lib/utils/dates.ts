@@ -124,6 +124,7 @@ export function convertToTimezone(inputDate: Date, targetTimezone: string) {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   let hours = inputDate.getHours().toString();
+
   if (hours.length === 1) {
     hours = "0" + hours;
   }
@@ -131,13 +132,21 @@ export function convertToTimezone(inputDate: Date, targetTimezone: string) {
   if (minutes.length === 1) {
     minutes = "0" + minutes;
   }
+  let day = inputDate.getDate().toString();
+  if (day.length === 1) {
+    day = "0" + day;
+  }
+  let month = (inputDate.getMonth() + 1).toString();
+  if (month.length === 1) {
+    month = "0" + month;
+  }
 
-  const dateString = `${inputDate.getFullYear()}-${
-    inputDate.getMonth() + 1
-  }-${inputDate.getDate()}T${hours}:${minutes}:00.000Z`;
+  const dateString = `${inputDate.getFullYear()}-${month}-${day}T${hours}:${minutes}:00.000Z`;
   // Get plain date w/o timezones
   const initialDate = new Date(dateString);
+
   const plainString = initialDate.toISOString().split(".")[0] as string;
+
   const plain = dayjs.tz(plainString, targetTimezone);
   return plain.toDate();
 }
