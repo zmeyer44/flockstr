@@ -200,6 +200,7 @@ export default function CreateCalendarEventModal() {
           ref={titleRef}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          autoFocus={true}
           placeholder="Event Name"
           className={cn(
             "invisible-input !text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80",
