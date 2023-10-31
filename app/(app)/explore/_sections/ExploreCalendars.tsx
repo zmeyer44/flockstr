@@ -41,7 +41,7 @@ function HorizontalCarousel() {
       <div className="scrollbar-thumb-rounded-full mr-auto flex min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto pl-5 pr-[50vw] scrollbar-thin sm:pr-[200px]">
         {events.map((calendar, index) => (
           <div
-            key={index}
+            key={calendar.id}
             className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}
           >
             <Calendar encodedEvent={calendar.encode()} />
