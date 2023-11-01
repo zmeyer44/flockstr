@@ -5,8 +5,8 @@ import { z } from "zod";
 const eventSchema = z.object({
   identifier: z.string(),
   name: z.string(),
-  description: z.string(),
-  image: z.string(),
+  description: z.string().optional(),
+  image: z.string().optional(),
 });
 
 export async function get(identifier: string) {
