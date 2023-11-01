@@ -56,7 +56,7 @@ export default function CalendarInfo({ eventReference }: CalendarInfoProps) {
   const name = getTagValues("name", event.tags);
   return (
     <Link
-      href={`/calendar/${eventReference}`}
+      href={`/calendar/${event.encode()}`}
       className="center group gap-x-2 rounded-sm rounded-r-full border bg-background/50 pl-0.5 pr-1 text-muted-foreground hover:shadow"
     >
       <Avatar className="center h-[16px] w-[16px] overflow-hidden rounded-[.25rem] bg-muted @sm:h-[18px] @sm:w-[18px]">
