@@ -15,7 +15,7 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
   if (!event) {
     return {
-      title: "Flockstr Event",
+      title: "Flockstr Calendar",
       openGraph: {
         images: previousImages,
       },

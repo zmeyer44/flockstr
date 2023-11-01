@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
@@ -14,6 +14,7 @@ import {
 import { type NDKKind } from "@nostr-dev-kit/ndk";
 import Header from "./_components/Header";
 import EventsFromCalendar from "@/containers/EventsTimeline/EventsFromCalendar";
+import { add } from "@/lib/server-actions/events/cache";
 
 export default function EventPage({
   params: { naddr },
@@ -36,6 +37,22 @@ export default function EventPage({
     },
   });
   const event = events[0];
+  useEffect(() => {
+    if (event) {
+      const { tags, content } = event;
+      const name = getTagValues("name", tags) ?? "Untitled";
+      const image =
+        getTagValues("image", tags) ??
+        getTagValues("picture", tags) ??
+        getTagValues("banner", tags);
+      add({
+        identifier: naddr,
+        name: name,
+        description: content,
+        image: image,
+      });
+    }
+  }, [event]);
 
   if (!event) {
     return (
