@@ -58,6 +58,7 @@ type FieldOptions =
   | "number"
   | "text-area"
   | "upload"
+  | "date-time"
   | "custom";
 
 type DefaultFieldType<TSchema> = {
@@ -302,6 +303,14 @@ export default function FormModal<TSchema extends FieldValues>({
                                 >,
                               );
                             }}
+                          />
+                        </FormControl>
+                      ) : type === "date-time" ? (
+                        <FormControl>
+                          <Input
+                            placeholder={placeholder}
+                            {...field}
+                            type="datetime-local"
                           />
                         </FormControl>
                       ) : (

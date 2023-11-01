@@ -46,11 +46,17 @@ export function groupEventsByDay(events: NDKEvent[]) {
   const eventDays: Record<string, NDKEvent[]> = {};
   for (const event of events) {
     const eventStartTime = getTagValues("start", event.tags);
+    console.log("start", eventStartTime);
     if (!eventStartTime) continue;
     const startDate = fromUnix(parseInt(eventStartTime));
     const daysAway = daysOffset(startDate);
-    if (daysAway < 1) continue;
-    if (eventDays[`${daysAway}`]) {
+    if (daysAway < 1) {
+      if (eventDays[`0`]) {
+        eventDays[`0`]!.push(event);
+      } else {
+        eventDays[`0`] = [event];
+      }
+    } else if (eventDays[`${daysAway}`]) {
       eventDays[`${daysAway}`]!.push(event);
     } else {
       eventDays[`${daysAway}`] = [event];

@@ -9,11 +9,14 @@ import { toast } from "sonner";
 import { useNDK } from "@/app/_providers/ndk";
 import { NostrEvent } from "@nostr-dev-kit/ndk";
 import { getTagValues } from "@/lib/nostr/utils";
+import { addMinutesToDate, fromUnix, toUnix } from "@/lib/utils/dates";
 
 const EditListSchema = z.object({
   name: z.string(),
   about: z.string().optional(),
   image: z.string().optional(),
+  start: z.string().optional(),
+  end: z.string().optional(),
 });
 
 type EditListType = z.infer<typeof EditListSchema>;
@@ -46,7 +49,15 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
 
   async function handleSubmit(listData: EditListType) {
     setIsLoading(true);
-    const newTags = Object.entries(listData);
+    const dateKeys = ["start", "end"];
+    const newTags = Object.entries(listData).map(([key, val]) => {
+      if (dateKeys.includes(key)) {
+        const unix = toUnix(new Date(val));
+        return [key, unix.toString()];
+      } else {
+        return [key, val];
+      }
+    }) as [string, string][];
     setSent(true);
     const result = await updateList(
       ndk!,
@@ -62,6 +73,16 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
       getTagValues("image", listEvent.tags) ??
       getTagValues("picture", listEvent.tags),
     about: listEvent.content,
+    start: getTagValues("start", listEvent.tags)
+      ? fromUnix(
+          parseInt(getTagValues("start", listEvent.tags) as string),
+        ).toISOString()
+      : new Date().toISOString(),
+    end: getTagValues("end", listEvent.tags)
+      ? fromUnix(
+          parseInt(getTagValues("end", listEvent.tags) as string),
+        ).toISOString()
+      : addMinutesToDate(new Date(), 60).toISOString(),
   };
 
   return (
@@ -82,6 +103,16 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
           label: "Image",
           type: "upload",
           slug: "image",
+        },
+        {
+          label: "Start",
+          type: "date-time",
+          slug: "start",
+        },
+        {
+          label: "End",
+          type: "date-time",
+          slug: "end",
         },
       ]}
       defaultValues={defaultValues ?? {}}

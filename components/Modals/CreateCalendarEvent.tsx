@@ -5,18 +5,20 @@ import Image from "next/image";
 import { HiX } from "react-icons/hi";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, satsToBtc } from "@/lib/utils";
 import { randomId } from "@/lib/nostr";
 import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 import { addMinutesToDate, toUnix, convertToTimezone } from "@/lib/utils/dates";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { TimePicker } from "@/components/ui/time-picker";
 import { TimezoneSelector } from "@/components/ui/timezone";
 import { Label } from "@/components/ui/label";
 import Picker from "@/components/FormComponents/Picker";
+import { Switch } from "@/components/ui/switch";
 
 import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
 import LocationIcon from "@/components/EventIcons/LocationIcon";
@@ -32,7 +34,6 @@ import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import useImageUpload from "@/lib/hooks/useImageUpload";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagValues } from "@/lib/nostr/utils";
-
 export default function CreateCalendarEventModal() {
   const modal = useModal();
   const now = new Date(new Date().setHours(12, 0, 0, 0));
@@ -47,6 +48,8 @@ export default function CreateCalendarEventModal() {
   const [error, setError] = useState<Record<string, string | undefined>>({});
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [tickets, setTickets] = useState(false);
+  const [price, setPrice] = useState<number>(1000);
   const [startDate, setStartDate] = useState<Date>(now);
   const startTime = `${
     startDate?.getHours().toLocaleString().length === 1
@@ -137,6 +140,12 @@ export default function CreateCalendarEventModal() {
       if (imageUrl) {
         tags.push(["image", imageUrl]);
       }
+      if (tickets) {
+        tags.push(["tickets", "true"]);
+        if (price) {
+          tags.push(["price", satsToBtc(price).toString(), "btc"]);
+        }
+      }
       const preEvent = {
         content: description,
         pubkey: currentUser.pubkey,
@@ -148,7 +157,6 @@ export default function CreateCalendarEventModal() {
       if (event) {
         const encodedEvent = event.encode();
         if (calendar) {
-          console.log("calendar", calendar);
           const selectedCalendar = Array.from(calendars)
             .find((option) => option.encode() === calendar)
             ?.rawEvent();
@@ -196,6 +204,7 @@ export default function CreateCalendarEventModal() {
         <HiX className="h-4 w-4" />
       </button>
       <div className="">
+        {/* Event Name */}
         <Textarea
           ref={titleRef}
           value={title}
@@ -203,13 +212,14 @@ export default function CreateCalendarEventModal() {
           autoFocus={true}
           placeholder="Event Name"
           className={cn(
-            "invisible-input !text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80",
+            "invisible-input max-h-none !text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80",
             title === "" && "max-h-[60px]",
             error["title"] &&
               "border-b border-red-600 placeholder:text-red-600/50",
           )}
         />
         <div className="space-y-4">
+          {/* General Details */}
           <div className="flex w-full items-start gap-x-3">
             <div className="shrink-0">
               <SmallCalendarIcon date={startDate ?? new Date()} />
@@ -295,7 +305,6 @@ export default function CreateCalendarEventModal() {
                   </div>
                 </div>
               </div>
-
               <div className="flex justify-between overflow-hidden p-0.5 px-1 pl-3">
                 <div className="flex-1 text-xs text-muted-foreground">
                   <div className="flex max-w-full justify-start bg-secondary">
@@ -383,6 +392,8 @@ export default function CreateCalendarEventModal() {
               )}
             </div>
           </div>
+
+          {/* Loction Details */}
           <div className="flex w-full items-start gap-x-3">
             <div className="shrink-0">
               <LocationIcon />
@@ -400,6 +411,39 @@ export default function CreateCalendarEventModal() {
               </div>
             </div>
           </div>
+
+          {/* Ticketing Details */}
+          <div className="w-full">
+            {/* <div className="shrink-0">
+              <LocationIcon />
+            </div> */}
+            <Label className="text-muted-foreground">Ticketing details</Label>
+            <div className="flex-1 divide-y overflow-hidden rounded-md bg-muted sm:max-w-[350px]">
+              <div className="flex w-full items-center justify-between px-3 py-2.5">
+                <Label className="text-muted-foreground">Require Tickets</Label>
+                <Switch
+                  checked={tickets}
+                  onCheckedChange={(checked) => setTickets(checked)}
+                />
+              </div>
+              {tickets && (
+                <div className="flex h-[40px] w-full items-center justify-between px-3 py-2.5">
+                  <Label className="text-muted-foreground">Price</Label>
+                  <Input
+                    value={price}
+                    type="number"
+                    onChange={(e) => setPrice(parseInt(e.target.value))}
+                    className={cn(
+                      "invisible-input ml-auto py-0 text-right placeholder:text-muted-foreground/40",
+                    )}
+                    placeholder="10,000"
+                  />
+                  <pre className="ml-1 text-xs text-muted-foreground">sats</pre>
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="w-full">
             <Label className="text-muted-foreground">Event details</Label>
             <Textarea

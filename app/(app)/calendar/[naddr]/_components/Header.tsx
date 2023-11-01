@@ -141,7 +141,7 @@ export default function Header({ event }: { event: NDKEvent }) {
           </div>
         </div>
         <div className="flex flex-col gap-x-6 gap-y-3 pt-1 @md:pt-2 @xl:flex-row">
-          <div className="flex-1">
+          <div className="flex-2">
             {!!description && (
               <p className="text-sm text-muted-foreground @md:text-sm">
                 {description}
