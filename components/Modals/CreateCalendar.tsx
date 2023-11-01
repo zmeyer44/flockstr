@@ -215,7 +215,7 @@ export default function CreateCalendarEventModal() {
                 )}
               </div>
             ) : (
-              <ImageUploadButton>
+              <BannerImageUploadButton>
                 <Button
                   className=""
                   variant={"outline"}
@@ -223,7 +223,7 @@ export default function CreateCalendarEventModal() {
                 >
                   {bannerImageUrl ? "Uploaded!" : "Upload Banner Image"}
                 </Button>
-              </ImageUploadButton>
+              </BannerImageUploadButton>
             )}
           </div>
 
