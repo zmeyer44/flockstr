@@ -46,7 +46,7 @@ export function groupEventsByDay(events: NDKEvent[]) {
   const eventDays: Record<string, NDKEvent[]> = {};
   for (const event of events) {
     const eventStartTime = getTagValues("start", event.tags);
-    console.log("start", eventStartTime);
+
     if (!eventStartTime) continue;
     const startDate = fromUnix(parseInt(eventStartTime));
     const daysAway = daysOffset(startDate);
@@ -65,7 +65,6 @@ export function groupEventsByDay(events: NDKEvent[]) {
   const groupedArray = Object.entries(eventDays)
     .sort(([aKey], [bKey]) => {
       const aDay = parseInt(aKey);
-
       const bDay = parseInt(bKey);
       if (aDay > bDay) {
         return 1;
@@ -74,6 +73,17 @@ export function groupEventsByDay(events: NDKEvent[]) {
       }
       return 0;
     })
-    .map(([_, events]) => events);
+    .map(([_, events]) =>
+      events.sort((a, b) => {
+        const aStart = parseInt(getTagValues("start", a.tags) ?? "0");
+        const bStart = parseInt(getTagValues("start", b.tags) ?? "0");
+        if (aStart > bStart) {
+          return 1;
+        } else if (aStart < bStart) {
+          return -1;
+        }
+        return 0;
+      }),
+    );
   return groupedArray;
 }
