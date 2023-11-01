@@ -32,6 +32,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-google-maps/api": "^2.19.2",
     "@tailwindcss/container-queries": "^0.1.1",
+    "@upstash/redis": "^1.24.3",
     "aws-sdk": "^2.1475.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.7.0",
