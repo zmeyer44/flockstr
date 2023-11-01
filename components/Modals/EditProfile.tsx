@@ -62,7 +62,7 @@ export default function EditProfileModal() {
 
   return (
     <FormModal
-      title="Edit List"
+      title="Edit Profile"
       fields={[
         {
           label: "Display name",
@@ -76,7 +76,7 @@ export default function EditProfileModal() {
         },
         {
           label: "Image",
-          type: "input",
+          type: "upload",
           slug: "image",
         },
         {
@@ -86,7 +86,7 @@ export default function EditProfileModal() {
         },
         {
           label: "Banner",
-          type: "input",
+          type: "upload",
           slug: "banner",
         },
         {
