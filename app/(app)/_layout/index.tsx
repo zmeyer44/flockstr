@@ -1,11 +1,13 @@
 import BottomNav from "./BottomNav";
 import Header from "./Header";
 import Keystone from "./Keystone";
-import MobileBanner from "./MobileBanner";
 import Sidebar from "./Sidebar";
 import dynamic from "next/dynamic";
 
 const CommandDialog = dynamic(() => import("./components/CommandDialog"), {
+  ssr: false,
+});
+const MobileBanner = dynamic(() => import("./MobileBanner"), {
   ssr: false,
 });
 export default function AppLayout({ children }: { children: React.ReactNode }) {
