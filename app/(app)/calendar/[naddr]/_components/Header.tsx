@@ -41,9 +41,9 @@ export default function Header({ event }: { event: NDKEvent }) {
   const eventReference = event.encode();
   const name = getTagValues("name", tags) ?? "Untitled";
   const image =
+    getTagValues("banner", tags) ??
     getTagValues("image", tags) ??
     getTagValues("picture", tags) ??
-    getTagValues("banner", tags) ??
     profile?.banner;
 
   const description = event.content;
