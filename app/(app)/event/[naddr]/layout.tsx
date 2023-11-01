@@ -1,13 +1,8 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { get } from "@/lib/server-actions/events/cache";
 
-type Props = {
-  params: { naddr: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params }: { params: { naddr: string } },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // read route params

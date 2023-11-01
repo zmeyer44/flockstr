@@ -11,7 +11,6 @@ import {
 } from "@/lib/nostr/utils";
 
 import Header from "./_components/Header";
-import LocationPreview from "@/components/LocationPreview";
 import HostsContainer from "./_components/HostsContainer";
 import LocationContainer from "./_components/LocationContainer";
 import AnnouncementsContainer from "./_components/AnnouncementsContainer";
@@ -42,7 +41,6 @@ export default function EventPage({
   });
   const event = events[0];
   useEffect(() => {
-    console.log("EFFECT CALLED", event);
     if (event) {
       const { tags, content } = event;
       const name = getTagValues("name", tags) ?? "Untitled";
@@ -51,17 +49,12 @@ export default function EventPage({
         getTagValues("picture", tags) ??
         getTagValues("banner", tags) ??
         BANNER;
-      console.log("setting event");
       add({
         identifier: naddr,
         name: name,
         description: content,
         image: image,
       });
-      (async () => {
-        const res = await get(naddr);
-        console.log("RESPONE", res);
-      })();
     }
   }, [event]);
 
