@@ -1,8 +1,11 @@
+"use client";
+import { useState, useEffect } from "react";
 import { formatDate, fromUnix } from "@/lib/utils/dates";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { nip19 } from "nostr-tools";
 import {
   Card,
   CardContent,
@@ -12,7 +15,8 @@ import {
 } from "@/components/ui/card";
 import SmallProfileLine from "@/components/ProfileContainers/SmallProfileLine";
 import AvatarStack from "@/components/ProfileContainers/AvatarStack";
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { type NDKEvent, type NDKKind } from "@nostr-dev-kit/ndk";
+import { useNDK } from "@/app/_providers/ndk";
 import {
   getTagValues,
   getTagAllValues,
@@ -22,6 +26,7 @@ import { HiOutlineMapPin, HiOutlineUserCircle } from "react-icons/hi2";
 import { RxClock, RxCalendar } from "react-icons/rx";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import SmallLineInfo from "@/components/CalendarContainers/SmallLineInfo";
 
 type LargeFeedCardProps = {
   event: NDKEvent;
@@ -33,7 +38,6 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
   const location =
     getTagValues("location", tags) ?? getTagValues("address", tags);
   const users = getTagsValues("p", tags).filter(Boolean);
-  console.log("Users", users);
   const startDate = getTagValues("start", tags)
     ? new Date(parseInt(getTagValues("start", tags) as string) * 1000)
     : null;
@@ -160,4 +164,41 @@ export function LoadingCard() {
       </div>
     </Card>
   );
+}
+
+function CalendarLine({ eventReference }: { eventReference: string }) {
+  const { type, data } = nip19.decode(eventReference);
+  if (type !== "naddr") {
+    throw new Error("Invalid list");
+  }
+  const { pubkey } = data;
+  const { ndk } = useNDK();
+  const [event, setEvent] = useState<NDKEvent>();
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    if (!ndk || isFetching || event) return;
+    handleFetchEvent();
+  }, [ndk, eventReference]);
+  async function handleFetchEvent() {
+    if (!ndk) return;
+    setIsFetching(true);
+
+    const calendarEvent = await ndk
+      .fetchEvent({
+        authors: [pubkey],
+        ["#a"]: [eventReference],
+        kinds: [31924 as NDKKind],
+      })
+      .catch((err) => console.log("err"));
+    if (calendarEvent) {
+      console.log("Found calendar", calendarEvent);
+      setEvent(calendarEvent);
+    }
+    setIsFetching(false);
+  }
+  if (!event) {
+    return <SmallProfileLine pubkey={pubkey} />;
+  }
+  return <SmallLineInfo event={event} />;
 }

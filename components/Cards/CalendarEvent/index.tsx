@@ -70,7 +70,7 @@ export default function CalendarEventCard({
             height={150}
             unoptimized
             className={cn(
-              "h-auto w-auto  object-cover transition-all group-hover:scale-105",
+              "h-auto w-auto min-w-full object-cover transition-all group-hover:scale-105",
               "aspect-video",
             )}
           />
