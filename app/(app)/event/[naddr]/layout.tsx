@@ -44,5 +44,5 @@ export default function metadataLayout({
 }: {
   children: React.ReactNode;
 }) {
-  <>{children}</>;
+  return <>{children}</>;
 }
