@@ -4,14 +4,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { RiArrowRightLine } from "react-icons/ri";
 import useEvents from "@/lib/hooks/useEvents";
-import useProfile from "@/lib/hooks/useProfile";
 import { nip19 } from "nostr-tools";
-import { EXPLORE_CALENDARS } from "@/constants/app";
-import { getTagValues } from "@/lib/nostr/utils";
-import { NDKEvent, NDKKind, NDKUserProfile } from "@nostr-dev-kit/ndk";
-import { useNDK } from "@nostr-dev-kit/ndk-react";
+import { type NDKKind } from "@nostr-dev-kit/ndk";
+import { uniqBy } from "ramda";
 
 import CalendarCard, { LoadingCalendarCard } from "../_components/CalendarCard";
+import { getTagValues } from "@/lib/nostr/utils";
 export default function ExploreCalendars() {
   return (
     <section className="relative -mx-5 space-y-4 overflow-x-hidden sm:space-y-6">
@@ -39,14 +37,16 @@ function HorizontalCarousel() {
   if (events.length) {
     return (
       <div className="scrollbar-thumb-rounded-full mr-auto flex min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto pl-5 pr-[50vw] scrollbar-thin sm:pr-[200px]">
-        {events.map((calendar, index) => (
-          <div
-            key={calendar.id}
-            className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}
-          >
-            <Calendar encodedEvent={calendar.encode()} />
-          </div>
-        ))}
+        {uniqBy((e) => getTagValues("title", e.tags), events).map(
+          (calendar, index) => (
+            <div
+              key={calendar.id}
+              className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}
+            >
+              <Calendar encodedEvent={calendar.encode()} />
+            </div>
+          ),
+        )}
       </div>
     );
   }
