@@ -94,14 +94,14 @@ export default function ProfilePage({
             )}
           </div>
           <div className="flex flex-wrap items-center justify-end gap-3">
-            {currentUser?.pubkey === pubkey && !mySubscription && (
+            {/* {currentUser?.pubkey === pubkey && !mySubscription && (
               <Button
                 onClick={() => modal?.show(<CreateSubecriptionTierModal />)}
                 className="rounded-sm px-5 max-sm:h-8 max-sm:text-xs"
               >
                 Add Subscription Tier
               </Button>
-            )}
+            )} */}
             {currentUser?.pubkey === pubkey && (
               <Button
                 onClick={() => modal?.show(<EditProfileModal />)}
