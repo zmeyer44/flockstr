@@ -71,13 +71,10 @@ export default function EditListModal({ listEvent }: EditListModalProps) {
       { ...listEvent, content: listData.about ?? "" },
       newTags,
     );
-    console.log("listData.calendar", listData.calendar);
-    if (listData.calendar) {
+    if (listData.calendar !== getTagValues("calendar", listEvent.tags)) {
       const selectedCalendar = Array.from(calendars)
         .find((option) => option.tagId() === listData.calendar)
         ?.rawEvent();
-      console.log("selectedCalendar", selectedCalendar);
-
       if (selectedCalendar) {
         const encodedEvent = nip19.naddrEncode({
           identifier: getTagValues("d", listEvent.tags) as string,
