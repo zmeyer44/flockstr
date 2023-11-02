@@ -39,6 +39,7 @@ export default function EventsFromCalendar({
     if (events) {
       if (secondaryFilter) {
         const grouped = groupEventsByDay(events.filter(secondaryFilter));
+        console.log("rouped events", grouped);
         setEventsByDay(grouped);
       } else {
         const grouped = groupEventsByDay(events);

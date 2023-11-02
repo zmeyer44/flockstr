@@ -132,8 +132,8 @@ export default function Header({ event }: { event: NDKEvent }) {
         </div>
       </div>
       <div className="space-y-1 p-3 @sm:px-3.5 @sm:pb-2 @sm:pt-5">
-        <div className="flex items-start justify-between gap-x-1.5 @lg:gap-x-2.5">
-          <div className="shrink-0 space-y-1 @sm:space-y-2">
+        <div className="flex items-start justify-between gap-x-1.5 overflow-hidden @lg:gap-x-2.5">
+          <div className="space-y-1 @sm:space-y-2">
             <h2 className="font-condensed text-2xl font-semibold sm:text-3xl lg:text-4xl">
               {title}
             </h2>
