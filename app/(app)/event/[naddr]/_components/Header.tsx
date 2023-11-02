@@ -218,13 +218,13 @@ export default function Header({ event }: { event: NDKEvent }) {
               {!!location && (
                 <div className="flex flex-1 items-center gap-3">
                   <LocationIcon />
-                  <div className="">
+                  <div className="overflow-hidden">
                     {location.length > 2 ? (
                       <>
-                        <p className="text-bold text-sm @xl:text-base">
+                        <p className="text-bold line-clamp-2 text-sm @xl:text-base">
                           {location[1]}
                         </p>
-                        <p className="text-xs text-muted-foreground @xl:text-sm">
+                        <p className="line-clamp-2 text-xs text-muted-foreground @xl:text-sm">
                           {location[2]}
                         </p>
                       </>
