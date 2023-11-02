@@ -221,7 +221,7 @@ export default function CreateCalendarEventModal({
           placeholder="Event Name"
           className={cn(
             "invisible-input max-h-none !text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:hover:text-muted-foreground/80",
-            title === "" && "max-h-[60px]",
+            title === "" && "max-h-[52px]",
             error["title"] &&
               "border-b border-red-600 placeholder:text-red-600/50",
           )}
