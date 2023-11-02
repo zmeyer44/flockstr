@@ -226,13 +226,13 @@ export default function CreateCalendarEventModal({
               "border-b border-red-600 placeholder:text-red-600/50",
           )}
         />
-        <div className="space-y-4">
+        <div className="mt-2 space-y-4">
           {/* General Details */}
           <div className="flex w-full items-start gap-x-3">
             <div className="shrink-0">
               <SmallCalendarIcon date={startDate ?? new Date()} />
             </div>
-            <div className="flex-1 divide-y overflow-hidden rounded-md bg-muted sm:max-w-[300px]">
+            <div className="flex-1 shrink-0 divide-y overflow-hidden rounded-md bg-muted sm:max-w-[300px]">
               <div className="flex justify-between p-0.5 px-2 pl-3">
                 <div className="flex w-[50px] items-center">Start</div>
                 <div className="flex-1 shrink-0">
