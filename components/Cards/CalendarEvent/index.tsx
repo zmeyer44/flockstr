@@ -29,7 +29,6 @@ export default function CalendarEventCard({
   const { profile } = useProfile(pubkey);
 
   const title = getTagValues("name", tags) || "Untitled";
-  console.log("tite", tags);
   const image =
     getTagValues("image", tags) ??
     getTagValues("picture", tags) ??
