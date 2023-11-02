@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { RiArrowRightLine } from "react-icons/ri";
 import useEvents from "@/lib/hooks/useEvents";
 import { nip19 } from "nostr-tools";
-import { type NDKKind } from "@nostr-dev-kit/ndk";
+import { NDKEvent, type NDKKind } from "@nostr-dev-kit/ndk";
 import { uniqBy } from "ramda";
 
 import CalendarCard, { LoadingCalendarCard } from "../_components/CalendarCard";
@@ -45,7 +45,7 @@ function HorizontalCarousel() {
               key={calendar.id}
               className={cn("snap-start pl-2 sm:pl-5", index === 0 && "pl-5")}
             >
-              <Calendar encodedEvent={calendar.encode()} />
+              <Calendar event={calendar} />
             </div>
           ),
         )}
@@ -67,24 +67,6 @@ function HorizontalCarousel() {
   );
 }
 
-function Calendar({ encodedEvent }: { encodedEvent: string }) {
-  const { type, data } = nip19.decode(encodedEvent);
-  if (type !== "naddr") {
-    throw new Error("impoper type");
-  }
-  const { pubkey, identifier, kind } = data;
-  const { events } = useEvents({
-    filter: {
-      authors: [pubkey],
-      ["#d"]: [identifier],
-      kinds: [31924 as NDKKind],
-      limit: 1,
-    },
-  });
-  const event = events[0];
-  if (!event) {
-    return null;
-  }
-
-  return <CalendarCard calendar={event} key={event.id} />;
+function Calendar({ event }: { event: NDKEvent }) {
+  return <CalendarCard calendar={event} />;
 }
