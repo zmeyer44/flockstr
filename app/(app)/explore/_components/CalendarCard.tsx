@@ -24,7 +24,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
-
+import { uniqBy } from "ramda";
 type CalendarCardProps = {
   calendar: NDKEvent;
 };
@@ -61,7 +61,9 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
           unixTimeNowInSeconds(),
       );
       const sortedEvents = sortEventsByTagNumber(filteredEvents, "start");
-      setUpcomingEvents(sortedEvents);
+      setUpcomingEvents(
+        uniqBy((e) => getTagValues("name", e.tags), sortedEvents),
+      );
     }
   }, [events]);
 

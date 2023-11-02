@@ -9,26 +9,26 @@ import CalendarSection, { CalendarSectionLoading } from "./CalendarSection";
 import useEvents from "@/lib/hooks/useEvents";
 type EventsFromCalendar = {
   calendar: NDKEvent;
+  secondaryFilter?: (event: NDKEvent) => Boolean;
   loader?: () => JSX.Element;
   empty?: () => JSX.Element;
 };
 
 export default function EventsFromCalendar({
   calendar,
+  secondaryFilter,
   loader: Loader,
   empty: Empty,
 }: EventsFromCalendar) {
   const calendarEvents = getTagsValues("a", calendar.tags);
-  const { ndk } = useNDK();
   const [eventsByDay, setEventsByDay] = useState<NDKEvent[][]>([]);
-  const [isFetching, setIsFetching] = useState(false);
 
   const calendarEventIdentifiers = calendarEvents
     .filter(Boolean)
     .map((e) => nip19.decode(e))
     .filter(({ type }) => type === "naddr")
     .map((e) => e.data as nip19.AddressPointer);
-  const { events } = useEvents({
+  const { events, isLoading } = useEvents({
     filter: {
       kinds: calendarEventIdentifiers.map((k) => k.kind),
       authors: calendarEventIdentifiers.map((k) => k.pubkey),
@@ -37,11 +37,16 @@ export default function EventsFromCalendar({
   });
   useEffect(() => {
     if (events) {
-      const grouped = groupEventsByDay(events);
-      setEventsByDay(grouped);
+      if (secondaryFilter) {
+        const grouped = groupEventsByDay(events.filter(secondaryFilter));
+        setEventsByDay(grouped);
+      } else {
+        const grouped = groupEventsByDay(events);
+        setEventsByDay(grouped);
+      }
     }
   }, [events]);
-  if (isFetching) {
+  if (isLoading) {
     if (Loader) {
       return <Loader />;
     }

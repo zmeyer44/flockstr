@@ -15,6 +15,7 @@ import { type NDKKind } from "@nostr-dev-kit/ndk";
 import Header from "./_components/Header";
 import EventsFromCalendar from "@/containers/EventsTimeline/EventsFromCalendar";
 import { add } from "@/lib/server-actions/events/cache";
+import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 
 export default function EventPage({
   params: { naddr },
@@ -61,8 +62,6 @@ export default function EventPage({
       </div>
     );
   }
-  const { tags } = event;
-  const eventReference = event.encode();
   return (
     <div className="relative mx-auto max-w-5xl space-y-4 p-2 @container sm:p-4">
       <Header event={event} />
@@ -73,6 +72,10 @@ export default function EventPage({
         <div className="mx-auto w-full max-w-[900px] space-y-6">
           <EventsFromCalendar
             calendar={event}
+            secondaryFilter={(e) =>
+              parseInt(getTagValues("start", e.tags) ?? "0") >
+              unixTimeNowInSeconds()
+            }
             empty={() => (
               <div className="py-3 text-center text-sm text-muted-foreground">
                 <p>No upcoming events</p>
