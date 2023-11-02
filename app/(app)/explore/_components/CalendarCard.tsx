@@ -150,7 +150,7 @@ export function LoadingCalendarCard() {
   const textColor = "bg-zinc-200";
   return (
     <Skeleton className="pointer-events-none relative h-[350px] w-[250px] min-w-[250px] overflow-hidden bg-muted">
-      <div className="absolute inset-0  backdrop-blur-lg transition-all">
+      <div className="absolute inset-0 backdrop-blur-lg transition-all">
         <div className="group relative flex h-full w-full flex-col items-center justify-end transition-all">
           <CardHeader className="absolute inset-x-0 top-[59%] transform pt-4 text-center transition-all duration-300 group-hover:top-[8px] group-hover:ml-[75px] group-hover:text-left">
             <Skeleton className={cn("mx-auto h-[20px] w-2/3", textColor)} />

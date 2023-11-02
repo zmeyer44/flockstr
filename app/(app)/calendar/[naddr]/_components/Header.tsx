@@ -21,7 +21,7 @@ import {
 } from "@/lib/actions/zap";
 import { type NDKEvent } from "@nostr-dev-kit/ndk";
 import { btcToSats, formatNumber } from "@/lib/utils";
-import { nip19 } from "nostr-tools";
+import BannerImage from "@/components/PageComponents/BannerImage";
 
 const CreateEventButton = dynamic(() => import("./CreateEventButton"), {
   ssr: false,
@@ -108,16 +108,7 @@ export default function Header({ event }: { event: NDKEvent }) {
     <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
       <div className="overflow-hidden rounded-[0.5rem] p-0">
         <div className="relative w-full overflow-hidden bg-gradient-to-b from-primary pb-[50%] @5xl:rounded-[20px] md:pb-[40%]">
-          {!!image && (
-            <Image
-              className="absolute inset-0 h-full w-full object-cover align-middle"
-              src={image}
-              width={400}
-              height={100}
-              alt="banner"
-              unoptimized
-            />
-          )}
+          {!!image && <BannerImage image={image} />}
         </div>
       </div>
       <div className="space-y-1 p-3 @sm:px-3.5 @sm:pb-2 @sm:pt-5">
