@@ -27,7 +27,7 @@ import { btcToSats, formatNumber } from "@/lib/utils";
 import { formatDate } from "@/lib/utils/dates";
 import SmallCalendarIcon from "@/components/EventIcons/DateIcon";
 import LocationIcon from "@/components/EventIcons/LocationIcon";
-
+import BannerImage from "@/components/PageComponents/BannerImage";
 const RSVPButton = dynamic(() => import("./RSVPButton"), {
   ssr: false,
 });
@@ -128,16 +128,7 @@ export default function Header({ event }: { event: NDKEvent }) {
     <div className="relative overflow-hidden rounded-[1rem] border bg-muted p-[0.5rem] @container">
       <div className="overflow-hidden rounded-[0.5rem] p-0">
         <div className="relative w-full overflow-hidden bg-gradient-to-b from-primary pb-[50%] @5xl:rounded-[20px] md:pb-[40%]">
-          {!!image && (
-            <Image
-              className="absolute inset-0 h-full w-full object-cover align-middle"
-              src={image}
-              width={400}
-              height={100}
-              alt="banner"
-              unoptimized
-            />
-          )}
+          {!!image && <BannerImage image={image} />}
         </div>
       </div>
       <div className="space-y-1 p-3 @sm:px-3.5 @sm:pb-2 @sm:pt-5">
@@ -154,7 +145,7 @@ export default function Header({ event }: { event: NDKEvent }) {
             {!!currentUser && currentUser.pubkey === pubkey && (
               <EditEventButton event={event.rawEvent()} />
             )}
-            {!isMember && <RSVPButton eventReference={eventReference} />}
+            {!isMember && <RSVPButton event={event} />}
             {/* {!isMember &&
               (hasValidPayment ? (
                 <Button variant={"outline"}>Pending Sync</Button>
