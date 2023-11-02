@@ -13,15 +13,17 @@ import {
 import { cn, getLettersPlain, getTwoLetters } from "@/lib/utils";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { BANNER } from "@/constants/app";
-import { getNameToShow } from "@/lib/utils";
 import { nip19 } from "nostr-tools";
 import useProfile from "@/lib/hooks/useProfile";
 import useEvents from "@/lib/hooks/useEvents";
-import { getTagsValues, getTagValues } from "@/lib/nostr/utils";
-import { useNDK } from "@/app/_providers/ndk";
+import {
+  getTagsValues,
+  getTagValues,
+  sortEventsByTagNumber,
+} from "@/lib/nostr/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 
 type CalendarCardProps = {
   calendar: NDKEvent;
@@ -29,12 +31,9 @@ type CalendarCardProps = {
 
 export default function CalendarCard({ calendar }: CalendarCardProps) {
   const { pubkey, tags, content } = calendar;
-  const { ndk } = useNDK();
-  const npub = nip19.npubEncode(pubkey);
   const { profile } = useProfile(pubkey);
   const encodedEvent = calendar.encode();
   const [upcomingEvents, setUpcomingEvents] = useState<NDKEvent[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
   const name = getTagValues("name", tags);
   const image = getTagValues("image", tags);
   const banner =
@@ -46,38 +45,25 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
     .map((e) => nip19.decode(e))
     .filter(({ type }) => type === "naddr")
     .map((e) => e.data as nip19.AddressPointer);
-
-  async function handleFetchEvents(data: nip19.AddressPointer[]) {
-    if (!ndk) return;
-    setIsFetching(true);
-    const events: NDKEvent[] = [];
-    const promiseArray = [];
-    for (const info of data) {
-      const calendarEventPromise = ndk
-        .fetchEvent({
-          authors: [info.pubkey],
-          ["#d"]: [info.identifier],
-          kinds: [info.kind],
-        })
-        .then((e) => e && events.push(e))
-        .catch((err) => console.log("err"));
-      promiseArray.push(calendarEventPromise);
-    }
-    await Promise.all(promiseArray);
-    setUpcomingEvents(events);
-    setIsFetching(false);
-  }
+  const { events } = useEvents({
+    filter: {
+      kinds: calendarEventIdentifiers.map((k) => k.kind),
+      authors: calendarEventIdentifiers.map((k) => k.pubkey),
+      ["#d"]: calendarEventIdentifiers.map((k) => k.identifier),
+    },
+  });
 
   useEffect(() => {
-    if (
-      !ndk ||
-      calendarEventIdentifiers.length === 0 ||
-      isFetching ||
-      upcomingEvents.length
-    )
-      return;
-    handleFetchEvents(calendarEventIdentifiers);
-  }, [ndk, calendarEventIdentifiers]);
+    if (events) {
+      const filteredEvents = events.filter(
+        (e) =>
+          parseInt(getTagValues("start", e.tags) ?? "0") >
+          unixTimeNowInSeconds(),
+      );
+      const sortedEvents = sortEventsByTagNumber(filteredEvents, "start");
+      setUpcomingEvents(sortedEvents);
+    }
+  }, [events]);
 
   return (
     <Card className="relative h-[350px] w-[250px] min-w-[250] overflow-hidden">
@@ -119,34 +105,40 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
               <CardTitle>Upcoming Events:</CardTitle>
             </CardHeader>
             <CardContent className="overflow-hidden px-0">
-              <ul className="w-full">
-                {upcomingEvents.map((item) => {
-                  const { tags, content } = item;
-                  const encodedEvent = item.encode();
-                  const name = getTagValues("name", tags);
-                  const description = content;
-                  return (
-                    <li key={item.id} className="w-full overflow-hidden">
-                      <Link
-                        href={`/event/${encodedEvent}`}
-                        className="flex max-w-full items-center justify-between overflow-hidden py-1.5 pl-4 pr-2 transition-colors hover:bg-muted hover:text-primary"
-                      >
-                        <div className="shrink overflow-x-hidden">
-                          <h4 className="line-clamp-1 text-sm font-semibold text-card-foreground">
-                            {name}
-                          </h4>
-                          <p className="line-clamp-2 text-[10px] leading-4 text-muted-foreground">
-                            {description ?? ""}
-                          </p>
-                        </div>
-                        <div className="center ml-auto shrink-0 pl-2">
-                          <RiArrowRightLine className="h-5 w-5" />
-                        </div>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+              {upcomingEvents.length ? (
+                <ul className="w-full">
+                  {upcomingEvents.map((item) => {
+                    const { tags, content } = item;
+                    const encodedEvent = item.encode();
+                    const name = getTagValues("name", tags);
+                    const description = content;
+                    return (
+                      <li key={item.id} className="w-full overflow-hidden">
+                        <Link
+                          href={`/event/${encodedEvent}`}
+                          className="flex max-w-full items-center justify-between overflow-hidden py-1.5 pl-4 pr-2 transition-colors hover:bg-muted hover:text-primary"
+                        >
+                          <div className="shrink overflow-x-hidden">
+                            <h4 className="line-clamp-1 text-sm font-semibold text-card-foreground">
+                              {name}
+                            </h4>
+                            <p className="line-clamp-2 text-[10px] leading-4 text-muted-foreground">
+                              {description ?? ""}
+                            </p>
+                          </div>
+                          <div className="center ml-auto shrink-0 pl-2">
+                            <RiArrowRightLine className="h-5 w-5" />
+                          </div>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <div className="py-3 text-center text-sm text-muted-foreground">
+                  <p>No upcoming events</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

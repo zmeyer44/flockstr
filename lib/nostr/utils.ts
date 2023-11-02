@@ -43,11 +43,29 @@ export function aTagToNip19(aTag: string[]): string {
     identifier: tagIdSplit[2] as string,
   });
 }
+export function sortEventsByTagNumber<T extends { tags: string[][] }>(
+  events: T[],
+  key: string,
+  swap?: boolean,
+) {
+  const direction = swap ? -1 : 1;
+  return events.sort((a, b) => {
+    const aVal = parseInt(getTagValues(key, a.tags) ?? "0");
+    const bVal = parseInt(getTagValues(key, b.tags) ?? "0");
+    if (aVal > bVal) {
+      return direction;
+    } else if (aVal < bVal) {
+      return direction * -1;
+    }
+    return 0;
+  });
+}
 export const getTagValues = (name: string, tags: string[][]) => {
   const [itemTag] = tags.filter((tag: string[]) => tag[0] === name);
   const [, item] = itemTag || [, undefined];
   return item;
 };
+
 export const getTagAllValues = (name: string, tags: string[][]) => {
   const [itemTag] = tags.filter((tag: string[]) => tag[0] === name);
   const itemValues = itemTag || [, undefined];

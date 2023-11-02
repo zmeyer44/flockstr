@@ -19,9 +19,9 @@ import {
   checkPayment,
   updateListUsersFromZaps,
 } from "@/lib/actions/zap";
-import { useModal } from "@/app/_providers/modal/provider";
 import { type NDKEvent } from "@nostr-dev-kit/ndk";
 import { btcToSats, formatNumber } from "@/lib/utils";
+import { nip19 } from "nostr-tools";
 
 const CreateEventButton = dynamic(() => import("./CreateEventButton"), {
   ssr: false,
@@ -32,13 +32,12 @@ const EditCalendarButton = dynamic(() => import("./EditCalendarButton"), {
 
 export default function Header({ event }: { event: NDKEvent }) {
   const { currentUser } = useCurrentUser();
-  const modal = useModal();
   const { ndk } = useNDK();
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const { pubkey, tags } = event;
   const { profile } = useProfile(pubkey);
-  const eventReference = event.encode();
+  const identifier = event.tagId();
   const name = getTagValues("name", tags) ?? "Untitled";
   const image =
     getTagValues("banner", tags) ??
@@ -134,7 +133,7 @@ export default function Header({ event }: { event: NDKEvent }) {
           <div className="flex flex-wrap items-center justify-end gap-3">
             {!!currentUser && currentUser.pubkey === pubkey && (
               <>
-                <CreateEventButton eventReference={eventReference} />
+                <CreateEventButton eventIdentifier={identifier} />
                 <EditCalendarButton event={event.rawEvent()} />
               </>
             )}

@@ -3,16 +3,20 @@ import { useModal } from "@/app/_providers/modal/provider";
 import CreateCalendarEventModal from "@/components/Modals/CreateCalendarEvent";
 
 type CreateEventButtonProps = {
-  eventReference: string;
+  eventIdentifier: string;
 };
 
 export default function CreateEventButton({
-  eventReference,
+  eventIdentifier,
 }: CreateEventButtonProps) {
   const modal = useModal();
 
   return (
-    <Button onClick={() => modal?.show(<CreateCalendarEventModal />)}>
+    <Button
+      onClick={() =>
+        modal?.show(<CreateCalendarEventModal calendar={eventIdentifier} />)
+      }
+    >
       Create Event
     </Button>
   );

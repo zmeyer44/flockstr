@@ -34,7 +34,14 @@ import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import useImageUpload from "@/lib/hooks/useImageUpload";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagValues } from "@/lib/nostr/utils";
-export default function CreateCalendarEventModal() {
+
+type CreateCalendarEventModalProps = {
+  calendar?: string;
+};
+
+export default function CreateCalendarEventModal({
+  calendar: _calendar,
+}: CreateCalendarEventModalProps) {
   const modal = useModal();
   const now = new Date(new Date().setHours(12, 0, 0, 0));
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +80,7 @@ export default function CreateCalendarEventModal() {
   const [timezone, setTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
-  const [calendar, setCalendar] = useState<string>();
+  const [calendar, setCalendar] = useState<string>(_calendar ?? "");
   const [location, setLocation] = useState<{
     address: string;
     name: string;
@@ -154,6 +161,7 @@ export default function CreateCalendarEventModal() {
         kind: 31923,
       };
       const event = await createEvent(ndk, preEvent);
+
       if (event) {
         const encodedEvent = event.encode();
         if (calendar) {
@@ -326,7 +334,7 @@ export default function CreateCalendarEventModal() {
                           ({
                             ...o,
                             label: getTagValues("name", o.tags) as string,
-                            value: o.encode(),
+                            value: o.tagId(),
                           }) as NDKEvent & {
                             label: string;
                             value: string;
@@ -339,7 +347,7 @@ export default function CreateCalendarEventModal() {
                       }
                       className="px-0 pr-1 font-normal"
                       value={calendar}
-                      onChange={(calendar) => setCalendar(calendar.encode())}
+                      onChange={(calendar) => setCalendar(calendar.tagId())}
                     />
                   </div>
                 </div>

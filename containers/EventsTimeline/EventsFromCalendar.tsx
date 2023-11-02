@@ -35,47 +35,12 @@ export default function EventsFromCalendar({
       ["#d"]: calendarEventIdentifiers.map((k) => k.identifier),
     },
   });
-  // async function handleFetchEvents(data: nip19.AddressPointer[]) {
-  //   if (!ndk) return;
-  //   setIsFetching(true);
-  //   const events: NDKEvent[] = [];
-  //   const promiseArray = [];
-  //   for (const info of data) {
-  //     console.log("INFO", info);
-  //     const calendarEventPromise = ndk
-  //       .fetchEvent({
-  //         authors: [info.pubkey],
-  //         ["#d"]: [info.identifier],
-  //         kinds: [info.kind],
-  //       })
-  //       .then((e) => e && events.push(e))
-  //       .catch((err) => console.log("err"));
-  //     promiseArray.push(calendarEventPromise);
-  //   }
-  //   await Promise.all(promiseArray);
-  //   setEvents(events);
-  //   setIsFetching(false);
-  // }
-
-  // useEffect(() => {
-  //   if (
-  //     !ndk ||
-  //     calendarEventIdentifiers.length === 0 ||
-  //     isFetching ||
-  //     events.length
-  //   )
-  //     return;
-  //   handleFetchEvents(calendarEventIdentifiers);
-  // }, [ndk, calendarEventIdentifiers]);
-
   useEffect(() => {
     if (events) {
       const grouped = groupEventsByDay(events);
-      console.log("Runnign group", events, " to", grouped);
       setEventsByDay(grouped);
     }
   }, [events]);
-  console.log(eventsByDay);
   if (isFetching) {
     if (Loader) {
       return <Loader />;
