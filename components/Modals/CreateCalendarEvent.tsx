@@ -347,7 +347,7 @@ export default function CreateCalendarEventModal({
                       }
                       className="px-0 pr-1 font-normal"
                       value={calendar}
-                      onChange={(calendar) => setCalendar(calendar.tagId())}
+                      onChange={(calendar) => setCalendar(calendar.value)}
                     />
                   </div>
                 </div>
