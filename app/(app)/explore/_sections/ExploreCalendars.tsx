@@ -10,6 +10,7 @@ import { uniqBy } from "ramda";
 
 import CalendarCard, { LoadingCalendarCard } from "../_components/CalendarCard";
 import { getTagValues } from "@/lib/nostr/utils";
+
 export default function ExploreCalendars() {
   return (
     <section className="relative -mx-5 space-y-4 overflow-x-hidden sm:space-y-6">
@@ -33,11 +34,12 @@ function HorizontalCarousel() {
       limit: 5,
     },
   });
+  console.log("explore calendars", events);
 
   if (events.length) {
     return (
       <div className="scrollbar-thumb-rounded-full mr-auto flex min-w-0 max-w-full snap-x snap-mandatory overflow-x-auto pl-5 pr-[50vw] scrollbar-thin sm:pr-[200px]">
-        {uniqBy((e) => getTagValues("title", e.tags), events).map(
+        {uniqBy((e) => getTagValues("d", e.tags), events).map(
           (calendar, index) => (
             <div
               key={calendar.id}
