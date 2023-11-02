@@ -112,9 +112,10 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
             src={image}
             unoptimized
             alt="Image"
-            fill
+            height={300}
+            width={300}
             className={cn(
-              "h-full max-h-[150px] rounded-[0.5rem] object-cover object-center max-sm:max-h-[100px]",
+              "ml-auto h-auto max-h-full w-auto rounded-[0.5rem] object-cover object-center max-sm:max-h-[100px]",
             )}
           />
         ) : (
@@ -135,7 +136,7 @@ export function LoadingCard() {
             <Skeleton className="h-3 w-[50px]" />
           </div>
           <div className="pl-3">
-            <Skeleton className="mt-3  h-5 w-[220px]" />
+            <Skeleton className="mt-3  h-5 w-5/6" />
             <div className="mt-2 space-y-1.5">
               <Skeleton className="h-3.5 w-3/4" />
               <Skeleton className="h-3.5 w-3/5" />
