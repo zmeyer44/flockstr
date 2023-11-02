@@ -46,13 +46,13 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
     : null;
 
   return (
-    <Card className="relative flex justify-between gap-x-4 rounded-[1rem] bg-muted p-[0.5rem]">
+    <Card className="relative flex justify-between gap-x-4 overflow-hidden rounded-[1rem] bg-muted p-[0.5rem]">
       <CardHeader className="w-3/5 justify-between p-0 pr-5">
         <div className="">
           <div className="flex">
             <SmallProfileLine pubkey={pubkey} />
           </div>
-          <div className="pl-3">
+          <div className="overflow-hidden pl-3">
             <CardTitle className="mt-3 line-clamp-2 text-xl leading-6">
               {getTagValues("name", tags)}
             </CardTitle>
@@ -61,7 +61,7 @@ export default function LargeFeedCard({ event }: LargeFeedCardProps) {
             </CardDescription>
           </div>
         </div>
-        <div className="flex items-center gap-x-4 pl-2">
+        <div className="flex flex-wrap items-center gap-x-4 overflow-hidden pl-2">
           {!!users.length && (
             <div className="flex shrink-0 items-center gap-x-1.5">
               <HiOutlineUserCircle className="h-4 w-4 text-primary" />

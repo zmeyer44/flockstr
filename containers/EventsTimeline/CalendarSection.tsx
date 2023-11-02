@@ -28,7 +28,7 @@ export default function CalendarSection({ events }: CalendarSectionProps) {
   const startDate = fromUnix(parseInt(startDateUnix));
 
   return (
-    <div className="relative flex w-full items-start gap-x-3 @container">
+    <div className="relative flex w-full max-w-full items-start gap-x-3 @container">
       {/* Date Indicator */}
       <div className="sticky top-[calc(var(--header-height)_+_28px)] hidden w-[230px] shrink-0 md:block">
         <CalendarIcon date={startDate} />
@@ -41,7 +41,7 @@ export default function CalendarSection({ events }: CalendarSectionProps) {
       </div>
 
       {/* Events */}
-      <div className="flex-1 space-y-4 max-md:pt-[60px]">
+      <div className="max-w-full flex-1 space-y-4 overflow-x-hidden max-md:pt-[60px]">
         {events.map((e) => (
           <LargeFeedCard key={e.id} event={e} />
         ))}
