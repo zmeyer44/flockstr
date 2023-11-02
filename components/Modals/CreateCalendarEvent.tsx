@@ -166,7 +166,7 @@ export default function CreateCalendarEventModal({
         const encodedEvent = event.encode();
         if (calendar) {
           const selectedCalendar = Array.from(calendars)
-            .find((option) => option.encode() === calendar)
+            .find((option) => option.tagId() === calendar)
             ?.rawEvent();
           if (selectedCalendar) {
             console.log("selectedCalendar", selectedCalendar);
