@@ -13,12 +13,10 @@ import CalendarEventCard, {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import useEvents from "@/lib/hooks/useEvents";
-import { Event } from "nostr-tools";
-import KindLoading from "@/components/KindCard/loading";
-import { nip19 } from "nostr-tools";
 import { getTagValues, getTagsValues } from "@/lib/nostr/utils";
 import { type NDKKind } from "@nostr-dev-kit/ndk";
 import { uniqBy } from "ramda";
+import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 
 export default function UpcomingEventsSection() {
   const { events } = useEvents({
@@ -49,24 +47,33 @@ export default function UpcomingEventsSection() {
         <div className="center gap-x-2 max-sm:px-5">
           <SectionTitle>Upcoming Events</SectionTitle>
         </div>
-        <Button variant={"ghost"}>
-          View all <RiArrowRightLine className="ml-1 h-4 w-4" />
-        </Button>
+        <Link href="/events">
+          <Button variant={"ghost"}>
+            View all <RiArrowRightLine className="ml-1 h-4 w-4" />
+          </Button>
+        </Link>
       </SectionHeader>
       <SectionContent className="relative">
         <ScrollArea>
           <div className="flex space-x-2 pb-4 max-sm:px-5">
             {processedEvents?.length ? (
-              processedEvents.slice(0, 6).map((e, idx) => {
-                return (
-                  <Link key={e.id} href={`/event/${e.encode()}`}>
-                    <CalendarEventCard
-                      event={e.rawEvent()}
-                      className="min-w-[250px] max-w-[350px]"
-                    />
-                  </Link>
-                );
-              })
+              processedEvents
+                .filter(
+                  (e) =>
+                    parseInt(getTagValues("start", e.tags) ?? "0") >
+                    unixTimeNowInSeconds(),
+                )
+                .slice(0, 8)
+                .map((e, idx) => {
+                  return (
+                    <Link key={e.id} href={`/event/${e.encode()}`}>
+                      <CalendarEventCard
+                        event={e.rawEvent()}
+                        className="min-w-[250px] max-w-[350px]"
+                      />
+                    </Link>
+                  );
+                })
             ) : (
               <>
                 <CardLoading className="min-w-[250px] max-w-[350px]" />
