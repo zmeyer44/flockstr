@@ -87,7 +87,7 @@ const useImageUpload = (folderName?: string) => {
         </button>
         <input
           type="file"
-          accept="image/png, image/jpeg"
+          accept="image/png, image/jpeg, image/webp"
           hidden
           onChange={onImageChange}
           ref={inputFileRef}
