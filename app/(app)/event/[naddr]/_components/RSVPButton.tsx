@@ -6,7 +6,7 @@ import { HiOutlineLightningBolt } from "react-icons/hi";
 import RSVPModal from "@/components/Modals/RSVP";
 import ConfirmModal from "@/components/Modals/Confirm";
 
-import { type NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKKind, type NDKEvent } from "@nostr-dev-kit/ndk";
 import { getTagAllValues, getTagValues } from "@/lib/nostr/utils";
 import { formatDate } from "@/lib/utils/dates";
 
@@ -17,6 +17,7 @@ import { useNDK } from "@/app/_providers/ndk";
 import { toast } from "sonner";
 
 import { sendZap, checkPayment } from "@/lib/actions/zap";
+import { useEvent } from "@/lib/hooks/useEvents";
 
 type RSVPButtonProps = {
   event: NDKEvent;
@@ -34,6 +35,14 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
   const [ticketPending, setTicketPending] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [hasValidPayment, setHasValidPayment] = useState(false);
+  const { event: rsvpEvent } = useEvent({
+    filter: {
+      kinds: [31925 as NDKKind],
+      authors: [currentUser?.pubkey as string],
+      ["#a"]: [eventReference],
+    },
+    enabled: !!currentUser,
+  });
 
   async function handleBuyTicket() {
     setTicketPending(true);
@@ -75,16 +84,30 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
       setCheckingPayment(false);
     }
   }
+
   if (!tickets) {
-    return (
-      <Button
-        onClick={() =>
-          modal?.show(<RSVPModal eventReference={eventReference} />)
-        }
-      >
-        RSVP
-      </Button>
-    );
+    if (rsvpEvent) {
+      const rsvpResponse = getTagValues("l", rsvpEvent.tags);
+      return (
+        <Button disabled>
+          {rsvpResponse === "accepted"
+            ? "Going"
+            : rsvpResponse === "tentative"
+            ? "Tentative"
+            : "Not Going"}
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          onClick={() =>
+            modal?.show(<RSVPModal eventReference={eventReference} />)
+          }
+        >
+          RSVP
+        </Button>
+      );
+    }
   }
   if (price) {
     return (
