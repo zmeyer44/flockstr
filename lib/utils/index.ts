@@ -21,6 +21,16 @@ export function cleanUrl(url?: string) {
   }
   return url;
 }
+export function getFirstSubdomain(url: string): string | null {
+  // Use a regular expression to extract the first subdomain
+  const subdomainMatch = url.match(/^(https?:\/\/)?([^.]+)\./i);
+
+  if (subdomainMatch && subdomainMatch[2]) {
+    return subdomainMatch[2];
+  }
+
+  return null;
+}
 
 export function truncateText(text: string, size?: number) {
   let length = size ?? 5;

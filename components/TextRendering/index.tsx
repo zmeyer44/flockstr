@@ -1,7 +1,14 @@
-import { cleanUrl } from "@/lib/utils";
+import { cleanUrl, getFirstSubdomain } from "@/lib/utils";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import ProfileMention from "./ProfileMention";
 import EventMention from "./EventMention";
+const ImageUrl = dynamic(() => import("./Image"), {
+  ssr: false,
+});
+const VideoUrl = dynamic(() => import("./Video"), {
+  ssr: false,
+});
 
 const urlRegex =
   /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
@@ -27,17 +34,37 @@ const RenderText = ({ text }: { text?: string }) => {
     Elements.push(jsxElement);
     let specialElement;
     if (specialValuesArray?.length && specialValuesArray.length > index) {
-      if (specialValuesArray[index]?.match(urlRegex)) {
-        specialElement = (
-          <a
-            className="text-primary hover:underline"
-            href={cleanUrl(specialValuesArray[index])}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {cleanUrl(specialValuesArray[index])}
-          </a>
-        );
+      const currentValue = specialValuesArray[index];
+      if (currentValue?.match(urlRegex)) {
+        console.log("First zSub", getFirstSubdomain(currentValue));
+        const subdomain = getFirstSubdomain(currentValue);
+        if (!subdomain || subdomain === "www") {
+          specialElement = (
+            <a
+              className="text-primary hover:underline"
+              href={cleanUrl(currentValue)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {cleanUrl(currentValue)}
+            </a>
+          );
+        } else if (subdomain === "i" || subdomain === "image") {
+          specialElement = <ImageUrl className="my-1" url={currentValue} />;
+        } else if (["v", "video"].includes(subdomain)) {
+          specialElement = <VideoUrl className="my-1" url={currentValue} />;
+        } else {
+          specialElement = (
+            <a
+              className="text-primary hover:underline"
+              href={cleanUrl(currentValue)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {cleanUrl(currentValue)}
+            </a>
+          );
+        }
         // specialElement = <ContentRendering url={specialValuesArray[index]} />;
         // specialElement = <span>{cleanUrl(specialValuesArray[index])}</span>;
       } else if (specialValuesArray[index]?.match(hashtagRegex)) {

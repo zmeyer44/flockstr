@@ -84,6 +84,25 @@ export default function EventPage({
           />
         </div>
       </div>
+      <div className="flex flex-col pt-5 sm:gap-6">
+        <div className="flex items-center justify-between px-0">
+          <h2 className="font-condensed text-2xl font-bold">Past Events</h2>
+        </div>
+        <div className="mx-auto w-full max-w-[900px] space-y-6">
+          <EventsFromCalendar
+            calendar={event}
+            secondaryFilter={(e) =>
+              parseInt(getTagValues("start", e.tags) ?? "0") <
+              unixTimeNowInSeconds()
+            }
+            empty={() => (
+              <div className="py-3 text-center text-sm text-muted-foreground">
+                <p>No past events</p>
+              </div>
+            )}
+          />
+        </div>
+      </div>
     </div>
   );
 }
