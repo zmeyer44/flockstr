@@ -22,7 +22,7 @@ export default function BottomNav() {
       icon: RiCalendarEventFill,
     },
     {
-      href: "",
+      href: "/explore",
       name: "messages",
       icon: RiQuestionAnswerFill,
     },
