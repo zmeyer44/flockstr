@@ -16,7 +16,7 @@ import LocationContainer from "./_components/LocationContainer";
 import AnnouncementsContainer from "./_components/AnnouncementsContainer";
 import DiscussionContainer from "./_components/DiscussionContainer";
 import AttendeesContainer from "./_components/AttendeesContainer";
-import { add, get } from "@/lib/server-actions/events/cache";
+import { add } from "@/lib/server-actions/events/cache";
 import { BANNER } from "@/constants";
 
 export default function EventPage({
@@ -31,6 +31,7 @@ export default function EventPage({
     throw new Error("Invalid list");
   }
   const { identifier, kind, pubkey } = data;
+
   const { events } = useEvents({
     filter: {
       authors: [pubkey],
@@ -66,7 +67,7 @@ export default function EventPage({
     );
   }
   const { tags } = event;
-  const eventReference = event.encode();
+  const eventReference = event.tagId();
 
   const location = getTagAllValues("location", tags)[0]
     ? getTagAllValues("location", tags)
