@@ -97,7 +97,6 @@ export default function LoginModal() {
     setIsLoading(true);
 
     const decryptedNsec = decryptMessage(encryptedNsec, passphrase);
-    console.log("decryptedNsec", decryptedNsec);
     if (!decryptedNsec) {
       setIsLoading(false);
       toast.error("An error has occured");
