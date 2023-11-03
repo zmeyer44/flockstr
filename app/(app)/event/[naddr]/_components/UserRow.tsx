@@ -10,7 +10,7 @@ export default function UserRow({ pubkey }: { pubkey: string }) {
   const { profile } = useProfile(pubkey);
   return (
     <li className="flex items-center">
-      <Link href={`/${pubkey}`} className="center group gap-x-3">
+      <Link href={`/${npub}`} className="center group gap-x-3">
         <Avatar className="center h-9 w-9 overflow-hidden rounded-sm bg-muted @md:h-10 @md:w-10">
           <AvatarImage src={profile?.image} alt={profile?.displayName} />
           <AvatarFallback className="text-xs">
