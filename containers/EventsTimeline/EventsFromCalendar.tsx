@@ -25,7 +25,25 @@ export default function EventsFromCalendar({
 
   const calendarEventIdentifiers = calendarEvents
     .filter(Boolean)
-    .map((e) => nip19.decode(e))
+    .map((e) => {
+      if (nip19.BECH32_REGEX.test(e) && e.includes(":")) {
+        const [kind, pubkey, identifier] = e.split(":") as [
+          string,
+          string,
+          string,
+        ];
+        return {
+          type: "naddr",
+          data: {
+            kind,
+            pubkey,
+            identifier,
+          },
+        };
+      } else {
+        return nip19.decode(e);
+      }
+    })
     .filter(({ type }) => type === "naddr")
     .map((e) => e.data as nip19.AddressPointer);
   const { events, isLoading } = useEvents({
