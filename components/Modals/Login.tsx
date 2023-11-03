@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import AddPassphrase from "./AddPassphrase";
 import { decryptMessage } from "@/lib/nostr";
 import { toast } from "sonner";
+import { generateSchnorrKeyPair } from "@/lib/keys";
 
 export default function LoginModal() {
   const { loginWithNip07, loginWithSecret } = useNDK();
@@ -19,8 +20,10 @@ export default function LoginModal() {
   const [isLoading, setIsLoading] = useState(false);
   const [showExtensionLogin, setShowExtensionLogin] = useState(true);
   const [showPassphraseLogin, setShowPassphraseLogin] = useState(false);
+  const [showEmailLogin, setShowEmailLogin] = useState(false);
   const [nsec, setNsec] = useState("");
   const [passphrase, setPassphrase] = useState("");
+  const [email, setEmail] = useState("");
   const [encryptedNsec, setEncryptedNsec] = useState("");
   const modal = useModal();
 
@@ -92,6 +95,25 @@ export default function LoginModal() {
     setIsLoading(false);
     modal?.hide();
   }
+  async function handleLoginEmail() {
+    if (!email || !passphrase) return;
+    setIsLoading(true);
+    const seedString = email + passphrase;
+    const { privateKey, publicKey } = generateSchnorrKeyPair(seedString);
+    console.log("privateKey", privateKey, "publicKey", publicKey);
+    const emailNsec = nip19.nsecEncode(privateKey);
+    const user = await loginWithSecret(emailNsec);
+    console.log("User", user);
+    if (!user) {
+      throw new Error("NO auth");
+    }
+    await loginWithPubkey(nip19.decode(user.npub).data.toString());
+    if (typeof window.webln !== "undefined") {
+      await window.webln.enable();
+    }
+    setIsLoading(false);
+    modal?.hide();
+  }
   async function handleLoginPassphrase() {
     if (!encryptedNsec || !passphrase) return;
     setIsLoading(true);
@@ -138,7 +160,51 @@ export default function LoginModal() {
             Connect with extension
           </Button>
         )}
-        {showPassphraseLogin ? (
+        {showEmailLogin ? (
+          <div className="space-y-3">
+            <div className="space-y-2">
+              <Label>Email</Label>
+              <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="email"
+                type="email"
+                className="text-[16px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Password</Label>
+              <Input
+                value={passphrase}
+                onChange={(e) => setPassphrase(e.target.value)}
+                placeholder="password..."
+                type="password"
+                className="text-[16px]"
+              />
+            </div>
+            <Button
+              variant={"outline"}
+              onClick={() => void handleLoginEmail()}
+              loading={isLoading}
+              className="w-full"
+            >
+              Login
+            </Button>
+            <div className="center">
+              <Button
+                variant={"link"}
+                size={"sm"}
+                className="h-0 pt-1"
+                onClick={() => {
+                  setShowEmailLogin(false);
+                  setShowPassphraseLogin(false);
+                }}
+              >
+                Or, use Nsec
+              </Button>
+            </div>
+          </div>
+        ) : showPassphraseLogin ? (
           <div className="space-y-3">
             <Label>Passphrase</Label>
             <Input
@@ -184,18 +250,27 @@ export default function LoginModal() {
             >
               Connect with Nsec
             </Button>
-            {!!encryptedNsec && (
-              <div className="center">
-                <Button
-                  variant={"link"}
-                  size={"sm"}
-                  className="h-0 pt-1"
-                  onClick={() => setShowPassphraseLogin(true)}
-                >
-                  Or, use Passphrase
-                </Button>
-              </div>
-            )}
+
+            <div className="center text-xs font-medium text-primary">
+              Or, use
+              {!!encryptedNsec && (
+                <>
+                  <button
+                    className="ml-1 hover:underline"
+                    onClick={() => setShowPassphraseLogin(true)}
+                  >
+                    Passphrase
+                  </button>
+                  <span className="mx-1">or</span>
+                </>
+              )}
+              <button
+                className="ml-1 hover:underline"
+                onClick={() => setShowEmailLogin(true)}
+              >
+                Email
+              </button>
+            </div>
           </div>
         )}
       </div>
