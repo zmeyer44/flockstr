@@ -26,7 +26,7 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
   const modal = useModal();
   const { currentUser } = useCurrentUser();
   const { ndk } = useNDK();
-  const eventReference = event.encode();
+  const eventReference = event.tagId();
   const name = getTagValues("name", event.tags);
   const tickets = getTagValues("tickets", event.tags);
   const price = getTagAllValues("price", event.tags);

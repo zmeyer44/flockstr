@@ -163,20 +163,19 @@ export default function CreateCalendarEventModal({
       const event = await createEvent(ndk, preEvent);
 
       if (event) {
-        const encodedEvent = event.encode();
+        const encodedEvent = event.tagId();
         if (calendar) {
           const selectedCalendar = Array.from(calendars)
             .find((option) => option.tagId() === calendar)
             ?.rawEvent();
           if (selectedCalendar) {
             console.log("selectedCalendar", selectedCalendar);
-
             await updateList(ndk, selectedCalendar, [["a", encodedEvent]]);
           }
         }
         toast.success("Event Created!");
         modal?.hide();
-        router.push(`/event/${encodedEvent}`);
+        router.push(`/event/${event.encode()}`);
       } else {
         toast.error("An error occured");
       }

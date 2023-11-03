@@ -31,7 +31,7 @@ export default function EventPage({
     throw new Error("Invalid list");
   }
   const { identifier, kind, pubkey } = data;
-
+  const bech32 = `${kind}:${pubkey}:${identifier}`;
   const { events } = useEvents({
     filter: {
       authors: [pubkey],
@@ -67,7 +67,7 @@ export default function EventPage({
     );
   }
   const { tags } = event;
-  const eventReference = event.tagId();
+  const eventTagId = event.tagId();
 
   const location = getTagAllValues("location", tags)[0]
     ? getTagAllValues("location", tags)
@@ -96,11 +96,8 @@ export default function EventPage({
           <AttendeesContainer attendees={attendees} />
         </div>
         <div className="max-w-2xl grow space-y-4">
-          <AnnouncementsContainer
-            eventReference={eventReference}
-            hosts={hosts}
-          />
-          <DiscussionContainer eventReference={eventReference} />
+          <AnnouncementsContainer eventReference={eventTagId} hosts={hosts} />
+          <DiscussionContainer eventReference={eventTagId} />
         </div>
       </div>
     </div>

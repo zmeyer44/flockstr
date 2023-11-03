@@ -17,11 +17,12 @@ type CalendarInfoProps = {
 };
 export default function CalendarInfo({ eventReference }: CalendarInfoProps) {
   console.log("eventReference", eventReference);
-  const { type, data } = nip19.decode(eventReference);
-  if (type !== "naddr") {
-    throw new Error("Invalid list");
-  }
-  const { pubkey } = data;
+  const [kind, pubkey, identifier] = eventReference.split(":") as [
+    string,
+    string,
+    string,
+  ];
+
   const { ndk } = useNDK();
   const [event, setEvent] = useState<NDKEvent>();
   const [isFetching, setIsFetching] = useState(false);

@@ -44,7 +44,7 @@ export default function Header({ event }: { event: NDKEvent }) {
   const [hasValidPayment, setHasValidPayment] = useState(false);
   const { pubkey, tags } = event;
   const { profile } = useProfile(pubkey);
-  const eventReference = event.encode();
+  const eventReference = event.tagId();
   const title = getTagValues("name", tags) ?? "Untitled";
   const image =
     getTagValues("image", tags) ??

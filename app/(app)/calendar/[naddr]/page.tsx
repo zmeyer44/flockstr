@@ -29,6 +29,7 @@ export default function EventPage({
     throw new Error("Invalid list");
   }
   const { identifier, kind, pubkey } = data;
+  const bech32 = `${kind}:${pubkey}:${identifier}`;
   const { events } = useEvents({
     filter: {
       authors: [pubkey],
