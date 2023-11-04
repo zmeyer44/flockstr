@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { HiOutlineLightningBolt } from "react-icons/hi";
+import { RiRepeatFill } from "react-icons/ri";
 
 import RSVPModal from "@/components/Modals/RSVP";
 import ConfirmModal from "@/components/Modals/Confirm";
@@ -89,13 +90,24 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
     if (rsvpEvent) {
       const rsvpResponse = getTagValues("l", rsvpEvent.tags);
       return (
-        <Button disabled>
-          {rsvpResponse === "accepted"
-            ? "Going"
-            : rsvpResponse === "tentative"
-            ? "Tentative"
-            : "Not Going"}
-        </Button>
+        <div className="flex items-center">
+          <Button disabled>
+            {rsvpResponse === "accepted"
+              ? "Going"
+              : rsvpResponse === "tentative"
+              ? "Tentative"
+              : "Not Going"}
+          </Button>
+          <Button
+            onClick={() =>
+              modal?.show(<RSVPModal eventReference={eventReference} />)
+            }
+            variant={"secondary"}
+            size="icon"
+          >
+            <RiRepeatFill className="h-5 w-5" />
+          </Button>
+        </div>
       );
     } else {
       return (
