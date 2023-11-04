@@ -88,9 +88,10 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
 
   if (!tickets) {
     if (rsvpEvent) {
+      console.log("rsvp", rsvpEvent);
       const rsvpResponse = getTagValues("l", rsvpEvent.tags);
       return (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Button disabled>
             {rsvpResponse === "accepted"
               ? "Going"
@@ -102,10 +103,10 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
             onClick={() =>
               modal?.show(<RSVPModal eventReference={eventReference} />)
             }
-            variant={"secondary"}
+            variant={"outline"}
             size="icon"
           >
-            <RiRepeatFill className="h-5 w-5" />
+            <RiRepeatFill className="h-4 w-4 text-muted-foreground" />
           </Button>
         </div>
       );
