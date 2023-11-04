@@ -10,7 +10,7 @@ import { unixTimeNowInSeconds } from "@/lib/nostr/dates";
 import useCurrentUser from "@/lib/hooks/useCurrentUser";
 import { createEvent } from "@/lib/actions/create";
 import { useNDK } from "@/app/_providers/ndk";
-
+import useAuthGuard from "./hooks/useAuthGuard";
 type RSVPModalProps = {
   eventReference: string;
 };
@@ -22,6 +22,7 @@ const statusMap = {
 };
 
 export default function RSVPModal({ eventReference }: RSVPModalProps) {
+  useAuthGuard();
   const modal = useModal();
   const { ndk } = useNDK();
   const { currentUser } = useCurrentUser();
