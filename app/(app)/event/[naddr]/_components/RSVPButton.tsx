@@ -88,7 +88,6 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
 
   if (!tickets) {
     if (rsvpEvent) {
-      console.log("rsvp", rsvpEvent);
       const rsvpResponse = getTagValues("l", rsvpEvent.tags);
       return (
         <div className="flex items-center gap-2">
