@@ -215,7 +215,7 @@ export default function Header({ event }: { event: NDKEvent }) {
                   </div>
                 </div>
               )}
-              {!!location && (
+              {!!location[0] && (
                 <div className="flex flex-1 items-center gap-3">
                   <LocationIcon />
                   <div className="overflow-hidden">
