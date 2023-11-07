@@ -27,6 +27,10 @@ export default function ModalLayout(props: {
           {props[30311]}
         </div>
       );
+    } else if (kind === 31923 || kind === 31922) {
+      return redirect(`/event/${key}`);
+    } else if (kind === 31924) {
+      return redirect(`/calendar/${key}`);
     }
   } else if (type === "note") {
     return (
