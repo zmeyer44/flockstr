@@ -36,6 +36,7 @@ export default function BannerImage({ image }: { image: string }) {
         width={1}
         height={1}
         src={image}
+        unoptimized
         onLoad={(e) => {
           console.log(
             "Width",

@@ -362,6 +362,7 @@ export default function CreateCalendarEventModal({
                       height="288"
                       width="288"
                       src={imagePreview}
+                      unoptimized
                       className={cn(
                         "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
                         imageStatus === "uploading" && "grayscale",
@@ -469,6 +470,7 @@ export default function CreateCalendarEventModal({
                     height="288"
                     width="288"
                     src={imagePreview}
+                    unoptimized
                     className={cn(
                       "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
                       imageStatus === "uploading" && "grayscale",

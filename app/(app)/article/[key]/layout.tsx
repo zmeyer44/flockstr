@@ -13,6 +13,7 @@ export default function ModalLayout(props: {
 }) {
   const key = props.params.key;
   const { data, type } = nip19.decode(key);
+  console.log("AT layout", type, data);
   if (type === "naddr") {
     const kind = data.kind;
     if (kind === 30023) {

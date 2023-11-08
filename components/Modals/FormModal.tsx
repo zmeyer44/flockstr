@@ -364,6 +364,7 @@ function ImageUpload({
               alt="Image"
               height="288"
               width="288"
+              unoptimized
               src={(value || imageUrl) as string}
               className={cn(
                 "bg-bckground h-full rounded-xl object-cover object-center max-sm:max-h-[100px]",
