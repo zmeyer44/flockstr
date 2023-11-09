@@ -9,7 +9,7 @@ import { getTagValues } from "@/lib/nostr/utils";
 import { fromUnix, daysOffset } from "@/lib/utils/dates";
 import Spinner from "@/components/spinner";
 import CalendarSection, { CalendarSectionLoading } from "./CalendarSection";
-
+import { uniqBy } from "ramda";
 type EventsTimelineProps = {
   filter?: NDKFilter;
   loader?: () => JSX.Element;
@@ -23,7 +23,9 @@ export default function EventsTimeline({
   const { events, isLoading } = useEvents({
     filter: { kinds: [31923 as NDKKind], ...filter },
   });
-  const eventsByDay = groupEventsByDay(events);
+  const eventsByDay = groupEventsByDay(
+    uniqBy((e) => getTagValues("d", e.tags), events),
+  );
 
   if (isLoading) {
     if (Loader) {
