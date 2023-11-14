@@ -48,7 +48,7 @@ export default function Container({
         setExpandButton(false);
       }
     }
-  }, [contentRef.current]);
+  }, [contentRef.current, contentRef.current?.scrollHeight]);
 
   if (!event) {
     return (
