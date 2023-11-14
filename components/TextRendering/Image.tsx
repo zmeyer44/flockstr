@@ -16,7 +16,7 @@ export default function ImageUrl({
         unoptimized
         src={url}
         className={cn(
-          "h-full rounded-xl bg-background object-cover object-center max-sm:max-h-[100px]",
+          "h-full rounded-xl bg-background object-cover object-center",
         )}
       />
     </div>
