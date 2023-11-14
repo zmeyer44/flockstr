@@ -93,7 +93,10 @@ export default function EventPage({
             />
           )}
           <HostsContainer hosts={hosts} />
-          <AttendeesContainer attendees={attendees} />
+          <AttendeesContainer
+            attendees={attendees}
+            eventReference={eventTagId}
+          />
         </div>
         <div className="max-w-2xl grow space-y-4">
           <AnnouncementsContainer eventReference={eventTagId} hosts={hosts} />
