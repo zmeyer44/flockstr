@@ -120,7 +120,9 @@ export default function Container({
                 onClick={() => setShowFull(true)}
                 className="center text-text relative h-[30px] w-full bg-background text-sm transition-all hover:text-primary"
               >
-                <div className="flex items-end justify-center">Show more</div>
+                <div className="flex items-end justify-center pb-1.5">
+                  Show more
+                </div>
               </button>
             </div>
           )}
