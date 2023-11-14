@@ -104,7 +104,7 @@ function CommandSearch({ location, onSelect }: CommandSearchProps) {
     });
     if (!result[0]) return;
     const coordinates = getLatLng(result[0]);
-    const geohash = Geohash.encode(coordinates.lat, coordinates.lng, 6);
+    const geohash = Geohash.encode(coordinates.lat, coordinates.lng, 8);
     setOpen(false);
     return onSelect({
       name,
