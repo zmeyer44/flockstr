@@ -105,7 +105,10 @@ export default function Container({
       </CardHeader>
       <CardContent
         ref={contentRef}
-        className={cn("relative flex grow flex-col px-4 pb-3")}
+        className={cn(
+          "relative flex grow flex-col px-4 pb-3",
+          showFull || expandButton === false ? "max-h-none" : "max-h-[400px]",
+        )}
       >
         {children}
         {!showFull && expandButton && (
