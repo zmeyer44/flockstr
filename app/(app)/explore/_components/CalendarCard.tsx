@@ -43,7 +43,7 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
   const calendarEventIdentifiers = calendarEvents
     .filter(Boolean)
     .map((e) => {
-      if (nip19.BECH32_REGEX.test(e) && e.includes(":")) {
+      if (e.includes(":") && e.split(":").length === 3) {
         const [kind, pubkey, identifier] = e.split(":") as [
           string,
           string,
