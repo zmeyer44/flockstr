@@ -108,7 +108,12 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
             </CardDescription>
           </CardHeader>
           <Avatar className="absolute left-1/2 top-1/2 !aspect-square h-[100px] w-[100px] -translate-x-1/2 -translate-y-[70%] transform overflow-hidden rounded-lg bg-muted object-cover transition-all duration-300 group-hover:left-[50px] group-hover:top-[65px] group-hover:h-[70px] group-hover:w-[70px]">
-            <AvatarImage src={image ?? BANNER} height={100} width={100} />
+            <AvatarImage
+              src={image ?? BANNER}
+              className="object-cover"
+              height={100}
+              width={100}
+            />
             <AvatarFallback>
               {getLettersPlain(name ?? profile?.displayName ?? profile?.name)}
             </AvatarFallback>
