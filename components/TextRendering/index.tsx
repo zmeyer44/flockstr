@@ -49,7 +49,7 @@ const RenderText = ({ text }: { text?: string }) => {
               {cleanUrl(currentValue)}
             </a>
           );
-        } else if (["m", "i", "image", "flockstr"].includes(subdomain)) {
+        } else if (["m", "i", "image", "flockstr", "cdn"].includes(subdomain)) {
           specialElement = <ImageUrl className="my-1" url={currentValue} />;
         } else if (["v", "video"].includes(subdomain)) {
           specialElement = <VideoUrl className="my-1" url={currentValue} />;
