@@ -195,7 +195,7 @@ export default function Header({ event }: { event: NDKEvent }) {
           <div className="flex flex-1 @xl:justify-end">
             <div className="flex flex-col gap-3 pr-3">
               {!!startDate && (
-                <div className="flex flex-1 items-center gap-3">
+                <div className="flex items-center gap-3">
                   <SmallCalendarIcon date={startDate} />
                   <div className="">
                     <p className="text-bold text-sm @xl:text-base">
@@ -216,7 +216,7 @@ export default function Header({ event }: { event: NDKEvent }) {
                 </div>
               )}
               {!!location[0] && (
-                <div className="flex flex-1 items-center gap-3">
+                <div className="flex items-center gap-3">
                   <LocationIcon />
                   <div className="overflow-hidden">
                     {location.length > 2 ? (
