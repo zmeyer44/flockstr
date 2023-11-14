@@ -40,10 +40,11 @@ export default function EventsFromCalendar({
             identifier,
           },
         };
-      } else {
+      } else if (nip19.BECH32_REGEX.test(e)) {
         return nip19.decode(e);
-      }
+      } else return;
     })
+    .filter(Boolean)
     .filter(({ type }) => type === "naddr")
     .map((e) => e.data as nip19.AddressPointer);
   const { events, isLoading } = useEvents({
