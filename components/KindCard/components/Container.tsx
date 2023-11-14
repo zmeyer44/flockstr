@@ -103,26 +103,29 @@ export default function Container({
           </DropDownMenu>
         </div>
       </CardHeader>
-      <CardContent
-        ref={contentRef}
-        className={cn(
-          "relative flex grow flex-col px-4 pb-3",
-          showFull || expandButton === false ? "max-h-none" : "max-h-[400px]",
-        )}
-      >
-        {children}
-        {!showFull && expandButton && (
-          <div className="z-20 mt-[-70px]">
-            <div className=" h-[50px] w-full bg-gradient-to-b from-transparent to-background"></div>
-            {/* <div className="h-[30px] w-full bg-gradient-to-b from-transparent to-background"></div> */}
-            <button
-              onClick={() => setShowFull(true)}
-              className="center text-text relative h-[30px] w-full bg-background text-sm transition-all hover:text-primary"
-            >
-              <div className="flex items-end justify-center">Show more</div>
-            </button>
-          </div>
-        )}
+      <CardContent className={cn("flex grow flex-col px-4 pb-3")}>
+        <div
+          ref={contentRef}
+          className={cn(
+            "relative flex grow flex-col",
+            showFull || expandButton === false ? "max-h-none" : "max-h-[400px]",
+          )}
+        >
+          {children}
+          {!showFull && expandButton && (
+            <div className="absolute inset-x-0 bottom-0 z-20 mt-[-70px]">
+              <div className="h-[50px] w-full bg-gradient-to-b from-transparent to-background"></div>
+              {/* <div className="h-[30px] w-full bg-gradient-to-b from-transparent to-background"></div> */}
+              <button
+                onClick={() => setShowFull(true)}
+                className="center text-text relative h-[30px] w-full bg-background text-sm transition-all hover:text-primary"
+              >
+                <div className="flex items-end justify-center">Show more</div>
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="mt-auto">
           {!!contentTags?.length ? (
             <div className="mb-2.5 mt-1 max-h-[52px] overflow-hidden">
