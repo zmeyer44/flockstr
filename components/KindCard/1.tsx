@@ -36,7 +36,7 @@ export default function Kind1(props: KindCardProps) {
         <RenderText text={content} />
       </CardDescription>
       {!!r.length && (
-        <div className="mt-1.5 flex flex-wrap">
+        <div className="mt-1.5 flex flex-wrap gap-2">
           {r.map((url, idx) => (
             <LinkCard key={idx} url={url} className="max-w-[250px]" />
           ))}
