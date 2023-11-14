@@ -141,8 +141,8 @@ export default function LandingPage() {
               <p className="text-xl leading-8 text-zinc-600">
                 The internet is changing. We have shifted from the open frontier
                 of "The Network" to a series of walled gardens hording userdata
-                to best monatize thier engagment. Nostr breaks down these walls,
-                you data follows you wherever you decide to go.
+                to best monetize their engagement. Nostr breaks down these
+                walls, your data follows you wherever you decide to go.
               </p>
               <div className="mt-10 max-w-xl text-base leading-7 text-zinc-700">
                 <p>
