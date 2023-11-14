@@ -1,6 +1,5 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
+import { useRef, useEffect, useState } from "react";
 import { RiMoreFill } from "react-icons/ri";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils/dates";
@@ -13,6 +12,7 @@ import Tags from "./Tags";
 import DropDownMenu from "@/components/DropDownMenu";
 import { removeDuplicates } from "@/lib/utils";
 import { type KindCardProps } from "..";
+import { cn } from "@/lib/utils";
 
 type OptionLink = {
   href: string;
@@ -37,6 +37,19 @@ export default function Container({
   actionOptions = [],
   event,
 }: CreatorCardProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [expandButton, setExpandButton] = useState<boolean | null>(null);
+  const [showFull, setShowFull] = useState(false);
+  useEffect(() => {
+    if (contentRef.current) {
+      if (contentRef.current.scrollHeight > 350) {
+        setExpandButton(true);
+      } else {
+        setExpandButton(false);
+      }
+    }
+  }, [contentRef.current]);
+
   if (!event) {
     return (
       <Card className="relative flex h-full w-full flex-col overflow-hidden @container">
@@ -90,8 +103,23 @@ export default function Container({
           </DropDownMenu>
         </div>
       </CardHeader>
-      <CardContent className="flex grow flex-col px-4 pb-3">
+      <CardContent
+        ref={contentRef}
+        className={cn("relative flex grow flex-col px-4 pb-3")}
+      >
         {children}
+        {!showFull && expandButton && (
+          <div className="z-20 mt-[-70px]">
+            <div className=" h-[50px] w-full bg-gradient-to-b from-transparent to-background"></div>
+            {/* <div className="h-[30px] w-full bg-gradient-to-b from-transparent to-background"></div> */}
+            <button
+              onClick={() => setShowFull(true)}
+              className="center text-text relative h-[30px] w-full bg-background text-sm transition-all hover:text-primary"
+            >
+              <div className="flex items-end justify-center">Show more</div>
+            </button>
+          </div>
+        )}
         <div className="mt-auto">
           {!!contentTags?.length ? (
             <div className="mb-2.5 mt-1 max-h-[52px] overflow-hidden">
