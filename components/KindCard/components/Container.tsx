@@ -107,7 +107,7 @@ export default function Container({
         <div
           ref={contentRef}
           className={cn(
-            "relative flex grow flex-col",
+            "relative flex grow flex-col overflow-hidden",
             showFull || expandButton === false ? "max-h-none" : "max-h-[400px]",
           )}
         >
