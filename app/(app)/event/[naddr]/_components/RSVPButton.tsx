@@ -137,7 +137,7 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
               }
             >
               <p className="text-muted-forground">
-                {`Pay ${priceInBTC} BTC (${formatNumber(
+                {`Pay ${priceInBTC.toFixed()} BTC (${formatNumber(
                   btcToSats(priceInBTC),
                 )} sats) for one ticket for ${name}`}
               </p>
