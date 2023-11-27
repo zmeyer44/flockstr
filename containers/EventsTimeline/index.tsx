@@ -52,8 +52,12 @@ export function groupEventsByDay(events: NDKEvent[]) {
     if (!eventStartTime) continue;
     const startDate = fromUnix(parseInt(eventStartTime));
     const daysAway = daysOffset(startDate);
-    if (daysAway < -5) {
-       continue;
+    if (daysAway < 1) {
+      if (eventDays[`0`]) {
+        eventDays[`0`]!.push(event);
+      } else {
+        eventDays[`0`] = [event];
+      }
     } else if (eventDays[`${daysAway}`]) {
       eventDays[`${daysAway}`]!.push(event);
     } else {
