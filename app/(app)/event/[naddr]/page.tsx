@@ -69,9 +69,7 @@ export default function EventPage({
   const { tags } = event;
   const eventTagId = event.tagId();
 
-  const location = getTagAllValues("location", tags)[0]
-    ? getTagAllValues("location", tags)
-    : getTagAllValues("address", tags);
+  const location = getTagAllValues("location", tags)
   const geohash = getTagValues("g", tags);
   const hosts = getTagsAllValues("p", tags)
     .filter(([pubkey, relay, role]) => role === "host")

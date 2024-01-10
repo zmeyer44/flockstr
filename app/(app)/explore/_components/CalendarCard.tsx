@@ -38,7 +38,7 @@ export default function CalendarCard({ calendar }: CalendarCardProps) {
   const image = getTagValues("image", tags);
   const banner =
     getTagValues("banner", tags) ?? profile?.image ?? profile?.banner ?? BANNER;
-  const description = content ?? getTagValues("about", tags);
+  const description = content ?? '';
   const calendarEvents = getTagsValues("a", tags);
   const calendarEventIdentifiers = calendarEvents
     .filter(Boolean)

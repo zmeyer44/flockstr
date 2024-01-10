@@ -121,7 +121,6 @@ export default function CreateCalendarEventModal({
       const tags: string[][] = [
         ["d", random],
         ["name", title],
-        ["description", description],
         ["start", toUnix(convertToTimezone(startDate, timezone)).toString()],
         ["end", toUnix(convertToTimezone(endDate, timezone)).toString()],
         ["start_tzid", timezone],
@@ -131,12 +130,6 @@ export default function CreateCalendarEventModal({
       if (location) {
         tags.push([
           "location",
-          `${location.name}, ${location.address}`,
-          location.name,
-          location.address,
-        ]);
-        tags.push([
-          "address",
           `${location.name}, ${location.address}`,
           location.name,
           location.address,
