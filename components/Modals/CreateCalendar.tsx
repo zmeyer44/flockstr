@@ -57,7 +57,7 @@ export default function CreateCalendarEventModal() {
     }
 
     if (!name) {
-      setError("Please add a title");
+      setError("Please add a name");
       return;
     }
     setIsLoading(true);
