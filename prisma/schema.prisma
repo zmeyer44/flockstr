@@ -24,7 +24,7 @@ model NostrEvent {
   key        Int     @id @default(autoincrement())
   id         String
   kind       Int
-  content    String  @default("") @db.Text
+  content    String  @db.Text
   created_at Int
   pubkey     String
   tags       Json    @default("[]")
