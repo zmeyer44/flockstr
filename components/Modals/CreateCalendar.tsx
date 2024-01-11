@@ -56,11 +56,11 @@ export default function CreateCalendarEventModal() {
       return;
     }
 
-    setIsLoading(true);
     if (!name) {
       setError("Please add a title");
       return;
     }
+    setIsLoading(true);
 
     try {
       const random = randomId();
@@ -228,7 +228,7 @@ export default function CreateCalendarEventModal() {
               </BannerImageUploadButton>
             )}
           </div>
-
+          {!!error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex">
             <Button
               onClick={handleSubmit}
