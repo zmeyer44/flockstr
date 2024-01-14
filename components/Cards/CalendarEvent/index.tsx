@@ -11,6 +11,7 @@ import { NostrEvent } from "@nostr-dev-kit/ndk";
 import {
   getTagAllValues,
   getTagValues,
+  getTagsAllValues,
   getTagsValues,
 } from "@/lib/nostr/utils";
 import useProfile from "@/lib/hooks/useProfile";
@@ -31,7 +32,6 @@ export default function CalendarEventCard({
   const title = getTagValues("name", tags) || "Untitled";
   const image =
     getTagValues("image", tags) ??
-    getTagValues("picture", tags) ??
     getTagValues("banner", tags) ??
     profile?.banner;
 
@@ -42,14 +42,7 @@ export default function CalendarEventCard({
   const endDate = getTagValues("end", tags)
     ? new Date(parseInt(getTagValues("end", tags) as string) * 1000)
     : null;
-  const getLocation = () => {
-    let temp = getTagAllValues("location", tags);
-    if (temp[0]) {
-      return temp;
-    }
-    return getTagAllValues("address", tags);
-  };
-  const location = getLocation();
+  const location = getTagsAllValues("location", tags);
 
   const users = getTagsValues("p", tags);
   const hashtags = getTagsValues("t", tags);

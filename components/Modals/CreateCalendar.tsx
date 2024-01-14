@@ -67,7 +67,6 @@ export default function CreateCalendarEventModal() {
       const tags: string[][] = [
         ["d", random],
         ["name", name],
-        ["description", description],
         ["p", currentUser.pubkey, "", "host"],
       ];
 

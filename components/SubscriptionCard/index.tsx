@@ -38,10 +38,8 @@ export default function SubscriptionCard({ event }: { event: NDKEvent }) {
   const { tags } = event;
   const rawEvent = event.rawEvent();
   const title = getTagValues("title", tags) ?? getTagValues("name", tags) ?? "";
-  const image =
-    getTagValues("image", tags) ?? getTagValues("picture", tags) ?? BANNER;
-  const description =
-    getTagValues("description", tags) ?? getTagValues("summary", tags) ?? "";
+  const image = getTagValues("image", tags) ?? BANNER;
+  const description =  event.content ?? "";
   const delegate = getTagValues("delegate", tags);
   const priceInBTC = parseFloat(getTagValues("price", rawEvent.tags) ?? "0");
 

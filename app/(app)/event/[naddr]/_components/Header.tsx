@@ -59,14 +59,7 @@ export default function Header({ event }: { event: NDKEvent }) {
   const endDate = getTagValues("end", tags)
     ? new Date(parseInt(getTagValues("end", tags) as string) * 1000)
     : null;
-  const getLocation = () => {
-    let temp = getTagAllValues("location", tags);
-    if (temp[0]) {
-      return temp;
-    }
-    return getTagAllValues("address", tags);
-  };
-  const location = getLocation();
+  const location = getTagAllValues("location", tags);
   const rawEvent = event.rawEvent();
   const priceInBTC = parseFloat(getTagValues("price", rawEvent.tags) ?? "0");
   const isMember =

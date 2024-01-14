@@ -35,8 +35,7 @@ type LargeFeedCardProps = {
 export default function LargeFeedCard({ event }: LargeFeedCardProps) {
   const { tags, pubkey, content } = event;
   const image = getTagValues("image", tags);
-  const location =
-    getTagValues("location", tags) ?? getTagValues("address", tags);
+  const location = getTagValues("location", tags);
   const users = getTagsValues("p", tags).filter(Boolean);
   const startDate = getTagValues("start", tags)
     ? new Date(parseInt(getTagValues("start", tags) as string) * 1000)
