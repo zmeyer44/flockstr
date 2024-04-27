@@ -29,7 +29,7 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
   const { currentUser } = useCurrentUser();
   const { ndk } = useNDK();
   const eventReference = event.tagId();
-  const name = getTagValues("name", event.tags);
+  const name = getTagValues("title", event.tags);
   const tickets = getTagValues("tickets", event.tags);
   const price = getTagAllValues("price", event.tags);
   const priceInBTC = parseFloat(getTagValues("price", event.tags) ?? "0");

@@ -45,7 +45,7 @@ export default function Header({ event }: { event: NDKEvent }) {
   const { pubkey, tags } = event;
   const { profile } = useProfile(pubkey);
   const eventReference = event.tagId();
-  const title = getTagValues("name", tags) ?? "Untitled";
+  const title = getTagValues("title", tags) ?? "Untitled";
   const image =
     getTagValues("image", tags) ??
     getTagValues("picture", tags) ??

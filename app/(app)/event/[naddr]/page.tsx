@@ -44,7 +44,7 @@ export default function EventPage({
   useEffect(() => {
     if (event) {
       const { tags, content } = event;
-      const name = getTagValues("name", tags) ?? "Untitled";
+      const name = getTagValues("title", tags) ?? "Untitled";
       const image =
         getTagValues("image", tags) ??
         getTagValues("picture", tags) ??

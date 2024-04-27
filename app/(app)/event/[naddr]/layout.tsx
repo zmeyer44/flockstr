@@ -33,7 +33,7 @@ export async function generateMetadata(
     };
   }
 
-  const title = `${getTagValues("name", event.tags as string[][])} | Flockstr`;
+  const title = `${getTagValues("title", event.tags as string[][])} | Flockstr`;
   const images =
     getTagValues("image", event.tags as string[][]) ??
     getTagValues("banner", event.tags as string[][]) ??

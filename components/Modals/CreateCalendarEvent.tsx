@@ -120,7 +120,7 @@ export default function CreateCalendarEventModal({
       const random = randomId();
       const tags: string[][] = [
         ["d", random],
-        ["name", title],
+        ["title", title],
         ["description", description],
         ["start", toUnix(convertToTimezone(startDate, timezone)).toString()],
         ["end", toUnix(convertToTimezone(endDate, timezone)).toString()],
