@@ -44,8 +44,8 @@ export default function AvatarStack({
 }
 
 function User({ pubkey, className }: { pubkey: string; className: string }) {
-  const { profile } = useProfile(pubkey);
-  const npub = nip19.npubEncode(pubkey);
+  const { profile, npub } = useProfile(pubkey);
+  // const npub = profilenip19.npubEncode(pubkey);
 
   return (
     <Avatar
