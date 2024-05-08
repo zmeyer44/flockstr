@@ -7,7 +7,7 @@ import { type NDKUserProfile } from "@nostr-dev-kit/ndk";
 
 export default function useProfile(key: string) {
   const { ndk, getProfile } = useNDK();
-  const npub = NOSTR_BECH32_REGEXP.test(key) ? nip19.npubEncode(key) : key;
+  const npub = key.length === 64 ? nip19.npubEncode(key) : key;
   useEffect(() => {
     if (!ndk) return;
     if (NOSTR_BECH32_REGEXP.test(key)) {
