@@ -23,8 +23,8 @@ export default function BecomeACreator() {
             Create Events on Nostr
           </h2>
           <div className="mb-6 mt-2 text-muted-foreground">
-            Start organizing your events an calendar on directly on Nostr.
-            Seamlessly collect payments and engage with your community.
+            Start organizing your social events on a calendar directly over Nostr.
+            Seamlessly collect payments and engage with your flock.
           </div>
           <Button onClick={() => modal?.show(<CreateCalendarEvent />)}>
             Create an Event
