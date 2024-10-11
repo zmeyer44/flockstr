@@ -88,13 +88,14 @@ export default function RSVPButton({ event }: RSVPButtonProps) {
 
   if (!tickets) {
     if (rsvpEvent) {
-      const rsvpResponse = getTagValues("l", rsvpEvent.tags);
+      const rsvpResponse = getTagValues("status", rsvpEvent.tags);
+      const rsvpResponseDeprecated = getTagValues("l", rsvpEvent.tags);
       return (
         <div className="flex items-center gap-2">
           <Button disabled>
-            {rsvpResponse === "accepted"
+            {rsvpResponse === "accepted" || rsvpResponseDeprecated === "accepted"
               ? "Going"
-              : rsvpResponse === "tentative"
+              : rsvpResponse === "tentative" || rsvpResponseDeprecated === "tentative"
               ? "Tentative"
               : "Not Going"}
           </Button>

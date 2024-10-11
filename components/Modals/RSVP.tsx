@@ -41,8 +41,7 @@ export default function RSVPModal({ eventReference }: RSVPModalProps) {
       const tags: string[][] = [
         ["d", random],
         ["a", eventReference],
-        ["L", "status"],
-        ["l", statusMap[type], "status"],
+        ["status", statusMap[type]],
       ];
       const event = await createEvent(ndk, {
         content: "",
